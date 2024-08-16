@@ -1,5 +1,6 @@
 import argparse
 import logging
+from datetime import datetime
 
 from jass.agents.agent_random_schieber import AgentRandomSchieber
 from jass.arena.arena import Arena
@@ -24,7 +25,8 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.WARNING)
 
-    arena = Arena(nr_games_to_play=1000, save_filename='logs/arena_games')
+    formatted_start_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    arena = Arena(nr_games_to_play=args.n_games, save_filename=f'logs/{formatted_start_time}_arena_logs')
     player = AgentRandomSchieber()
 
     arena.set_players(player, player, player, player)
