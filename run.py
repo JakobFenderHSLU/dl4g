@@ -7,6 +7,7 @@ from jass.arena.arena import Arena
 
 from src.bots.random_bot import RandomBot
 from src.utils.log_utils import LogUtils
+from src.utils.results_utils import ResultsUtils
 
 POSSIBLE_MODELS = ["random"]
 
@@ -23,6 +24,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     log_utils = LogUtils(verbose=args.verbose)
+    results_utils = ResultsUtils()
 
     logger = logging.getLogger("run.py")
 
@@ -37,7 +39,6 @@ if __name__ == '__main__':
     player = RandomBot()
 
     arena.set_players(player, player, player, player)
-    logger.info('Playing {} games'.format(arena.nr_games_to_play))
     arena.play_all_games()
-    logger.info('Average Points Team 0: {:.2f})'.format(arena.points_team_0.mean()))
-    logger.info('Average Points Team 1: {:.2f})'.format(arena.points_team_1.mean()))
+
+    results_utils.print_results(arena)
