@@ -5,6 +5,9 @@ from datetime import datetime
 from jass.agents.agent_random_schieber import AgentRandomSchieber
 from jass.arena.arena import Arena
 
+from src.bots.random_bot import RandomBot
+from src.utils.log_utils import LogUtils
+
 POSSIBLE_MODELS = ["random"]
 
 if __name__ == '__main__':
@@ -14,27 +17,27 @@ if __name__ == '__main__':
     parser.add_argument("-o", "--opponent", default=POSSIBLE_MODELS[0], choices=["All"] + POSSIBLE_MODELS,
                         help="Choose the opponent")
     parser.add_argument("-n", "--n_games", default=100, type=int, help="Number of games to play")
+    parser.add_argument("-v", "--verbose", default=False, action="store_true",
+                        help="Increase output verbosity")
 
     args = parser.parse_args()
 
-    print("Running a game Simulation with the following parameters:")
-    print(f"Agent: {args.agent}")
-    print(f"Opponent: {args.opponent}")
-    print(f"Number of games: {args.n_games}")
-    print("Starting the simulation...")
+    log_utils = LogUtils(verbose=args.verbose)
 
-    logging.basicConfig(level=logging.WARNING)
+    logger = logging.getLogger("run.py")
 
-    formatted_start_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    arena = Arena(nr_games_to_play=args.n_games, save_filename=f'logs/{formatted_start_time}_arena_logs')
-    player = AgentRandomSchieber()
+    logger.info("Running a game Simulation with the following parameters:")
+    logger.info(f"Agent: {args.agent}")
+    logger.info(f"Opponent: {args.opponent}")
+    logger.info(f"Number of games: {args.n_games}")
+    logger.info(f"Verbose: {args.verbose}")
+    logger.info("Starting the simulation...")
+
+    arena = Arena(nr_games_to_play=args.n_games, save_filename=f'logs/{log_utils.formatted_start_time}_arena_logs')
+    player = RandomBot()
 
     arena.set_players(player, player, player, player)
-    print('Playing {} games'.format(arena.nr_games_to_play))
+    logger.info('Playing {} games'.format(arena.nr_games_to_play))
     arena.play_all_games()
-    print('Average Points Team 0: {:.2f})'.format(arena.points_team_0.mean()))
-    print('Average Points Team 1: {:.2f})'.format(arena.points_team_1.mean()))
-
-
-
-
+    logger.info('Average Points Team 0: {:.2f})'.format(arena.points_team_0.mean()))
+    logger.info('Average Points Team 1: {:.2f})'.format(arena.points_team_1.mean()))
