@@ -14,7 +14,6 @@ class ResultsUtils:
         n_team_0_wins = len(arena.points_team_0[arena.points_team_0 > arena.points_team_1])
         n_team_1_wins = len(arena.points_team_0) - n_team_0_wins
 
-        # format into [++++++++++++///----] + for win - for loss
         bar_length = 50
         win_loss_bar = "+" * int(n_team_0_wins / arena.nr_games_played * bar_length) + \
                        "-" * int(n_team_1_wins / arena.nr_games_played * bar_length)
