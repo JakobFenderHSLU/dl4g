@@ -1,8 +1,6 @@
 import argparse
 import logging
-from datetime import datetime
 
-from jass.agents.agent_random_schieber import AgentRandomSchieber
 from jass.arena.arena import Arena
 
 from src.bots.random_bot import RandomBot
@@ -18,12 +16,13 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--opponent", default=POSSIBLE_MODELS[0], choices=["All"] + POSSIBLE_MODELS,
                         help="Choose the opponent")
     parser.add_argument("-n", "--n_games", default=100, type=int, help="Number of games to play")
-    parser.add_argument("-v", "--verbose", default=False, action="store_true",
-                        help="Increase output verbosity")
+    parser.add_argument("-ll", "--log_level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+                        help="Set the logging level")
+    parser.add_argument("-s", "--seed", default=42, type=int, help="Set the seed for the random number generator")
 
     args = parser.parse_args()
 
-    log_utils = LogUtils(verbose=args.verbose)
+    log_utils = LogUtils(log_level=args.log_level)
     results_utils = ResultsUtils()
 
     logger = logging.getLogger("run.py")
@@ -32,7 +31,7 @@ if __name__ == "__main__":
     logger.info(f"Agent: {args.agent}")
     logger.info(f"Opponent: {args.opponent}")
     logger.info(f"Number of games: {args.n_games}")
-    logger.info(f"Verbose: {args.verbose}")
+    logger.info(f"Log Level: {args.log_level}")
     logger.info("Starting the simulation...")
 
     arena = Arena(nr_games_to_play=args.n_games, save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs")

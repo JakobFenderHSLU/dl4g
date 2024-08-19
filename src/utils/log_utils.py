@@ -3,13 +3,10 @@ from datetime import datetime
 
 
 class LogUtils:
-    def __init__(self, verbose: bool = False):
+    def __init__(self, log_level: str):
         self.formatted_start_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-        if verbose:
-            logging.basicConfig(level=logging.DEBUG)
-        else:
-            logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=log_level)
 
         log_formatter = logging.Formatter(
             "%(asctime)s %(levelname)-8s %(name)-10s - [%(filename)s:%(lineno)d]: %(message)s")
