@@ -3,7 +3,9 @@ import logging
 
 from jass.arena.arena import Arena
 
-from src.bots.random_bot import RandomBot
+from src.agent.agent import CustomAgent
+from src.play_strategy.random_play_strategy import RandomPlayStrategy
+from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
 from src.utils.log_utils import LogUtils
 from src.utils.results_utils import ResultsUtils
 
@@ -34,10 +36,19 @@ if __name__ == "__main__":
     logger.info(f"Log Level: {args.log_level}")
     logger.info("Starting the simulation...")
 
-    arena = Arena(nr_games_to_play=args.n_games, save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs")
-    player = RandomBot()
+    if args.agent == "random":
+        trump_strategy = RandomTrumpStrategy(log_level=args.log_level, seed=args.seed)
+        play_strategy = RandomPlayStrategy(log_level=args.log_level, seed=args.seed)
+        agent_team = [CustomAgent(trump_strategy, play_strategy), CustomAgent(trump_strategy, play_strategy)]
 
-    arena.set_players(player, player, player, player)
+    if args.opponent == "random":
+        trump_strategy = RandomTrumpStrategy(log_level=args.log_level, seed=args.seed)
+        play_strategy = RandomPlayStrategy(log_level=args.log_level, seed=args.seed)
+        opponent_team = [CustomAgent(trump_strategy, play_strategy), CustomAgent(trump_strategy, play_strategy)]
+
+    arena = Arena(nr_games_to_play=args.n_games, save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs")
+
+    arena.set_players(agent_team[0], opponent_team[0], agent_team[1], opponent_team[1])
     arena.play_all_games()
 
     results_utils.print_results(arena)
