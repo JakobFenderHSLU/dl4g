@@ -5,12 +5,13 @@ from jass.arena.arena import Arena
 
 from src.agent.agent import CustomAgent
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
+from src.trump_strategy.highest_score_trump_strategy import HighestScoreTrumpStrategy
 from src.trump_strategy.highest_sum_trump_strategy import HighestSumTrumpStrategy
 from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
 from src.utils.log_utils import LogUtils
 from src.utils.results_utils import ResultsUtils
 
-POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum"]
+POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score"]
 POSSIBLE_PLAY_STRATEGIES = ["random"]
 
 if __name__ == "__main__":
@@ -57,6 +58,8 @@ if __name__ == "__main__":
         agent_trump_strategy = RandomTrumpStrategy(log_level=args.log_level, seed=args.seed)
     elif args.agent_trump_strategy == "highest_sum":
         agent_trump_strategy = HighestSumTrumpStrategy(log_level=args.log_level, seed=args.seed)
+    elif args.agent_trump_strategy == "highest_score":
+        agent_trump_strategy = HighestScoreTrumpStrategy(log_level=args.log_level, seed=args.seed)
     if args.agent_play_strategy == "random":
         agent_play_strategy = RandomPlayStrategy(log_level=args.log_level, seed=args.seed)
 
@@ -67,6 +70,8 @@ if __name__ == "__main__":
         opponent_trump_strategy = RandomTrumpStrategy(log_level=args.log_level, seed=args.seed)
     elif args.agent_trump_strategy == "highest_sum":
         agent_trump_strategy = HighestSumTrumpStrategy(log_level=args.log_level, seed=args.seed)
+    elif args.agent_trump_strategy == "highest_score":
+        agent_trump_strategy = HighestScoreTrumpStrategy(log_level=args.log_level, seed=args.seed)
     if args.opponent_play_strategy == "random":
         opponent_play_strategy = RandomPlayStrategy(log_level=args.log_level, seed=args.seed)
 
