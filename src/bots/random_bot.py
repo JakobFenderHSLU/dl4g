@@ -28,15 +28,15 @@ class RandomBot(Agent):
         Returns:
             trump action
         """
-        self._logger.debug('Trump request')
+        self._logger.debug("Trump request")
         if obs.forehand == -1:
             # if forehand is not yet set, we are the forehand player and can select trump or push
             if self._rng.choice([True, False]):
-                self._logger.debug('Result: {}'.format(PUSH))
+                self._logger.debug("Result: {}".format(PUSH))
                 return PUSH
         # if not push or forehand, select a trump
         result = int(self._rng.integers(low=0, high=MAX_TRUMP, endpoint=True))
-        self._logger.debug('Result: {}'.format(result))
+        self._logger.debug("Result: {}".format(result))
         return result
 
     def action_play_card(self, obs: GameObservation) -> int:
@@ -47,10 +47,10 @@ class RandomBot(Agent):
         Returns:
             card to play
         """
-        self._logger.debug('Card request')
+        self._logger.debug("Card request")
         # cards are one hot encoded
         valid_cards = self._rule.get_valid_cards_from_obs(obs)
         # convert to list and draw a value
         card = self._rng.choice(np.flatnonzero(valid_cards))
-        self._logger.debug('Played card: {}'.format(card_strings[card]))
+        self._logger.debug("Played card: {}".format(card_strings[card]))
         return card

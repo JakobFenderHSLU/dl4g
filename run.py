@@ -11,7 +11,7 @@ from src.utils.results_utils import ResultsUtils
 
 POSSIBLE_MODELS = ["random"]
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", "--agent", default=POSSIBLE_MODELS[0], choices=POSSIBLE_MODELS,
                         help="Choose the bot")
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     logger.info(f"Verbose: {args.verbose}")
     logger.info("Starting the simulation...")
 
-    arena = Arena(nr_games_to_play=args.n_games, save_filename=f'logs/{log_utils.formatted_start_time}_arena_logs')
+    arena = Arena(nr_games_to_play=args.n_games, save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs")
     player = RandomBot()
 
     arena.set_players(player, player, player, player)
