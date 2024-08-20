@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 import numpy as np
 from jass.arena.arena import Arena
@@ -10,19 +11,21 @@ class ResultsUtils:
     def __init__(self):
         self._logger = logging.getLogger("ResultsUtils")
 
-    def print_results(self, arena: Arena):
-        self._logger.info("Total Games Played: {}".format(arena.nr_games_played))
+    def print_results(self, arenas: List[Arena]):
+        n_games_played = sum([a.nr_games_played for a in arenas])
+        self._logger.info(f"Total Games Played: {n_games_played}")
 
-        n_team_0_wins = len(arena.points_team_0[arena.points_team_0 > arena.points_team_1])
-        n_team_1_wins = len(arena.points_team_0) - n_team_0_wins
+        agents_wins = len(arenas[0].points_team_0[arenas[0].points_team_0 > arenas[0].points_team_1]) + \
+                      len(arenas[1].points_team_1[arenas[1].points_team_1 > arenas[1].points_team_0])
+        opponents_wins = n_games_played - agents_wins
 
         bar_length = 50
-        self._print_stacked_bar_plot(bar_length, n_team_0_wins, n_team_1_wins)
+        self._print_stacked_bar_plot(bar_length, agents_wins, opponents_wins)
 
-        agents_points = arena.points_team_0
-        agents_winrate = (arena.points_team_0 > arena.points_team_1).mean() * 100
-        opponents_points = arena.points_team_1
-        opponents_winrate = (arena.points_team_1 > arena.points_team_0).mean() * 100
+        agents_points = np.concat((arenas[0].points_team_0, arenas[1].points_team_1))
+        opponents_points = np.concat((arenas[0].points_team_1, arenas[1].points_team_0))
+        agents_winrate = (agents_points > opponents_points).mean() * 100
+        opponents_winrate = (opponents_points > agents_points).mean() * 100
 
         table = PrettyTable(["Overall", "Agents", "Opponents"])
         table.add_row(["Winrate", f"{agents_winrate:.2f} %", f"{opponents_winrate:.2f} %"])
@@ -41,10 +44,16 @@ class ResultsUtils:
         self._logger.info("")
 
         # get every second row
-        agent_trump_rounds = arena.points_team_0[1::2]
-        agent_trump_rounds_winrate = (arena.points_team_0[1::2] > arena.points_team_1[1::2]).mean() * 100
-        opponent_trump_rounds = arena.points_team_1[::2]
-        opponent_trump_rounds_winrate = (arena.points_team_1[::2] > arena.points_team_0[::2]).mean() * 100
+        agent_trump_rounds = np.concat((arenas[0].points_team_0[1::2], arenas[1].points_team_1[::2]))
+        agent_trump_rounds_winrate = np.concat((
+            arenas[0].points_team_0[1::2] > arenas[0].points_team_1[1::2],
+            arenas[1].points_team_1[::2] > arenas[1].points_team_0[::2]
+        )).mean() * 100
+        opponent_trump_rounds = np.concat((arenas[0].points_team_1[::2], arenas[1].points_team_0[1::2]))
+        opponent_trump_rounds_winrate = np.concat((
+            arenas[0].points_team_1[::2] > arenas[0].points_team_0[::2],
+            arenas[1].points_team_0[1::2] > arenas[1].points_team_1[1::2]
+        )).mean() * 100
 
         table = PrettyTable(["Trump Rounds", "Agents", "Opponents"])
         table.add_row(["Winrate", f"{agent_trump_rounds_winrate:.2f} %", f"{opponent_trump_rounds_winrate:.2f} %"])

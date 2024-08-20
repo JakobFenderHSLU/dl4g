@@ -52,39 +52,44 @@ if __name__ == "__main__":
     logger.info(f"Log Level: {args.log_level}")
     logger.info("Starting the simulation...")
 
-    agent_trump_strategy = None
-    agent_play_strategy = None
 
-    if args.agent_trump_strategy == "random":
-        agent_trump_strategy = RandomTrumpStrategy(log_level=args.log_level, seed=args.seed)
-    elif args.agent_trump_strategy == "highest_sum":
-        agent_trump_strategy = HighestSumTrumpStrategy(log_level=args.log_level, seed=args.seed)
-    elif args.agent_trump_strategy == "highest_score":
-        agent_trump_strategy = HighestScoreTrumpStrategy(log_level=args.log_level, seed=args.seed)
-    if args.agent_play_strategy == "random":
-        agent_play_strategy = RandomPlayStrategy(log_level=args.log_level, seed=args.seed)
+    def _get_trump_strategy(strategy):
+        if strategy == "random":
+            return RandomTrumpStrategy(log_level=args.log_level, seed=args.seed)
+        elif strategy == "highest_sum":
+            return HighestSumTrumpStrategy(log_level=args.log_level, seed=args.seed)
+        elif strategy == "highest_score":
+            return HighestScoreTrumpStrategy(log_level=args.log_level, seed=args.seed)
+        else:
+            raise ValueError(f"Unknown trump strategy: {strategy}")
 
-    opponent_trump_strategy = None
-    opponent_play_strategy = None
 
-    if args.opponent_trump_strategy == "random":
-        opponent_trump_strategy = RandomTrumpStrategy(log_level=args.log_level, seed=args.seed)
-    elif args.agent_trump_strategy == "highest_sum":
-        agent_trump_strategy = HighestSumTrumpStrategy(log_level=args.log_level, seed=args.seed)
-    elif args.agent_trump_strategy == "highest_score":
-        agent_trump_strategy = HighestScoreTrumpStrategy(log_level=args.log_level, seed=args.seed)
-    if args.opponent_play_strategy == "random":
-        opponent_play_strategy = RandomPlayStrategy(log_level=args.log_level, seed=args.seed)
+    def _get_play_strategy(strategy):
+        if strategy == "random":
+            return RandomPlayStrategy(log_level=args.log_level, seed=args.seed)
+        else:
+            raise ValueError(f"Unknown play strategy: {strategy}")
 
     np.random.seed(args.seed)
-    arena = Arena(nr_games_to_play=args.n_games, save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs")
-
-    arena.set_players(
-        CustomAgent(agent_trump_strategy, agent_play_strategy),
-        CustomAgent(opponent_trump_strategy, opponent_play_strategy),
-        CustomAgent(agent_trump_strategy, agent_play_strategy),
-        CustomAgent(opponent_trump_strategy, opponent_play_strategy)
+    arena1 = Arena(nr_games_to_play=args.n_games // 2,
+                   save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs")
+    arena1.set_players(
+        CustomAgent(_get_trump_strategy(args.agent_trump_strategy), _get_play_strategy(args.agent_play_strategy)),
+        CustomAgent(_get_trump_strategy(args.opponent_trump_strategy), _get_play_strategy(args.opponent_play_strategy)),
+        CustomAgent(_get_trump_strategy(args.agent_trump_strategy), _get_play_strategy(args.agent_play_strategy)),
+        CustomAgent(_get_trump_strategy(args.opponent_trump_strategy), _get_play_strategy(args.opponent_play_strategy)),
     )
-    arena.play_all_games()
+    arena1.play_all_games()
 
-    results_utils.print_results(arena)
+    np.random.seed(args.seed)
+    arena2 = Arena(nr_games_to_play=args.n_games // 2,
+                   save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs")
+    arena2.set_players(
+        CustomAgent(_get_trump_strategy(args.opponent_trump_strategy), _get_play_strategy(args.opponent_play_strategy)),
+        CustomAgent(_get_trump_strategy(args.agent_trump_strategy), _get_play_strategy(args.agent_play_strategy)),
+        CustomAgent(_get_trump_strategy(args.opponent_trump_strategy), _get_play_strategy(args.opponent_play_strategy)),
+        CustomAgent(_get_trump_strategy(args.agent_trump_strategy), _get_play_strategy(args.agent_play_strategy)),
+    )
+    arena2.play_all_games()
+
+    results_utils.print_results([arena1, arena2])
