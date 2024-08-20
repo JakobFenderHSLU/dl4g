@@ -1,6 +1,7 @@
 import argparse
 import logging
 
+import numpy as np
 from jass.arena.arena import Arena
 
 from src.agent.agent import CustomAgent
@@ -35,7 +36,7 @@ if __name__ == "__main__":
     parser.add_argument("-n", "--n_games", default=100, type=int, help="Number of games to play")
     parser.add_argument("-ll", "--log_level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
                         help="Set the logging level")
-    parser.add_argument("-s", "--seed", default=42, type=int, help="Set the seed for the random number generator")
+    parser.add_argument("-s", "--seed", type=int, help="Set the seed for the random number generator")
 
     args = parser.parse_args()
 
@@ -75,6 +76,7 @@ if __name__ == "__main__":
     if args.opponent_play_strategy == "random":
         opponent_play_strategy = RandomPlayStrategy(log_level=args.log_level, seed=args.seed)
 
+    np.random.seed(args.seed)
     arena = Arena(nr_games_to_play=args.n_games, save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs")
 
     arena.set_players(
