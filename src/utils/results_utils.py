@@ -42,18 +42,19 @@ class ResultsUtils:
         self._logger.info("")
 
         # get every second row
-        trump_rounds = arena.points_team_0[::2]
+        agent_trump_rounds = arena.points_team_0[1::2]
+        opponent_trump_rounds = arena.points_team_1[::2]
 
         table = PrettyTable(["Trump Rounds", "Agents", "Opponents"])
-        table.add_row(["Total Points", sum(trump_rounds), sum(arena.points_team_1[::2])])
-        table.add_row(["Average Points", sum(trump_rounds) / len(trump_rounds),
-                       sum(arena.points_team_1[::2]) / len(arena.points_team_1[::2])])
-        table.add_row(["Max Points", max(trump_rounds), max(arena.points_team_1[::2])])
-        table.add_row(["Min Points", min(trump_rounds), min(arena.points_team_1[::2])])
-        table.add_row(["Points 25th Percentile", np.quantile(trump_rounds, 0.25),
-                       np.quantile(arena.points_team_1[::2], 0.25)])
-        table.add_row(["Points Median", np.median(trump_rounds), np.median(arena.points_team_1[::2])])
-        table.add_row(["Points 75th Percentile", np.quantile(trump_rounds, 0.75),
-                       np.quantile(arena.points_team_1[::2], 0.75)])
+        table.add_row(["Total Points", sum(agent_trump_rounds), sum(opponent_trump_rounds)])
+        table.add_row(["Average Points", sum(agent_trump_rounds) / len(agent_trump_rounds),
+                       sum(opponent_trump_rounds) / len(opponent_trump_rounds)])
+        table.add_row(["Max Points", max(agent_trump_rounds), max(opponent_trump_rounds)])
+        table.add_row(["Min Points", min(agent_trump_rounds), min(opponent_trump_rounds)])
+        table.add_row(["Points 25th Percentile", np.quantile(agent_trump_rounds, 0.25),
+                       np.quantile(opponent_trump_rounds, 0.25)])
+        table.add_row(["Points Median", np.median(agent_trump_rounds), np.median(opponent_trump_rounds)])
+        table.add_row(["Points 75th Percentile", np.quantile(agent_trump_rounds, 0.75),
+                       np.quantile(opponent_trump_rounds, 0.75)])
 
         [self._logger.info(" " + row) for row in table.get_string().split("\n")]
