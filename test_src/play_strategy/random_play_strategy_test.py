@@ -10,25 +10,24 @@ class RandomPlayStrategyTest(TestCase):
     def setUp(self):
         self._log_level = "DEBUG"
         self._seed = 42
-        self._random_play_strategy = RandomPlayStrategy(log_level=self._log_level, seed=self._seed)
+        self._strategy = RandomPlayStrategy(log_level=self._log_level, seed=self._seed)
 
     def test_choose_card_one_option(self):
-        self._random_play_strategy._rng = np.random.default_rng(42)
         observation = GameObservation()
         valid_cards = np.zeros(36)
         valid_cards[24] = 1
-        self._random_play_strategy._rule.get_valid_cards_from_obs = lambda x: valid_cards
-        card = self._random_play_strategy.choose_card(observation)
+        self._strategy._rule.get_valid_cards_from_obs = lambda x: valid_cards
+        card = self._strategy.choose_card(observation)
         self.assertEqual(24, card)
 
     def test_choose_card_multiple_options(self):
-        self._random_play_strategy._rng = np.random.default_rng(42)
+        self._strategy._rng = np.random.default_rng(42)
         observation = GameObservation()
         valid_cards = np.zeros(36)
-        valid_cards[5] = 1
-        valid_cards[17] = 1
-        valid_cards[19] = 1
-        valid_cards[26] = 1
-        self._random_play_strategy._rule.get_valid_cards_from_obs = lambda x: valid_cards
-        card = self._random_play_strategy.choose_card(observation)
+        valid_cards[5] = 1  # DIAMOND 9
+        valid_cards[17] = 1  # HEART 6
+        valid_cards[19] = 1  # SPADE KING
+        valid_cards[27] = 1  # CLUB ACE
+        self._strategy._rule.get_valid_cards_from_obs = lambda x: valid_cards
+        card = self._strategy.choose_card(observation)
         self.assertEqual(5, card)
