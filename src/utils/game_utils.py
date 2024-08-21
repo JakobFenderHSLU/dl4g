@@ -1,5 +1,4 @@
 import numpy as np
-from jass.game.const import same_team
 from jass.game.game_observation import GameObservation
 from jass.game.game_rule import GameRule
 
@@ -13,8 +12,8 @@ def is_save_trick(obs: GameObservation, rule: GameRule) -> bool:
     validate_current_trick(obs.current_trick)
     validate_player(obs.player)
 
-    current_winner = rule.calc_winner(obs.current_trick, get_starting_player_of_trick(obs), obs.trump)
-    return bool(same_team[obs.player][current_winner])
+    current_winner = rule.calc_winner(obs.current_trick, 0, obs.trump)
+    return current_winner in [0, 2]
 
 
 def get_starting_player_of_trick(obs: GameObservation) -> int:
