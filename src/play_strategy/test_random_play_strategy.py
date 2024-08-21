@@ -6,7 +6,7 @@ from jass.game.game_observation import GameObservation
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 
 
-class RandomPlayStrategyTest(TestCase):
+class TestRandomPlayStrategy(TestCase):
     def setUp(self):
         self._log_level = "DEBUG"
         self._seed = 42
