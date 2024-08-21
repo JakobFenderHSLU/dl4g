@@ -12,7 +12,7 @@ class TestGameUtils(TestCase):
     def test_is_save_trick(self):
         obs = GameObservation()
         rule = RuleSchieber()
-        obs.current_trick = np.array([0, 1, 2, -1])
+        obs.current_trick = np.array([1, 5, 2, -1])
         obs.player = 0
         obs.trump = 0
         self.assertTrue(gu.is_save_trick(obs, rule))
