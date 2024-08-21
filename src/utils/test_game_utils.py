@@ -15,7 +15,7 @@ class TestGameUtils(TestCase):
         obs.current_trick = np.array([1, 5, 2, -1])
         obs.player = 0
         obs.trump = 0
-        self.assertTrue(gu.is_save_trick(obs, rule))
+        self.assertTrue(gu.is_safe_trick(obs, rule))
 
     def test_get_starting_player_of_trick(self):
         obs = GameObservation()

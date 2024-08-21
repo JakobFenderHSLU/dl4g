@@ -3,7 +3,7 @@ from jass.game.game_observation import GameObservation
 from jass.game.game_rule import GameRule
 
 
-def is_save_trick(obs: GameObservation, rule: GameRule) -> bool:
+def is_safe_trick(obs: GameObservation, rule: GameRule) -> bool:
     """
     Check if the current trick is save.
 
