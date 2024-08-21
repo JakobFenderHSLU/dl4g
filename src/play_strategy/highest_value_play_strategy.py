@@ -28,14 +28,17 @@ class HighestValuePlayStrategy(PlayStrategy):
 
         if current_trump in [DIAMONDS, HEARTS, SPADES, CLUBS]:
             mask = np.tile(self._no_trump_weight, 4)
-            mask[current_suit * 9:current_suit * 9 + 9] = self._no_trump_weight_current_suit
+            if current_suit != -1:
+                mask[current_suit * 9:current_suit * 9 + 9] = self._no_trump_weight_current_suit
             mask[current_trump * 9:current_trump * 9 + 9] = self._trump_weight
         if current_trump == OBE_ABE:
             mask = np.tile(self._obenabe_weight, 4)
-            mask[current_suit * 9:current_suit * 9 + 9] = self._obenabe_weight_current_suit
+            if current_suit != -1:
+                mask[current_suit * 9:current_suit * 9 + 9] = self._obenabe_weight_current_suit
         elif current_trump == UNE_UFE:
             mask = np.tile(self._uneufe_weight, 4)
-            mask[current_suit * 9:current_suit * 9 + 9] = self._uneufe_weight_current_suit
+            if current_suit != -1:
+                mask[current_suit * 9:current_suit * 9 + 9] = self._uneufe_weight_current_suit
 
         possible_cards = self._rule.get_valid_cards_from_obs(observation)
 

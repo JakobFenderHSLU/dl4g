@@ -4,6 +4,7 @@ import logging
 import numpy as np
 from jass.arena.arena import Arena
 
+from play_strategy.highest_value_play_strategy import HighestValuePlayStrategy
 from src.agent.agent import CustomAgent
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.trump_strategy.highest_score_trump_strategy import HighestScoreTrumpStrategy
@@ -13,7 +14,7 @@ from src.utils.log_utils import LogUtils
 from src.utils.results_utils import ResultsUtils
 
 POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score"]
-POSSIBLE_PLAY_STRATEGIES = ["random"]
+POSSIBLE_PLAY_STRATEGIES = ["random", "highest_value"]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -67,6 +68,8 @@ if __name__ == "__main__":
     def _get_play_strategy(strategy):
         if strategy == "random":
             return RandomPlayStrategy(log_level=args.log_level, seed=args.seed)
+        elif strategy == "highest_value":
+            return HighestValuePlayStrategy(log_level=args.log_level, seed=args.seed)
         else:
             raise ValueError(f"Unknown play strategy: {strategy}")
 

@@ -13,6 +13,24 @@ class HighestValuePlayStrategyTest(unittest.TestCase):
         self._seed = 42
         self._strategy = HighestValuePlayStrategy(log_level=self._log_level, seed=self._seed)
 
+    def test_choose_suit_first(self):
+        observation = GameObservation()
+
+        observation.trump = 3  # CLUB
+        hand = np.zeros(36)
+        hand[5] = 1  # DIAMOND 9
+        hand[17] = 1  # HEART 6
+        hand[19] = 1  # SPADE KING
+        hand[27] = 1  # CLUB ACE
+
+        observation.hand = hand
+        observation.current_trick = [-1, -1, -1, -1]
+
+        # ALL CARDS ARE VALID
+        self._strategy._rule.get_valid_cards_from_obs = lambda x: hand
+        card = self._strategy.choose_card(observation)
+        self.assertEqual(27, card)
+
     def test_choose_suit_highest(self):
         observation = GameObservation()
 
