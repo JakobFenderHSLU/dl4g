@@ -1,5 +1,20 @@
 import numpy as np
+from jass.game.const import same_team
 from jass.game.game_observation import GameObservation
+from jass.game.game_rule import GameRule
+
+
+def is_save_trick(obs: GameObservation, rule: GameRule) -> bool:
+    """
+    Check if the current trick is save.
+
+    :param obs: GameObservation
+    """
+    validate_current_trick(obs.current_trick)
+    validate_player(obs.player)
+
+    current_winner = rule.calc_winner(obs.current_trick, get_starting_player_of_trick(obs), obs.trump)
+    return bool(same_team[obs.player][current_winner])
 
 
 def get_starting_player_of_trick(obs: GameObservation) -> int:
@@ -10,23 +25,24 @@ def get_starting_player_of_trick(obs: GameObservation) -> int:
     """
     validate_current_trick(obs.current_trick)
     validate_player(obs.player)
-    # var name for np.where(obs.current_trick != -1)[0]
+
     index = np.where(obs.current_trick != -1)[0]
     if len(index) == 0:
         return obs.player
     return int((index[-1] - obs.player) % 4)
 
 
-def get_previous_player(player: int, n: int) -> int:
+def validate_trump(trump: int) -> bool:
     """
-    Get the id of the player n steps before the current player.
+    Check if the trump is not none and is in [0, 1, 2, 3, 4, 5].
 
-    :param player: int
-    :param n: int
+    :param trump: int
     """
-    validate_player(player)
-    assert isinstance(n, int), "n is not an integer"
-    return (player - n) % 4
+    assert trump is not None, "Trump is None"
+    assert isinstance(trump, int), "Trump is not an integer"
+    assert trump in [0, 1, 2, 3, 4, 5], "Trump is not in [0, 1, 2, 3, 4, 5]"
+
+    return True
 
 
 def validate_current_trick(trick: np.ndarray) -> bool:
