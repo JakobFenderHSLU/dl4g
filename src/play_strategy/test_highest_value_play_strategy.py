@@ -1,4 +1,4 @@
-import unittest
+from unittest import TestCase
 
 import numpy as np
 from jass.game.game_observation import GameObservation
@@ -6,7 +6,7 @@ from jass.game.game_observation import GameObservation
 from src.play_strategy.highest_value_play_strategy import HighestValuePlayStrategy
 
 
-class TestHighestValuePlayStrategy(unittest.TestCase):
+class TestHighestValuePlayStrategy(TestCase):
 
     def setUp(self):
         self._log_level = "DEBUG"
