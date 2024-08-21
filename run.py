@@ -61,7 +61,8 @@ if __name__ == "__main__":
 
     logger.info("Running a game Simulation with the following parameters:")
     logger.info(f"Agent: {args.agent_trump_strategy} - {args.agent_play_strategy} - {args.agent_addon_play_strategy}")
-    logger.info(f"Opponent: {args.opponent_trump_strategy} - {args.opponent_play_strategy}")
+    logger.info(f"Opponent: {args.opponent_trump_strategy} - {args.opponent_play_strategy} - "
+                f"{args.opponent_addon_play_strategy}")
     logger.info(f"Number of games: {args.n_games}")
     logger.info(f"Log Level: {args.log_level}")
     logger.info("Starting the simulation...")
