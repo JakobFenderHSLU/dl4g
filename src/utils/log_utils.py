@@ -21,6 +21,3 @@ class LogUtils:
         root_logger.handlers.clear()
         root_logger.addHandler(file_handler)
         root_logger.addHandler(console_handler)
-
-
-
