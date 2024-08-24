@@ -102,3 +102,17 @@ def swap_colors_from_order(hand: np.ndarray, color_order: np.ndarray) -> np.ndar
     colors = hand.reshape(4, 9)
     hand = colors[color_order].flatten()
     return hand
+
+
+def deck_to_onehot_hands(deck: np.ndarray) -> np.ndarray:
+    """
+    Convert a deck to onehot encoded hands.
+
+    :param deck: np.ndarray
+    """
+    hands = np.split(deck, 4)
+    hands_onehot = np.zeros((4, 36))
+    for i, hand in enumerate(hands):
+        hands_onehot[i, hand] = 1
+
+    return hands_onehot

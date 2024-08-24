@@ -178,3 +178,15 @@ class TestGameUtils(TestCase):
         swapped_hand = gu.swap_colors_from_order(hand, np.array([3, 1, 2, 0]))
 
         self.assertTrue(np.array_equal(swapped_hand, expected_hand))
+
+    def test_deck_to_onehot_hands(self):
+        deck = np.arange(36)  # 0-35
+        expected_hands = np.zeros((4, 36))
+
+        expected_hands[0, 0:9] = 1
+        expected_hands[1, 9:18] = 1
+        expected_hands[2, 18:27] = 1
+        expected_hands[3, 27:36] = 1
+
+        hands = gu.deck_to_onehot_hands(deck)
+        self.assertTrue(np.array_equal(hands, expected_hands))
