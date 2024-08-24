@@ -1,4 +1,4 @@
-from play_strategy.abstract_play_strategy import PlayStrategy
+from src.play_strategy.abstract_play_strategy import PlayStrategy
 
 
 class OnlyValidPlayStrategy(PlayStrategy):

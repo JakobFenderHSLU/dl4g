@@ -4,19 +4,19 @@ import logging
 import numpy as np
 from jass.arena.arena import Arena
 
-from play_strategy.abstract_play_strategy import PlayStrategy
-from play_strategy.highest_value_play_strategy import HighestValuePlayStrategy
-from play_strategy.only_valid_play_strategy import OnlyValidPlayStrategy
 from src.agent.agent import CustomAgent
+from src.play_strategy.abstract_play_strategy import PlayStrategy
+from src.play_strategy.highest_value_play_strategy import HighestValuePlayStrategy
+from src.play_strategy.only_valid_play_strategy import OnlyValidPlayStrategy
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.play_strategy.smear_play_strategy import SmearPlayStrategy
+from src.trump_strategy.abstract_trump_strategy import TrumpStrategy
 from src.trump_strategy.highest_score_trump_strategy import HighestScoreTrumpStrategy
 from src.trump_strategy.highest_sum_trump_strategy import HighestSumTrumpStrategy
 from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
+from src.trump_strategy.statistical_trump_strategy import StatisticalTrumpStrategy
 from src.utils.log_utils import LogUtils
 from src.utils.results_utils import ResultsUtils
-from trump_strategy.abstract_trump_strategy import TrumpStrategy
-from trump_strategy.statistical_trump_strategy import StatisticalTrumpStrategy
 
 POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score", "statistical"]
 POSSIBLE_PLAY_STRATEGIES = ["random", "highest_value"]

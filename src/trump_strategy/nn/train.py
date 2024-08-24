@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from trump_strategy.nn.trump_selector import TrumpSelector
+from src.trump_strategy.nn.trump_selector import TrumpSelector
 
 
 class Trainer:

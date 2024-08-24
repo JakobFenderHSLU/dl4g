@@ -1,6 +1,6 @@
 from jass.game.game_observation import GameObservation
 
-from play_strategy.abstract_play_strategy import PlayStrategy
+from src.play_strategy.abstract_play_strategy import PlayStrategy
 
 
 class MockPlayStrategy(PlayStrategy):

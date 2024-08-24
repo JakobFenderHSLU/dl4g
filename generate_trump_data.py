@@ -4,8 +4,8 @@ import logging
 import numpy as np
 from tqdm import tqdm
 
-from trump_strategy.nn.trump_data_generator import TrumpDataGenerator
-from utils.log_utils import LogUtils
+from src.trump_strategy.nn.trump_data_generator import TrumpDataGenerator
+from src.utils.log_utils import LogUtils
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

@@ -4,7 +4,7 @@ import numpy as np
 from jass.game.const import PUSH, OBE_ABE, DIAMONDS, UNE_UFE
 from jass.game.game_observation import GameObservation
 
-from trump_strategy.highest_score_trump_strategy import HighestScoreTrumpStrategy
+from src.trump_strategy.highest_score_trump_strategy import HighestScoreTrumpStrategy
 
 
 class TestHighestScoreTrumpStrategy(TestCase):

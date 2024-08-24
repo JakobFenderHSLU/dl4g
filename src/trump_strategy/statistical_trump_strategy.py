@@ -1,7 +1,7 @@
 import numpy as np
 from jass.game.const import PUSH
 
-from trump_strategy.abstract_trump_strategy import TrumpStrategy
+from src.trump_strategy.abstract_trump_strategy import TrumpStrategy
 
 
 class StatisticalTrumpStrategy(TrumpStrategy):

@@ -3,8 +3,8 @@ from unittest import TestCase
 import numpy as np
 from jass.game.game_observation import GameObservation
 
-from play_strategy.mock_play_strategy import MockPlayStrategy
-from play_strategy.only_valid_play_strategy import OnlyValidPlayStrategy
+from src.play_strategy.mock_play_strategy import MockPlayStrategy
+from src.play_strategy.only_valid_play_strategy import OnlyValidPlayStrategy
 
 
 class TestOnlyValidPlayStrategy(TestCase):

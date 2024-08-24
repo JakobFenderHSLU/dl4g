@@ -4,7 +4,7 @@ import numpy as np
 from jass.game.const import OBE_ABE, UNE_UFE, DIAMONDS
 from jass.game.game_observation import GameObservation
 
-from play_strategy.mock_play_strategy import MockPlayStrategy
+from src.play_strategy.mock_play_strategy import MockPlayStrategy
 from src.play_strategy.smear_play_strategy import SmearPlayStrategy
 
 
