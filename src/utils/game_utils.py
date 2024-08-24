@@ -79,11 +79,11 @@ def swap_colors(hand: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     :param hand: the onehot encoded hand.
     :return: The swapped hand and the mapping of the swap.
     """
-    _trump_color_order = np.array([6, 5, 4, 8, 3, 7, 2, 1, 0]) ** 2
+    _trump_color_order = 2 ** np.array([6, 5, 4, 8, 3, 7, 2, 1, 0])
 
     colors = hand.reshape(4, 9)
     sum_of_colors = np.sum(colors, axis=1)
-    color_score = sum_of_colors * 200 + np.sum(colors * _trump_color_order, axis=1)
+    color_score = sum_of_colors * 500 + np.sum(colors * _trump_color_order, axis=1)
 
     # get the order of the colors
     color_order = np.argsort(color_score)[::-1]

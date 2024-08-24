@@ -123,6 +123,21 @@ class TestGameUtils(TestCase):
         swapped_hand, color_order = gu.swap_colors(hand)
         self.assertTrue(np.array_equal(color_order, np.array([2, 3, 0, 1])))
 
+    def test_swap_colors_very_close(self):
+        hand = np.zeros(36)
+        hand[8] = 1  # DIAMOND 6
+        hand[18] = 1  # SPADE ACE
+        hand[19] = 1  # SPADE KING
+        hand[21] = 1  # SPADE JACK
+        hand[23] = 1  # SPADE 9
+        hand[28] = 1  # CLUB KING
+        hand[29] = 1  # CLUB QUEEN
+        hand[30] = 1  # CLUB JACK
+        hand[32] = 1  # CLUB 9
+
+        swapped_hand, color_order = gu.swap_colors(hand)
+        self.assertTrue(np.array_equal(color_order, np.array([2, 3, 0, 1])))
+
     def test_swap_colors_exact(self):
         hand = np.zeros(36)
         hand[8] = 1  # DIAMOND 6
