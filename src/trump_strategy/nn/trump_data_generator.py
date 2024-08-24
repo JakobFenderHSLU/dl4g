@@ -1,5 +1,3 @@
-import os
-import pickle
 from typing import Tuple
 
 import numpy as np
@@ -32,22 +30,22 @@ class TrumpDataGenerator:
             "hand", "deck", "score"
         ])
 
-        if load_data:
-            if os.path.exists("data/existing_hands.pickle"):
-                with open("data/existing_hands.pickle", "rb") as f:
-                    self.existing_deck = pickle.load(f)
-
-            # if os.path.exists("data/cached_hands.csv"):
-            #     with open("data/cached_hands.csv", "r") as f:
-            #         self.cached_decks = pd.read_csv(f)
+        # if load_data:
+        #     if os.path.exists("data/existing_hands.pickle"):
+        #         with open("data/existing_hands.pickle", "rb") as f:
+        #             self.existing_deck = pickle.load(f)
+        #
+        #     if os.path.exists("data/cached_hands.csv"):
+        #         with open("data/cached_hands.csv", "r") as f:
+        #             self.cached_decks = pd.read_csv(f)
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        if self.n_yielded_hands % self.backup_interval == 0 and self.n_yielded_hands > 0:
-            print(f"Backing up hands at {self.n_yielded_hands}...")
-            self._backup_hands()
+        # if self.n_yielded_hands % self.backup_interval == 0 and self.n_yielded_hands > 0:
+        #     print(f"Backing up hands at {self.n_yielded_hands}...")
+        #     self._backup_hands()
 
         if self.n_yielded_hands < len(self.cached_decks):
             print(f"Yielding cached hand {self.n_yielded_hands}...")
@@ -64,12 +62,12 @@ class TrumpDataGenerator:
 
         return deck, verbose_results
 
-    def _backup_hands(self):
-        with open("data/existing_hands.pickle", "wb") as f:
-            pickle.dump(self.existing_deck, f)
-
-        # with open("data/cached_hands.csv", "a") as f:
-        #     self.cached_decks.to_csv(f, index=False, header=False)
+    # def _backup_hands(self):
+    #     with open("data/existing_hands.pickle", "wb") as f:
+    #         pickle.dump(self.existing_deck, f)
+    #
+    #     # with open("data/cached_hands.csv", "a") as f:
+    #     #     self.cached_decks.to_csv(f, index=False, header=False)
 
     def _generate_unique_deck(self) -> np.ndarray:
         deck, deck_str = self._generate_random_deck()
@@ -116,7 +114,8 @@ class TrumpDataGenerator:
                     card_action = np.random.choice(np.flatnonzero(valid_cards))
                     self.game.action_play_card(card_action)
 
-                score[i] = self.game.state.points[0]
+                score[i] = np.where(self.game.state.trick_winner == 0, self.game.state.trick_points, 0).sum()
+                score_for_player_0 = self.game.state.points[0]
 
             results[trump] = score
 
