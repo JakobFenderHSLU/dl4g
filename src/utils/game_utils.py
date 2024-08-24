@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import numpy as np
 from jass.game.game_observation import GameObservation
 from jass.game.game_rule import GameRule
@@ -69,3 +71,34 @@ def validate_player(player: int) -> bool:
     assert player is not None, "Player is None"
     assert player in [0, 1, 2, 3], "Player is not in [0, 1, 2, 3]"
     return True
+
+
+def swap_colors(hand: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Swap colors, to reduce the amount of possible hands by 24. See README.md for an explanation.
+    :param hand: the onehot encoded hand.
+    :return: The swapped hand and the mapping of the swap.
+    """
+    _trump_color_order = np.array([6, 5, 4, 8, 3, 7, 2, 1, 0]) ** 2
+
+    colors = hand.reshape(4, 9)
+    sum_of_colors = np.sum(colors, axis=1)
+    color_score = sum_of_colors * 200 + np.sum(colors * _trump_color_order, axis=1)
+
+    # get the order of the colors
+    color_order = np.argsort(color_score)[::-1]
+    hand = colors[color_order].flatten()
+
+    return hand, color_order
+
+
+def swap_colors_from_order(hand: np.ndarray, color_order: np.ndarray) -> np.ndarray:
+    """
+    Swap colors, to reduce the amount of possible hands by 24. See README.md for an explanation.
+    :param hand: the onehot encoded hand.
+    :param color_order: the order of the colors
+    :return: The swapped hand.
+    """
+    colors = hand.reshape(4, 9)
+    hand = colors[color_order].flatten()
+    return hand

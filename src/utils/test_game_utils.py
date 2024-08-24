@@ -91,3 +91,90 @@ class TestGameUtils(TestCase):
             gu.validate_current_trick(np.array([36, 35, 34, -1]))
         with self.assertRaises(AssertionError):
             gu.validate_current_trick(np.array([36, 35, 34, 33]))
+
+    def test_swap_colors_sum(self):
+        hand = np.zeros(36)
+        hand[5] = 1  # DIAMOND 9
+        hand[16] = 1  # HEART 7
+        hand[17] = 1  # HEART 6
+        hand[19] = 1  # SPADE KING
+        hand[20] = 1  # SPADE QUEEN
+        hand[21] = 1  # SPADE JACK
+        hand[27] = 1  # CLUB ACE
+        hand[28] = 1  # CLUB KING
+        hand[29] = 1  # CLUB QUEEN
+        hand[30] = 1  # CLUB JACK
+
+        swapped_hand, color_order = gu.swap_colors(hand)
+        self.assertTrue(np.array_equal(color_order, np.array([3, 2, 1, 0])))
+
+    def test_swap_colors_tie_breaker(self):
+        hand = np.zeros(36)
+        hand[8] = 1  # DIAMOND 6
+        hand[18] = 1  # SPADE ACE
+        hand[19] = 1  # SPADE KING
+        hand[20] = 1  # SPADE QUEEN
+        hand[21] = 1  # SPADE JACK
+        hand[27] = 1  # CLUB ACE
+        hand[28] = 1  # CLUB KING
+        hand[29] = 1  # CLUB QUEEN
+        hand[35] = 1  # CLUB 6
+
+        swapped_hand, color_order = gu.swap_colors(hand)
+        self.assertTrue(np.array_equal(color_order, np.array([2, 3, 0, 1])))
+
+    def test_swap_colors_exact(self):
+        hand = np.zeros(36)
+        hand[8] = 1  # DIAMOND 6
+        hand[18] = 1  # SPADE ACE
+        hand[19] = 1  # SPADE KING
+        hand[20] = 1  # SPADE QUEEN
+        hand[21] = 1  # SPADE JACK
+        hand[27] = 1  # CLUB ACE
+        hand[28] = 1  # CLUB KING
+        hand[29] = 1  # CLUB QUEEN
+        hand[30] = 1  # CLUB JACK
+
+        swapped_hand, color_order = gu.swap_colors(hand)
+        self.assertTrue(np.array_equal(color_order, np.array([3, 2, 0, 1])))
+
+    def test_swap_colors_from_order_0(self):
+        hand = np.zeros(36)
+        hand[0:9] = 1  # FULL DIAMOND Hand
+
+        swapped_hand = gu.swap_colors_from_order(hand, np.array([0, 1, 2, 3]))
+
+        self.assertTrue(np.array_equal(swapped_hand, hand))
+
+    def test_swap_colors_from_order_1(self):
+        hand = np.zeros(36)
+        hand[0:9] = 1  # FULL DIAMOND Hand
+
+        expected_hand = np.zeros(36)
+        expected_hand[9:18] = 1
+
+        swapped_hand = gu.swap_colors_from_order(hand, np.array([1, 0, 2, 3]))
+
+        self.assertTrue(np.array_equal(swapped_hand, expected_hand))
+
+    def test_swap_colors_from_order_2(self):
+        hand = np.zeros(36)
+        hand[0:9] = 1
+
+        expected_hand = np.zeros(36)
+        expected_hand[18:27] = 1
+
+        swapped_hand = gu.swap_colors_from_order(hand, np.array([2, 1, 0, 3]))
+
+        self.assertTrue(np.array_equal(swapped_hand, expected_hand))
+
+    def test_swap_colors_from_order_3(self):
+        hand = np.zeros(36)
+        hand[0:9] = 1
+
+        expected_hand = np.zeros(36)
+        expected_hand[27:36] = 1
+
+        swapped_hand = gu.swap_colors_from_order(hand, np.array([3, 1, 2, 0]))
+
+        self.assertTrue(np.array_equal(swapped_hand, expected_hand))
