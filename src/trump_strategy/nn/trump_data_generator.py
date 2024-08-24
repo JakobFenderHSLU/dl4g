@@ -57,13 +57,12 @@ class TrumpDataGenerator:
 
         deck = self._generate_unique_deck()
         verbose_results = self._get_scores(deck)
-        result = np.concatenate([deck.flatten(), verbose_results.flatten()])
 
         # cache the result
         # self.cached_decks.loc[self.n_yielded_hands] = result
         self.n_yielded_hands += 1
 
-        return result
+        return deck, verbose_results
 
     def _backup_hands(self):
         with open("data/existing_hands.pickle", "wb") as f:
