@@ -16,8 +16,9 @@ from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
 from src.utils.log_utils import LogUtils
 from src.utils.results_utils import ResultsUtils
 from trump_strategy.abstract_trump_strategy import TrumpStrategy
+from trump_strategy.statistical_trump_strategy import StatisticalTrumpStrategy
 
-POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score"]
+POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score", "statistical"]
 POSSIBLE_PLAY_STRATEGIES = ["random", "highest_value"]
 POSSIBLE_ADDON_PLAY_STRATEGIES = ["all", "none", "only_valid", "smear"]
 
@@ -75,6 +76,9 @@ if __name__ == "__main__":
             return HighestSumTrumpStrategy(log_level=args.log_level, seed=args.seed)
         elif strategy_name == "highest_score":
             return HighestScoreTrumpStrategy(log_level=args.log_level, seed=args.seed)
+        elif strategy_name == "statistical":
+            return StatisticalTrumpStrategy(log_level=args.log_level, seed=args.seed,
+                                            values_path="data/statistical/stat_values_v1.txt")
         else:
             raise ValueError(f"Unknown trump strategy: {strategy_name}")
 
