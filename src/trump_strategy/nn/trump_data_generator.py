@@ -15,8 +15,8 @@ import src.utils.game_utils as gu
 class TrumpDataGenerator:
     def __init__(self, load_data=False, n_play_per_hand=100, backup_interval=1000, cache_size=1_000_000):
         self.cache_size = cache_size
-        self.cached_decks = np.zeros((self.cache_size, 36))
-        self.cached_results = np.zeros((self.cache_size, MAX_TRUMP + 1, n_play_per_hand))
+        self.cached_decks = np.zeros((self.cache_size, 36)).astype(int)
+        self.cached_results = np.zeros((self.cache_size, MAX_TRUMP + 1, n_play_per_hand)).astype(int)
         self.n_play_per_hand = n_play_per_hand
         self.backup_interval = backup_interval
 
@@ -37,8 +37,9 @@ class TrumpDataGenerator:
                 self.logger.warning("no cached data found")
                 return
 
-            loaded_decks = np.load("data/cached_decks.npy")
-            loaded_results = np.load("data/cached_results.npy")
+            # load as int
+            loaded_decks = np.load("data/cached_decks.npy").astype(int)
+            loaded_results = np.load("data/cached_results.npy").astype(int)
 
             if loaded_decks.shape[0] != loaded_results.shape[0]:
                 self.logger.warning("cached data is inconsistent")
@@ -84,10 +85,10 @@ class TrumpDataGenerator:
 
     def _backup_hands(self):
         with open("data/cached_decks.npy", "wb") as f:
-            np.save(f, self.cached_decks)
+            np.save(f, self.cached_decks.astype(int))
 
         with open("data/cached_results.npy", "wb") as f:
-            np.save(f, self.cached_results)
+            np.save(f, self.cached_results.astype(int))
 
     def _generate_random_deck(self) -> ndarray:
         deck = self.deck.copy()
