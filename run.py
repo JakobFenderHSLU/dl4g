@@ -78,7 +78,7 @@ if __name__ == "__main__":
             return HighestScoreTrumpStrategy(log_level=args.log_level, seed=args.seed)
         elif strategy_name == "statistical":
             return StatisticalTrumpStrategy(log_level=args.log_level, seed=args.seed,
-                                            values_path="data/statistical/stat_values_v1.txt")
+                                            values_path="data/statistical/stat_values_v3.txt")
         else:
             raise ValueError(f"Unknown trump strategy: {strategy_name}")
 
