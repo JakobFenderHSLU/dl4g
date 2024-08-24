@@ -37,11 +37,8 @@ class TrumpDataGenerator:
                 self.logger.warning("no cached data found")
                 return
 
-            with open("data/cached_decks.npy", "rb") as f:
-                loaded_decks = np.load(f)
-
-            with open("data/cached_results.npy", "rb") as f:
-                loaded_results = np.load(f)
+            loaded_decks = np.load("data/cached_decks.npy")
+            loaded_results = np.load("data/cached_results.npy")
 
             if loaded_decks.shape[0] != loaded_results.shape[0]:
                 self.logger.warning("cached data is inconsistent")
@@ -67,46 +64,47 @@ class TrumpDataGenerator:
             self._backup_hands()
 
         if self.n_yielded_hands < self.n_cached_results:
-            deck = self.cached_results[self.n_yielded_hands]
+            deck = self.cached_decks[self.n_yielded_hands]
+            onehot_hands = gu.deck_to_onehot_hands(deck)
             results = self.cached_results[self.n_yielded_hands]
             self.n_yielded_hands += 1
-            return deck, results
+            return onehot_hands, results
 
         # Note: No check for uniqueness needed. Because the amount of data generated to have a 0.1% chance of a
         # duplicate is ~4.33 * 10^15. So we can safely ignore this case.
-        deck = self._generate_random_deck()
-        results = self._get_scores(deck)
+        onehot_hands = self._generate_random_deck()
+        results = self._get_scores(onehot_hands)
 
-        self.cached_decks[self.n_yielded_hands] = deck
+        self.cached_decks[self.n_yielded_hands] = np.where(onehot_hands == 1)[1]
         self.cached_results[self.n_yielded_hands] = results
 
         self.n_yielded_hands += 1
 
-        return deck, results
+        return onehot_hands, results
 
     def _backup_hands(self):
         with open("data/cached_decks.npy", "wb") as f:
-            np.savetxt(f, self.cached_decks, fmt="%d")
+            np.save(f, self.cached_decks)
 
         with open("data/cached_results.npy", "wb") as f:
-            np.savetxt(f, self.cached_results, fmt="%d")
+            np.save(f, self.cached_results)
 
     def _generate_random_deck(self) -> ndarray:
         deck = self.deck.copy()
         np.random.shuffle(deck)
         hands = gu.deck_to_onehot_hands(deck)
         swap_hand, color_order = gu.swap_colors(hands[0])
-        swapped_deck = np.array([
+        swapped_hands = np.array([
             swap_hand,
             gu.swap_colors_from_order(hands[1], color_order),
             gu.swap_colors_from_order(hands[2], color_order),
             gu.swap_colors_from_order(hands[3], color_order)
         ])
 
-        return swapped_deck
+        return swapped_hands
 
-    def _get_scores(self, deck: np.ndarray) -> ndarray:
-        self.game_state.hands = gu.deck_to_onehot_hands(deck)
+    def _get_scores(self, hands: np.ndarray) -> ndarray:
+        self.game_state.hands = hands
 
         self.game.init_from_state(self.game_state)
 
