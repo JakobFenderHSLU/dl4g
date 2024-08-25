@@ -12,7 +12,7 @@ if __name__ == "__main__":
     parser.add_argument("--n-hands", default=1001, type=int, help="Number of hands to play")
     parser.add_argument("--n-play-per-hand",
                         default=20, type=int, help="Number of games to play per hand")
-    parser.add_argument("--backup-interval", default=1000, type=int, help="Interval to backup the data")
+    parser.add_argument("--backup-interval", default=10_000, type=int, help="Interval to backup the data")
     parser.add_argument("--max-cache-size", default=1_000_000, type=int, help="Size of the cache")
     parser.add_argument("--log_level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
                         help="Set the logging level")
