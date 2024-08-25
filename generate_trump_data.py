@@ -13,7 +13,7 @@ if __name__ == "__main__":
     parser.add_argument("--n-play-per-hand",
                         default=20, type=int, help="Number of games to play per hand")
     parser.add_argument("--backup-interval", default=1000, type=int, help="Interval to backup the data")
-    parser.add_argument("--cache-size", default=1_000_000, type=int, help="Size of the cache")
+    parser.add_argument("--max-cache-size", default=1_000_000, type=int, help="Size of the cache")
     parser.add_argument("--log_level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
                         help="Set the logging level")
     parser.add_argument("-s", "--seed", type=int, help="Set the seed for the random number generator")
@@ -35,7 +35,7 @@ if __name__ == "__main__":
         load_data=args.load_data,
         n_play_per_hand=args.n_play_per_hand,
         backup_interval=args.backup_interval,
-        cache_size=args.cache_size
+        max_cache_size=args.max_cache_size
     )
 
     for _ in tqdm(range(args.n_hands)):
