@@ -3,16 +3,14 @@ from unittest import TestCase
 import numpy as np
 from jass.game.game_observation import GameObservation
 
-from src.play_strategy.mock_play_strategy import MockPlayStrategy
-from src.play_strategy.only_valid_play_strategy import OnlyValidPlayStrategy
+from play_rules.only_valid_play_strategy import OnlyValidPlayStrategyStrategy
 
 
 class TestOnlyValidPlayStrategy(TestCase):
     def setUp(self):
         self._log_level = "DEBUG"
         self._seed = 42
-        mock_strategy = MockPlayStrategy(self._log_level, self._seed, 99)
-        self._strategy = OnlyValidPlayStrategy(log_level=self._log_level, seed=self._seed, next_strategy=mock_strategy)
+        self._strategy = OnlyValidPlayStrategyStrategy(log_level=self._log_level, seed=self._seed)
 
     def test_choose_card_one(self):
         observation = GameObservation()
@@ -34,4 +32,4 @@ class TestOnlyValidPlayStrategy(TestCase):
 
         card = self._strategy.choose_card(observation)
 
-        self.assertEqual(99, card)
+        self.assertEqual(None, card)

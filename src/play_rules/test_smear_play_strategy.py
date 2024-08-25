@@ -4,23 +4,21 @@ import numpy as np
 from jass.game.const import OBE_ABE, UNE_UFE, DIAMONDS
 from jass.game.game_observation import GameObservation
 
-from src.play_strategy.mock_play_strategy import MockPlayStrategy
-from src.play_strategy.smear_play_strategy import SmearPlayStrategy
+from play_rules.smear_play_strategy import SmearPlayStrategy
 
 
 class TestSmearPlayStrategy(TestCase):
     def setUp(self):
         self._log_level = "DEBUG"
         self._seed = 42
-        mock_strategy = MockPlayStrategy(self._log_level, self._seed, 99)
-        self._strategy = SmearPlayStrategy(log_level=self._log_level, seed=self._seed, next_strategy=mock_strategy)
+        self._strategy = SmearPlayStrategy(log_level=self._log_level, seed=self._seed)
 
     def test_choose_card_not_last(self):
         obs = GameObservation()
         obs.current_trick = np.array([7, 1, -1, -1])
 
         card = self._strategy.choose_card(obs)
-        self.assertEqual(card, 99)
+        self.assertEqual(card, None)
 
     def test_choose_card_not_save(self):
         obs = GameObservation()
@@ -28,7 +26,7 @@ class TestSmearPlayStrategy(TestCase):
         obs.current_trick = np.array([7, 1, 5, -1])
 
         card = self._strategy.choose_card(obs)
-        self.assertEqual(card, 99)
+        self.assertEqual(card, None)
 
     def test_choose_card_smear_obe_abe(self):
         obs = GameObservation()
@@ -96,4 +94,4 @@ class TestSmearPlayStrategy(TestCase):
         self._strategy._rule.get_valid_cards_from_obs = lambda x: valid_cards
 
         card = self._strategy.choose_card(obs)
-        self.assertEqual(card, 99)
+        self.assertEqual(card, None)
