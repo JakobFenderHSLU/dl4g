@@ -1,7 +1,7 @@
-from play_rules.abstract_play_rule import PlayRuleStrategy
+from play_rule_strategy.abstract_play_rule import PlayRuleStrategy
 
 
-class OnlyValidPlayStrategyStrategy(PlayRuleStrategy):
+class OnlyValidPlayRuleStrategy(PlayRuleStrategy):
     def __init__(self, log_level: str, seed: int):
         super().__init__(log_level, __name__, seed)
 

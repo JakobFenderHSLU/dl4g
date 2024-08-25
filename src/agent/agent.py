@@ -2,11 +2,11 @@ from typing import List
 
 from jass.agents.agent import Agent
 
-from play_rules import AbstractPlayRule
+from src.play_rule_strategy.abstract_play_rule import PlayRuleStrategy
 
 
 class CustomAgent(Agent):
-    def __init__(self, trump_strategy, play_strategy, play_rules_strategies: List[AbstractPlayRule]):
+    def __init__(self, trump_strategy, play_strategy, play_rules_strategies: List[PlayRuleStrategy]):
         self.trump_strategy = trump_strategy
         self.play_strategy = play_strategy
         self.play_rules_strategy = play_rules_strategies

@@ -1,15 +1,17 @@
 import argparse
 import logging
+from typing import List
 
 import numpy as np
 from jass.arena.arena import Arena
 
 from src.agent.agent import CustomAgent
+from src.play_rule_strategy.abstract_play_rule import PlayRuleStrategy
+from src.play_rule_strategy.only_valid_play_strategy import OnlyValidPlayRuleStrategy
+from src.play_rule_strategy.smear_play_strategy import SmearPlayRuleStrategy
 from src.play_strategy.abstract_play_strategy import PlayStrategy
 from src.play_strategy.highest_value_play_strategy import HighestValuePlayStrategy
-from src.play_strategy.only_valid_play_strategy import OnlyValidPlayStrategy
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
-from src.play_strategy.smear_play_strategy import SmearPlayStrategy
 from src.trump_strategy.abstract_trump_strategy import TrumpStrategy
 from src.trump_strategy.highest_score_trump_strategy import HighestScoreTrumpStrategy
 from src.trump_strategy.highest_sum_trump_strategy import HighestSumTrumpStrategy
@@ -20,7 +22,7 @@ from src.utils.results_utils import ResultsUtils
 
 POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score", "statistical"]
 POSSIBLE_PLAY_STRATEGIES = ["random", "highest_value"]
-POSSIBLE_ADDON_PLAY_STRATEGIES = ["all", "none", "only_valid", "smear"]
+POSSIBLE_PLAY_RULE_STRATEGIES = ["all", "none", "only_valid", "smear"]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -32,9 +34,10 @@ if __name__ == "__main__":
                         default=POSSIBLE_PLAY_STRATEGIES[0],
                         choices=POSSIBLE_PLAY_STRATEGIES,
                         help="Choose the play strategy for the agent")
-    parser.add_argument("-aap", "--agent-addon-play-strategy",
-                        default=POSSIBLE_ADDON_PLAY_STRATEGIES[0],
-                        choices=POSSIBLE_ADDON_PLAY_STRATEGIES,
+    parser.add_argument("-apr", "--agent-play-rule-strategies",
+                        default=POSSIBLE_PLAY_RULE_STRATEGIES[0],
+                        choices=POSSIBLE_PLAY_RULE_STRATEGIES,
+                        nargs="+",
                         help="Choose the additional play strategy for the agent")
     parser.add_argument("-ot", "--opponent-trump-strategy",
                         default=POSSIBLE_TRUMP_STRATEGIES[0],
@@ -44,9 +47,10 @@ if __name__ == "__main__":
                         default=POSSIBLE_PLAY_STRATEGIES[0],
                         choices=POSSIBLE_PLAY_STRATEGIES,
                         help="Choose the play strategy for the opponent")
-    parser.add_argument("-oa", "--opponent-addon-play-strategy",
-                        default=POSSIBLE_ADDON_PLAY_STRATEGIES[1],
-                        choices=POSSIBLE_ADDON_PLAY_STRATEGIES,
+    parser.add_argument("-oa", "--opponent-play-rule-strategies",
+                        default=POSSIBLE_PLAY_RULE_STRATEGIES[1],
+                        choices=POSSIBLE_PLAY_RULE_STRATEGIES,
+                        nargs="+",
                         help="Choose the additional play strategy for the opponent")
     parser.add_argument("-n", "--n_games", default=100, type=int, help="Number of games to play")
     parser.add_argument("-ll", "--log_level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
@@ -61,9 +65,9 @@ if __name__ == "__main__":
     logger = logging.getLogger("run.py")
 
     logger.info("Running a game Simulation with the following parameters:")
-    logger.info(f"Agent: {args.agent_trump_strategy} - {args.agent_play_strategy} - {args.agent_addon_play_strategy}")
+    logger.info(f"Agent: {args.agent_trump_strategy} - {args.agent_play_strategy} - {args.agent_play_rule_strategies}")
     logger.info(f"Opponent: {args.opponent_trump_strategy} - {args.opponent_play_strategy} - "
-                f"{args.opponent_addon_play_strategy}")
+                f"{args.opponent_play_rule_strategies}")
     logger.info(f"Number of games: {args.n_games}")
     logger.info(f"Log Level: {args.log_level}")
     logger.info("Starting the simulation...")
@@ -83,31 +87,30 @@ if __name__ == "__main__":
             raise ValueError(f"Unknown trump strategy: {strategy_name}")
 
 
-    def _get_play_strategy(strategy_name: str, addon_strategy: str) -> PlayStrategy:
-        strategy = None
+    def _get_play_strategy(strategy_name: str) -> PlayStrategy:
         if strategy_name == "random":
-            strategy = RandomPlayStrategy(log_level=args.log_level, seed=args.seed)
+            return RandomPlayStrategy(log_level=args.log_level, seed=args.seed)
         elif strategy_name == "highest_value":
-            strategy = HighestValuePlayStrategy(log_level=args.log_level, seed=args.seed)
+            return HighestValuePlayStrategy(log_level=args.log_level, seed=args.seed)
         else:
             raise ValueError(f"Unknown play strategy: {strategy_name}")
 
-        if addon_strategy == "all":
-            return OnlyValidPlayStrategy(
-                log_level=args.log_level,
-                seed=args.seed,
-                next_strategy=SmearPlayStrategy(
-                    log_level=args.log_level,
-                    seed=args.seed,
-                    next_strategy=strategy
-                )
-            )
-        elif addon_strategy == "none":
-            return strategy
-        elif addon_strategy == "only_valid":
-            return OnlyValidPlayStrategy(log_level=args.log_level, seed=args.seed, next_strategy=strategy)
-        elif addon_strategy == "smear":
-            return SmearPlayStrategy(log_level=args.log_level, seed=args.seed, next_strategy=strategy)
+
+    def _get_play_rule_strategies(strategies_names: str) -> List[PlayRuleStrategy]:
+        if strategies_names == "none":
+            return []
+
+        if strategies_names == "all":
+            strategies_names = POSSIBLE_PLAY_RULE_STRATEGIES[1:]
+
+        strategies = []
+        for strategy_name in strategies_names:
+            if strategy_name == "only_valid":
+                strategies.append(OnlyValidPlayRuleStrategy(log_level=args.log_level, seed=args.seed))
+            if strategy_name == "smear":
+                strategies.append(SmearPlayRuleStrategy(log_level=args.log_level, seed=args.seed))
+
+        return strategies
 
 
     np.random.seed(args.seed)
@@ -115,13 +118,17 @@ if __name__ == "__main__":
                    save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs")
     arena1.set_players(
         CustomAgent(_get_trump_strategy(args.agent_trump_strategy),
-                    _get_play_strategy(args.agent_play_strategy, args.agent_addon_play_strategy)),
+                    _get_play_strategy(args.agent_play_strategy),
+                    _get_play_rule_strategies(args.agent_play_rule_strategies)),
         CustomAgent(_get_trump_strategy(args.opponent_trump_strategy),
-                    _get_play_strategy(args.opponent_play_strategy, args.opponent_addon_play_strategy)),
+                    _get_play_strategy(args.opponent_play_strategy),
+                    _get_play_rule_strategies(args.opponent_play_rule_strategies)),
         CustomAgent(_get_trump_strategy(args.agent_trump_strategy),
-                    _get_play_strategy(args.agent_play_strategy, args.agent_addon_play_strategy)),
+                    _get_play_strategy(args.agent_play_strategy),
+                    _get_play_rule_strategies(args.agent_play_rule_strategies)),
         CustomAgent(_get_trump_strategy(args.opponent_trump_strategy),
-                    _get_play_strategy(args.opponent_play_strategy, args.opponent_addon_play_strategy)),
+                    _get_play_strategy(args.opponent_play_strategy),
+                    _get_play_rule_strategies(args.opponent_play_rule_strategies))
     )
     arena1.play_all_games()
 
@@ -130,13 +137,17 @@ if __name__ == "__main__":
                    save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs")
     arena2.set_players(
         CustomAgent(_get_trump_strategy(args.opponent_trump_strategy),
-                    _get_play_strategy(args.opponent_play_strategy, args.opponent_addon_play_strategy)),
+                    _get_play_strategy(args.opponent_play_strategy),
+                    _get_play_rule_strategies(args.opponent_play_rule_strategies)),
         CustomAgent(_get_trump_strategy(args.agent_trump_strategy),
-                    _get_play_strategy(args.agent_play_strategy, args.agent_addon_play_strategy)),
+                    _get_play_strategy(args.agent_play_strategy),
+                    _get_play_rule_strategies(args.agent_play_rule_strategies)),
         CustomAgent(_get_trump_strategy(args.opponent_trump_strategy),
-                    _get_play_strategy(args.opponent_play_strategy, args.opponent_addon_play_strategy)),
+                    _get_play_strategy(args.opponent_play_strategy),
+                    _get_play_rule_strategies(args.opponent_play_rule_strategies)),
         CustomAgent(_get_trump_strategy(args.agent_trump_strategy),
-                    _get_play_strategy(args.agent_play_strategy, args.agent_addon_play_strategy)),
+                    _get_play_strategy(args.agent_play_strategy),
+                    _get_play_rule_strategies(args.agent_play_rule_strategies))
     )
     arena2.play_all_games()
 

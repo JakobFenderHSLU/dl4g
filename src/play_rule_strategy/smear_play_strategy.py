@@ -2,10 +2,10 @@ import numpy as np
 from jass.game.const import OBE_ABE
 
 import src.utils.game_utils as gu
-from play_rules.abstract_play_rule import PlayRuleStrategy
+from play_rule_strategy.abstract_play_rule import PlayRuleStrategy
 
 
-class SmearPlayStrategy(PlayRuleStrategy):
+class SmearPlayRuleStrategy(PlayRuleStrategy):
     _smear_weight = [0, 0, 0, 0, 1, 0, 0, 0, 0]
     _obenabe_smear_weight = [0, 0, 0, 0, 2, 0, 1, 0, 0]
 

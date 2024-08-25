@@ -5,8 +5,7 @@ from src.trump_strategy.nn.trump_selector import TrumpSelector
 
 
 class Trainer:
-    def __init__(self, max_epochs=10000, batch_size=64, lr=1e-3):
-        self.max_epochs = max_epochs
+    def __init__(self, batch_size=64, lr=1e-3):
         self.batch_size = batch_size
         self.lr = lr
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

@@ -4,14 +4,14 @@ import numpy as np
 from jass.game.const import OBE_ABE, UNE_UFE, DIAMONDS
 from jass.game.game_observation import GameObservation
 
-from play_rules.smear_play_strategy import SmearPlayStrategy
+from play_rule_strategy.smear_play_strategy import SmearPlayRuleStrategy
 
 
 class TestSmearPlayStrategy(TestCase):
     def setUp(self):
         self._log_level = "DEBUG"
         self._seed = 42
-        self._strategy = SmearPlayStrategy(log_level=self._log_level, seed=self._seed)
+        self._strategy = SmearPlayRuleStrategy(log_level=self._log_level, seed=self._seed)
 
     def test_choose_card_not_last(self):
         obs = GameObservation()

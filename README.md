@@ -1,4 +1,4 @@
-# Bots for DL4G
+# Agent for DL4G
 
 This repository contains the code for the bots that are used in the Deep Learning for Games course at the Lucerne
 University of Applied Sciences and Arts. It is based on the Jass game, which is a popular card game in Switzerland.
