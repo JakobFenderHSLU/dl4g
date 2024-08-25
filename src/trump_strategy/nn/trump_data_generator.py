@@ -35,7 +35,7 @@ class TrumpDataGenerator:
         self.logger = logging.getLogger(__name__)
 
         if load_data:
-            self.cached_decks, self.cached_results = self._load_data()
+            self._load_data()
         else:
             self.cached_decks = np.zeros((self.max_cache_size, 36)).astype(int)
             self.cached_results = np.zeros((self.max_cache_size, MAX_TRUMP + 1, n_play_per_hand)).astype(int)
@@ -53,7 +53,12 @@ class TrumpDataGenerator:
             deck = self.cached_decks[self.relative_n_yielded_hands]
             onehot_hands = gu.deck_to_onehot_hands(deck)
             results = self.cached_results[self.relative_n_yielded_hands]
+
+            self.total_n_yielded_hands += 1
+            self.relative_n_yielded_hands += 1
+
             return onehot_hands, results
+
         # Backup data at interval if it was generated.
         elif self.total_n_yielded_hands % self.backup_interval == 0 and self.total_n_yielded_hands > 0:
             self.logger.info(f"Backing up hands at {self.total_n_yielded_hands}...")
@@ -87,16 +92,12 @@ class TrumpDataGenerator:
             self.logger.warning("cached data is inconsistent")
             return
 
-        self.total_n_cached_results += loaded_results.shape[0]
-        self.relative_n_cached_results = loaded_results.shape[0]
+        first_empty_hand_index = np.where(loaded_decks.sum(axis=1) == 0)[0][0]
+        self.total_n_cached_results += first_empty_hand_index
+        self.relative_n_cached_results = first_empty_hand_index
 
-        sized_decks = np.zeros((self.max_cache_size, 36)).astype(int)
-        sized_results = np.zeros((self.max_cache_size, MAX_TRUMP + 1, self.n_play_per_hand)).astype(int)
-
-        sized_decks[:self.relative_n_cached_results] = loaded_decks
-        sized_results[:self.relative_n_cached_results] = loaded_results
-
-        return sized_decks, sized_results
+        self.cached_decks = loaded_decks
+        self.cached_results = loaded_results
 
     def _backup_hands(self):
         with open(f"{self.DATA_PATH}/cached_decks_{self.total_n_yielded_hands // self.max_cache_size}.npy", "wb") as f:
