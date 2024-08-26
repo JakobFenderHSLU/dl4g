@@ -5,8 +5,10 @@ from src.play_strategy.abstract_play_strategy import PlayStrategy
 
 
 class RandomPlayStrategy(PlayStrategy):
-    def __init__(self, log_level: str, seed: int):
-        super().__init__(log_level, __name__, seed)
+    def __init__(self, seed: int):
+        super().__init__(__name__)
+        self._rng = np.random.default_rng(seed)
+
 
     def choose_card(self, observation: GameObservation) -> int:
         valid_cards = self._rule.get_valid_cards_from_obs(observation)

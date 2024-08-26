@@ -1,14 +1,13 @@
 import logging
 from abc import ABC, abstractmethod
 
-import numpy as np
 from jass.game.game_observation import GameObservation
 from jass.game.rule_schieber import RuleSchieber
 
 
 class PlayStrategy(ABC):
 
-    def __init__(self, log_level: str, strategy_name: str, seed: int):
+    def __init__(self, strategy_name: str):
         """
         Initialize the abstract trump strategy. This method should be implemented by the child class.
         :param log_level: The log level
@@ -16,9 +15,7 @@ class PlayStrategy(ABC):
         :param seed: The seed for the random number generator
         """
         self._strategy_name = strategy_name
-        self._rng = np.random.default_rng(seed)
         self._logger = logging.getLogger(self._strategy_name)
-        self._logger.setLevel(log_level)
         self._rule = RuleSchieber()
 
     @abstractmethod

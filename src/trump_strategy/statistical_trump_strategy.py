@@ -5,8 +5,8 @@ from src.trump_strategy.abstract_trump_strategy import TrumpStrategy
 
 
 class StatisticalTrumpStrategy(TrumpStrategy):
-    def __init__(self, log_level: str, seed: int, values_path: str):
-        super().__init__(log_level, __name__, seed)
+    def __init__(self, values_path: str):
+        super().__init__(__name__)
         self.scores = np.loadtxt(values_path)
 
     def choose_trump(self, observation) -> int:

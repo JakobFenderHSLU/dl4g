@@ -10,8 +10,7 @@ class TestHighestValuePlayStrategy(TestCase):
 
     def setUp(self):
         self._log_level = "DEBUG"
-        self._seed = 42
-        self._strategy = HighestValuePlayStrategy(log_level=self._log_level, seed=self._seed)
+        self._strategy = HighestValuePlayStrategy()
 
     def test_choose_suit_first(self):
         observation = GameObservation()

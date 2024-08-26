@@ -17,8 +17,8 @@ class HighestValuePlayStrategy(PlayStrategy):
     _uneufe_weight = [2, 4, 6, 8, 10, 12, 14, 16, 18]
     _uneufe_weight_current_suit = [3, 5, 7, 9, 11, 13, 15, 17, 19]
 
-    def __init__(self, log_level: str, seed: int):
-        super().__init__(log_level, __name__, seed)
+    def __init__(self):
+        super().__init__(__name__)
 
     def choose_card(self, observation: GameObservation) -> int:
         current_trump = observation.trump

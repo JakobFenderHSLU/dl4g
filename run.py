@@ -75,23 +75,22 @@ if __name__ == "__main__":
 
     def _get_trump_strategy(strategy_name: str) -> TrumpStrategy:
         if strategy_name == "random":
-            return RandomTrumpStrategy(log_level=args.log_level, seed=args.seed)
+            return RandomTrumpStrategy(seed=args.seed)
         elif strategy_name == "highest_sum":
-            return HighestSumTrumpStrategy(log_level=args.log_level, seed=args.seed)
+            return HighestSumTrumpStrategy(seed=args.seed)
         elif strategy_name == "highest_score":
-            return HighestScoreTrumpStrategy(log_level=args.log_level, seed=args.seed)
+            return HighestScoreTrumpStrategy(seed=args.seed)
         elif strategy_name == "statistical":
-            return StatisticalTrumpStrategy(log_level=args.log_level, seed=args.seed,
-                                            values_path="data/statistical/stat_values_v3.txt")
+            return StatisticalTrumpStrategy(seed=args.seed, values_path="data/statistical/stat_values_v3.txt")
         else:
             raise ValueError(f"Unknown trump strategy: {strategy_name}")
 
 
     def _get_play_strategy(strategy_name: str) -> PlayStrategy:
         if strategy_name == "random":
-            return RandomPlayStrategy(log_level=args.log_level, seed=args.seed)
+            return RandomPlayStrategy(seed=args.seed)
         elif strategy_name == "highest_value":
-            return HighestValuePlayStrategy(log_level=args.log_level, seed=args.seed)
+            return HighestValuePlayStrategy(seed=args.seed)
         else:
             raise ValueError(f"Unknown play strategy: {strategy_name}")
 
@@ -106,9 +105,9 @@ if __name__ == "__main__":
         strategies = []
         for strategy_name in strategies_names:
             if strategy_name == "only_valid":
-                strategies.append(OnlyValidPlayRuleStrategy(log_level=args.log_level, seed=args.seed))
+                strategies.append(OnlyValidPlayRuleStrategy(seed=args.seed))
             if strategy_name == "smear":
-                strategies.append(SmearPlayRuleStrategy(log_level=args.log_level, seed=args.seed))
+                strategies.append(SmearPlayRuleStrategy(seed=args.seed))
 
         return strategies
 

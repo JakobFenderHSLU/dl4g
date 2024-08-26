@@ -10,7 +10,7 @@ class TestHighestSumTrumpStrategy(TestCase):
     def setUp(self):
         self._log_level = "DEBUG"
         self._seed = 42
-        self._strategy = HighestSumTrumpStrategy(log_level=self._log_level, seed=self._seed)
+        self._strategy = HighestSumTrumpStrategy()
 
     def test_choose_trump_diamond(self):
         observation = GameObservation()

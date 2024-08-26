@@ -10,8 +10,8 @@ class HighestScoreTrumpStrategy(TrumpStrategy):
     _obenabe_score = [14, 10, 8, 7, 5, 0, 5, 0, 0]
     _uneufe_score = [0, 2, 1, 1, 5, 5, 7, 9, 11]
 
-    def __init__(self, log_level: str, seed: int):
-        super().__init__(log_level, __name__, seed)
+    def __init__(self):
+        super().__init__(__name__)
 
     def choose_trump(self, observation) -> int:
         scores = [self._calculate_score(observation.hand, i) for i in range(6)]
