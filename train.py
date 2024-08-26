@@ -24,7 +24,7 @@ if __name__ == "__main__":
         lr=args.lr,
         weight_decay=args.weight_decay,
         max_batches=args.max_batches,
-        max_epochs=10_000
+        max_epochs=10_000_000
     )
 
     trainer.train()

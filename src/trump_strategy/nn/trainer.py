@@ -82,7 +82,6 @@ class Trainer:
         val_dl = DataLoader(val_ds, batch_size=self.batch_size)
 
         for epoch in range(self.max_epochs):
-            print(f"Epoch {epoch}")
             self.run.log({"train/epoch": epoch})
             for i, (hand, score) in enumerate(train_dl):
                 optimizer.zero_grad()
@@ -102,9 +101,10 @@ class Trainer:
                     loss = loss_fn(y_pred, score)
 
                     if loss.item() < self.lowest_val_loss[0]:
+                        print(f"New lowest val loss: {loss.item()} at epoch {epoch}")
                         self.lowest_val_loss = (loss.item(), epoch)
 
-                    if self.lowest_val_loss[1] - epoch > 50:
+                    if epoch - self.lowest_val_loss[1] > 500:
                         print("Early stopping")
                         return
 
