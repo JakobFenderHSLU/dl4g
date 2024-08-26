@@ -13,6 +13,7 @@ from src.play_strategy.abstract_play_strategy import PlayStrategy
 from src.play_strategy.highest_value_play_strategy import HighestValuePlayStrategy
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.trump_strategy.abstract_trump_strategy import TrumpStrategy
+from src.trump_strategy.deep_nn_trump_strategy import DeepNNTrumpStrategy
 from src.trump_strategy.highest_score_trump_strategy import HighestScoreTrumpStrategy
 from src.trump_strategy.highest_sum_trump_strategy import HighestSumTrumpStrategy
 from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
@@ -20,7 +21,7 @@ from src.trump_strategy.statistical_trump_strategy import StatisticalTrumpStrate
 from src.utils.log_utils import LogUtils
 from src.utils.results_utils import ResultsUtils
 
-POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score", "statistical"]
+POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score", "statistical", "deep_nn"]
 POSSIBLE_PLAY_STRATEGIES = ["random", "highest_value"]
 POSSIBLE_PLAY_RULE_STRATEGIES = ["all", "none", "only_valid", "smear"]
 
@@ -77,11 +78,13 @@ if __name__ == "__main__":
         if strategy_name == "random":
             return RandomTrumpStrategy(seed=args.seed)
         elif strategy_name == "highest_sum":
-            return HighestSumTrumpStrategy(seed=args.seed)
+            return HighestSumTrumpStrategy()
         elif strategy_name == "highest_score":
-            return HighestScoreTrumpStrategy(seed=args.seed)
+            return HighestScoreTrumpStrategy()
         elif strategy_name == "statistical":
-            return StatisticalTrumpStrategy(seed=args.seed, values_path="data/statistical/stat_values_v3.txt")
+            return StatisticalTrumpStrategy(values_path="data/statistical/stat_values_v3.txt")
+        elif strategy_name == "deep_nn":
+            return DeepNNTrumpStrategy()
         else:
             raise ValueError(f"Unknown trump strategy: {strategy_name}")
 
@@ -90,7 +93,7 @@ if __name__ == "__main__":
         if strategy_name == "random":
             return RandomPlayStrategy(seed=args.seed)
         elif strategy_name == "highest_value":
-            return HighestValuePlayStrategy(seed=args.seed)
+            return HighestValuePlayStrategy()
         else:
             raise ValueError(f"Unknown play strategy: {strategy_name}")
 

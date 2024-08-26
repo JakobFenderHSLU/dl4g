@@ -114,6 +114,6 @@ class Trainer:
                         })
 
             if epoch % 10 == 0:
-                model_path = f"data/trump_selector_{epoch}.pt"
+                model_path = f"data/deep_trump_strategy_epochs/trump_selector_{epoch}.pt"
                 torch.save(self.model.state_dict(), model_path)
                 wandb.save(model_path)

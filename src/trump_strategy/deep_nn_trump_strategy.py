@@ -1,0 +1,21 @@
+import torch
+from jass.game.game_observation import GameObservation
+
+from trump_strategy.abstract_trump_strategy import TrumpStrategy
+from trump_strategy.nn.trump_selector import TrumpSelector
+
+
+class DeepNNTrumpStrategy(TrumpStrategy):
+    def __init__(self):
+        super().__init__(__name__)
+
+        weights = torch.load("data/deep_nn_trump_selector.pt")
+
+        self.model = TrumpSelector()
+        self.model.load_state_dict(weights)
+
+    def choose_trump(self, observation: GameObservation) -> int:
+        hand = observation.hand
+        hand = torch.tensor(hand, dtype=torch.float32).unsqueeze(0)
+        trump = self.model(hand).argmax().item()
+        return trump
