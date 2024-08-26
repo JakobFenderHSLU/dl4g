@@ -22,8 +22,8 @@ class ResultsUtils:
         bar_length = 50
         self._print_stacked_bar_plot(bar_length, agents_wins, opponents_wins)
 
-        agents_points = np.concat((arenas[0].points_team_0, arenas[1].points_team_1))
-        opponents_points = np.concat((arenas[0].points_team_1, arenas[1].points_team_0))
+        agents_points = np.concatenate((arenas[0].points_team_0, arenas[1].points_team_1))
+        opponents_points = np.concatenate((arenas[0].points_team_1, arenas[1].points_team_0))
         agents_winrate = (agents_points > opponents_points).mean() * 100
         opponents_winrate = (opponents_points > agents_points).mean() * 100
 
@@ -44,13 +44,13 @@ class ResultsUtils:
         self._logger.info("")
 
         # get every second row
-        agent_trump_rounds = np.concat((arenas[0].points_team_0[1::2], arenas[1].points_team_1[::2]))
-        agent_trump_rounds_winrate = np.concat((
+        agent_trump_rounds = np.concatenate((arenas[0].points_team_0[1::2], arenas[1].points_team_1[::2]))
+        agent_trump_rounds_winrate = np.concatenate((
             arenas[0].points_team_0[1::2] > arenas[0].points_team_1[1::2],
             arenas[1].points_team_1[::2] > arenas[1].points_team_0[::2]
         )).mean() * 100
-        opponent_trump_rounds = np.concat((arenas[0].points_team_1[::2], arenas[1].points_team_0[1::2]))
-        opponent_trump_rounds_winrate = np.concat((
+        opponent_trump_rounds = np.concatenate((arenas[0].points_team_1[::2], arenas[1].points_team_0[1::2]))
+        opponent_trump_rounds_winrate = np.concatenate((
             arenas[0].points_team_1[::2] > arenas[0].points_team_0[::2],
             arenas[1].points_team_0[1::2] > arenas[1].points_team_1[1::2]
         )).mean() * 100
