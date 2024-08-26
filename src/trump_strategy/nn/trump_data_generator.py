@@ -88,9 +88,15 @@ class TrumpDataGenerator:
         loaded_decks = np.load(f"{self.DATA_PATH}/cached_decks_{cache_to_load}.npy").astype(int)
         loaded_results = np.load(f"{self.DATA_PATH}/cached_results_{cache_to_load}.npy").astype(int)
 
+        if loaded_decks is None or loaded_results is None:
+            self.logger.warning("cached data is None")
+            self.cache_decks = np.zeros((self.max_cache_size, 36)).astype(int)
+            self.cached_results = np.zeros((self.max_cache_size, MAX_TRUMP + 1, self.n_play_per_hand)).astype(int)
+
         if loaded_decks.shape[0] != loaded_results.shape[0]:
             self.logger.warning("cached data is inconsistent")
-            return
+            self.cache_decks = np.zeros((self.max_cache_size, 36)).astype(int)
+            self.cached_results = np.zeros((self.max_cache_size, MAX_TRUMP + 1, self.n_play_per_hand)).astype(int)
 
         first_empty_hand_index = np.where(loaded_decks.sum(axis=1) == 0)[0][0]
         self.total_n_cached_results += first_empty_hand_index
