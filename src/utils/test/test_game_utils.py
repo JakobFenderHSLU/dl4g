@@ -205,3 +205,18 @@ class TestGameUtils(TestCase):
 
         hands = gu.deck_to_onehot_hands(deck)
         self.assertTrue(np.array_equal(hands, expected_hands))
+
+    def test_get_bock_chain_suit_trump(self):
+        obs = GameObservation()
+        obs.player = 1
+        obs.trump = 0
+        obs.hand = np.zeros(36)
+        obs.hand[3] = 1  # DIAMOND JACK
+        obs.hand[5] = 1  # DIAMOND 9
+        obs.hand[0] = 1  # DIAMOND ACE
+        obs.hand[2] = 1  # DIAMOND QUEEN
+        obs.hand[9] = 1  # HEART ACE
+        obs.hand[12] = 1  # HEART JACK
+
+        bock_chain = gu.get_bock_chain(obs)
+        self.assertTrue(np.array_equal(bock_chain, np.array([0, 3, 5])))

@@ -1,6 +1,7 @@
 from typing import Tuple
 
 import numpy as np
+from jass.game.const import higher_trump_card
 from jass.game.game_observation import GameObservation
 from jass.game.game_rule import GameRule
 
@@ -116,3 +117,31 @@ def deck_to_onehot_hands(deck: np.ndarray) -> np.ndarray:
         hands_onehot[i, hand] = 1
 
     return hands_onehot
+
+
+def get_bock_chain(obs: GameObservation) -> np.ndarray:
+    """
+    Get the bock chain of the current trick.
+
+    :param obs: GameObservation
+    """
+    validate_current_trick(obs.current_trick)
+    validate_player(obs.player)
+
+    bock_chain = []
+    trump = obs.trump
+    trump_suits = obs.hand[trump * 9:trump * 9 + 9]
+    possible_opponent_cards = np.ones(36)
+    # set possible opponent cards to 0 for own cards
+    possible_opponent_cards[obs.hand == 1] = 0
+
+    indexes_of_trump_suits = np.where(trump_suits == 1)[0]
+
+    for trump_card in indexes_of_trump_suits:
+        trump_mask = np.zeros(36)
+        trump_mask[trump * 9:trump * 9 + 9] = higher_trump_card[trump_card]
+
+        if not np.any(possible_opponent_cards * trump_mask):
+            bock_chain.append(trump_card)
+
+    return bock_chain
