@@ -36,7 +36,7 @@ if __name__ == "__main__":
                         choices=POSSIBLE_PLAY_STRATEGIES,
                         help="Choose the play strategy for the agent")
     parser.add_argument("-apr", "--agent-play-rule-strategies",
-                        default=POSSIBLE_PLAY_RULE_STRATEGIES[0],
+                        default=POSSIBLE_PLAY_RULE_STRATEGIES[1],
                         choices=POSSIBLE_PLAY_RULE_STRATEGIES,
                         nargs="+",
                         help="Choose the additional play strategy for the agent")
