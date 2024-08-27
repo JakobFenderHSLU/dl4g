@@ -54,6 +54,10 @@ Or it has the option to choose `PUSH`. This lets the partner choose the trump.
 - `StatisticalTrumpStrategy` uses a statistical approach to choose the trump. It is based on a dataset of 1.8 Mio games
   played on [swisslos.ch](https://www.swisslos.ch/en/jass/schieber/play.html). It calculates how often a card was in the
   hand of the player when he picked a trump.
+- `DeepNNTrumpStrategy` was trained on synthetic data. We generated **~2'000'000** hands and played **20** games for
+  every trump with a random play strategy. This means we played **120'000'000** games in total. Then we trained a Simple
+  NN to predict the average amount of points the player with that hand would make. For the Trump selection we chose the
+  highest score predicted. If the predicted hand score would be below a certain threshold we would PUSH instead.
 
 ### Play Strategies
 
@@ -102,6 +106,32 @@ python generate_trump_data.py --help
 
 ## Evaluation
 
+### Trump Strategies
+
+#### Overview
+
+To evaluate the trump strategies independent of the play strategy, we ran every Trump strategy together with the
+`random` play strategy and no play rules. The opponent played with a random trump strategy. We played 10'000 games in
+total. After 5'000 the Arena was reset and the positions were swapped. This ensures, that the `random` play strategies
+returned the same outputs after every half.
+
+Command used:
+
+```bash
+run.py --seed 42 --n_games 10000 --agent-trump-strategy <strategy> 
+```
+
+O = overall, T = in Trump Rounds
+
+|              | Winrate O | Winrate T | Average Points O | Average Points T |
+|--------------|-----------|-----------|------------------|------------------|
+| Random       | 50.00 %   | 50.06 %   | 78.5             | 78.5858          |
+| HighestSum   | 59.15 %   | 69.88 %   | 85.8071          | 93.7382          |
+| HighestScore | 64.11 %   | 78.44 %   | 89.8663          | 101.387          |
+| Statistical  | 62.43 %   | 75.24 %   | 88.2777          | 98.3564          |
+| DeepNN       | 65.23 %   | 81.08 %   | 90.6736          | 103.2246         |
+
+For a more detailed evaluation see [evaluation_results.md](evaluation_results.md).
 *Work in progress*
 
 
