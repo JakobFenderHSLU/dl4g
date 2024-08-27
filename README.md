@@ -131,7 +131,7 @@ O = overall, T = in Trump Rounds
 | Statistical  | 62.43 %   | 75.24 %   | 88.2777          | 98.3564          |
 | DeepNN       | 65.23 %   | 81.08 %   | 90.6736          | 103.2246         |
 
-For a more detailed evaluation see [evaluation_results.md](evaluation_results.md).
+For a more detailed evaluation see [evaluation_results.md](README/evaluation_results.md).
 *Work in progress*
 
 
