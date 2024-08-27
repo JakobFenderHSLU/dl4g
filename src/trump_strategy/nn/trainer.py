@@ -8,7 +8,7 @@ from jass.game.const import MAX_TRUMP
 from torch.utils.data import TensorDataset, DataLoader
 from tqdm import tqdm
 
-from src.trump_strategy.nn.trump_selector import TrumpSelector
+from src.trump_strategy.nn.trump_selector_2 import TrumpSelector
 from trump_strategy.nn.trump_data_generator import TrumpDataGenerator
 
 
@@ -104,6 +104,11 @@ class Trainer:
                         print(f"New lowest val loss: {loss.item()} at epoch {epoch}")
                         self.lowest_val_loss = (loss.item(), epoch)
 
+                        if epoch > 1000:
+                            model_path = f"data/deep_trump_strategy_epochs/trump_selector_{epoch}.pt"
+                            torch.save(self.model.state_dict(), model_path)
+                            wandb.save(model_path)
+
                     if epoch - self.lowest_val_loss[1] > 500:
                         print("Early stopping")
                         return
@@ -112,8 +117,3 @@ class Trainer:
                         self.run.log({
                             "val/loss": loss.item(),
                         })
-
-            if epoch % 10 == 0:
-                model_path = f"data/deep_trump_strategy_epochs/trump_selector_{epoch}.pt"
-                torch.save(self.model.state_dict(), model_path)
-                wandb.save(model_path)
