@@ -7,8 +7,8 @@ from jass.game.game_state_util import observation_from_state
 from jass.game.rule_schieber import RuleSchieber
 
 from play_strategy.random_play_strategy import RandomPlayStrategy
-from src.play_strategy.nn.mcts.hand_sampler import HandSampler
-from src.play_strategy.nn.mcts.mcts_node import MCTSNode
+from src.play_strategy.nn.copied_mcts.hand_sampler import HandSampler
+from src.play_strategy.nn.copied_mcts.mcts_node import MCTSNode
 
 
 class MonteCarloTreeSearch:

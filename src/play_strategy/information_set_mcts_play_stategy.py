@@ -3,8 +3,8 @@ from jass.game.game_sim import GameSim
 from jass.game.game_state_util import state_from_observation
 
 from src.play_strategy.abstract_play_strategy import PlayStrategy
-from src.play_strategy.nn.mcts.basic_monte_carlo_tree_search import MonteCarloTreeSearch
-from src.play_strategy.nn.mcts.hand_sampler import HandSampler
+from src.play_strategy.nn.copied_mcts.basic_monte_carlo_tree_search import MonteCarloTreeSearch
+from src.play_strategy.nn.copied_mcts.hand_sampler import HandSampler
 
 
 class InformationSetMCTSPlayStrategy(PlayStrategy):
