@@ -14,11 +14,7 @@ class MCTSPlayStrategy(PlayStrategy):
 
     def choose_card(self, obs: GameObservation) -> int:
         game_sim = self.__create_game_sim_from_obs(obs)
-
-        # to_play = MonteCarloTreeSearch().information_set_search(game_sim.state, iterations=100)  # TODO
-        to_play = MCTS().search(game_sim.state, iterations=50)  # TODO
-
-        return to_play
+        return MCTS().search(game_sim.state, iterations=50)
 
     def __create_game_sim_from_obs(self, game_obs: GameObservation) -> GameSim:
         game_sim = GameSim(rule=self._rule)
