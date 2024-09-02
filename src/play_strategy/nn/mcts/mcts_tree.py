@@ -66,9 +66,9 @@ class MCTS:
     @staticmethod
     def _back_propagation(node: MCTSNode, score: int):
         while node is not None:
-            node.simulation_cnt += 1
+            node.n_simulated += 1
             node.score += score
             node = node.parent
 
     def _get_most_simulated_node(self):
-        return max(self.root.children, key=lambda child: child.simulation_cnt)
+        return max(self.root.children, key=lambda child: child.n_simulated)

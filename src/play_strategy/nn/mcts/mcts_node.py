@@ -15,7 +15,7 @@ class MCTSNode:
         self.state = state
         self.card = card
         self.score = 0.0
-        self.simulation_cnt = 0  # TODO: CHANGE NAME
+        self.n_simulated = 0
         valid_cards = rule.get_valid_cards(
             hand=self.state.hands[self.state.player],
             current_trick=self.state.current_trick,
@@ -33,8 +33,8 @@ class MCTSNode:
 
     def best_child_ubc(self, c=np.sqrt(2)):  # TODO: WRITE OWN IMPLEMENTATION
         choices_weights = [
-            (child.score / child.simulation_cnt) + c * np.sqrt(
-                (2 * np.log(self.simulation_cnt) / child.simulation_cnt))
+            (child.score / child.n_simulated) + c * np.sqrt(
+                (2 * np.log(self.n_simulated) / child.n_simulated))
             for child in self.children
         ]
         return self.children[np.argmax(choices_weights)]
