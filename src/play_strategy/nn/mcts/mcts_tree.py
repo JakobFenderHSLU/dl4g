@@ -59,9 +59,9 @@ class MCTS:
             game_sim.action_play_card(card)
 
         if simulating_player % 2 == 0:
-            return game_sim.state.points[0] / sum(game_sim.state.points)  # TODO: Try absolute
+            return game_sim.state.points[0] / 157
         else:
-            return game_sim.state.points[1] / sum(game_sim.state.points)
+            return game_sim.state.points[1] / 157
 
     @staticmethod
     def _back_propagation(node: MCTSNode, score: int):
