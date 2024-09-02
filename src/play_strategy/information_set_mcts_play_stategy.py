@@ -2,8 +2,8 @@ from jass.game.game_observation import GameObservation
 from jass.game.game_sim import GameSim
 from jass.game.game_state_util import state_from_observation
 
+from play_strategy.nn.mcts.mcts_tree import MCTS
 from src.play_strategy.abstract_play_strategy import PlayStrategy
-from src.play_strategy.nn.copied_mcts.basic_monte_carlo_tree_search import MonteCarloTreeSearch
 from src.play_strategy.nn.copied_mcts.hand_sampler import HandSampler
 
 
@@ -15,7 +15,8 @@ class InformationSetMCTSPlayStrategy(PlayStrategy):
     def choose_card(self, obs: GameObservation) -> int:
         game_sim = self.__create_game_sim_from_obs(obs)
 
-        to_play = MonteCarloTreeSearch().information_set_search(game_sim.state, iterations=100)  # TODO
+        # to_play = MonteCarloTreeSearch().information_set_search(game_sim.state, iterations=100)  # TODO
+        to_play = MCTS().search(game_sim.state, iterations=50)  # TODO
 
         return to_play
 
