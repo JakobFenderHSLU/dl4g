@@ -4,10 +4,10 @@ from jass.game.game_state_util import state_from_observation
 
 from play_strategy.nn.mcts.mcts_tree import MCTS
 from src.play_strategy.abstract_play_strategy import PlayStrategy
-from src.play_strategy.nn.copied_mcts.hand_sampler import HandSampler
+from src.play_strategy.nn.mcts.hand_sampler import HandSampler
 
 
-class InformationSetMCTSPlayStrategy(PlayStrategy):
+class MCTSPlayStrategy(PlayStrategy):
 
     def __init__(self):
         super().__init__(__name__)

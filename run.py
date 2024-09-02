@@ -11,7 +11,7 @@ from src.play_rule_strategy.only_valid_play_strategy import OnlyValidPlayRuleStr
 from src.play_rule_strategy.smear_play_strategy import SmearPlayRuleStrategy
 from src.play_strategy.abstract_play_strategy import PlayStrategy
 from src.play_strategy.highest_value_play_strategy import HighestValuePlayStrategy
-from src.play_strategy.information_set_mcts_play_stategy import InformationSetMCTSPlayStrategy
+from src.play_strategy.information_set_mcts_play_stategy import MCTSPlayStrategy
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.trump_strategy.abstract_trump_strategy import TrumpStrategy
 from src.trump_strategy.deep_nn_trump_strategy import DeepNNTrumpStrategy
@@ -96,7 +96,7 @@ if __name__ == "__main__":
         elif strategy_name == "highest_value":
             return HighestValuePlayStrategy()
         elif strategy_name == "mcts":
-            return InformationSetMCTSPlayStrategy()
+            return MCTSPlayStrategy()
         else:
             raise ValueError(f"Unknown play strategy: {strategy_name}")
 
