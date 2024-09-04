@@ -10,6 +10,7 @@ if __name__ == "__main__":
     parser.add_argument("--lr", type=float, default=0.001)
     parser.add_argument("--weight_decay", type=float, default=0.001)
     parser.add_argument("--max_batches", type=int, default=960)
+    parser.add_argument("--folds", type=int, default=10)
 
     args = parser.parse_args()
 
@@ -24,7 +25,8 @@ if __name__ == "__main__":
         lr=args.lr,
         weight_decay=args.weight_decay,
         max_batches=args.max_batches,
-        max_epochs=10_000_000
+        max_epochs=10_000_000,
+        folds=args.folds
     )
 
     trainer.train()

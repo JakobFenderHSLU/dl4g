@@ -5,3 +5,4 @@ tqdm==4.66.5
 wandb == 0.17.7
 matplotlib == 3.9.2
 torch == 2.4.0
+scikit-learn == 1.5.1
