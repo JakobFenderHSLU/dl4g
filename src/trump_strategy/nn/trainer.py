@@ -50,6 +50,11 @@ class Trainer:
         print(f"Generated {self.batch_size} hands.")
 
         for fold, (train_index, val_index) in enumerate(KFold(n_splits=self.folds).split(dataset[0])):
+            end_fold = False
+
+            self.model = TrumpSelector().to(self.device)
+            self.lowest_val_loss = (math.inf, 0)
+
             self.run = wandb.init(
                 project="dl4g-trump-selection",
                 name=f"bs={self.config['batch_size']}_lr={self.config['lr']}"
@@ -88,6 +93,9 @@ class Trainer:
             val_dl = DataLoader(val_ds, batch_size=self.batch_size)
 
             for epoch in range(self.max_epochs):
+                if end_fold:
+                    break
+
                 self.run.log({"train/epoch": epoch})
                 for i, (hand, score) in enumerate(train_dl):
                     optimizer.zero_grad()
@@ -117,7 +125,7 @@ class Trainer:
 
                         if epoch - self.lowest_val_loss[1] > 500:
                             print("Early stopping")
-                            return
+                            end_fold = True
 
                         if i == 0:
                             self.run.log({
