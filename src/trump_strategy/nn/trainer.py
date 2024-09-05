@@ -67,7 +67,8 @@ class Trainer:
                 lr=self.run.config.lr,
                 weight_decay=self.run.config.weight_decay
             )
-            loss_fn = nn.MSELoss()
+
+            loss_fn = nn.SmoothL1Loss()
 
             train_ds = (
                 dataset[0][train_index],
