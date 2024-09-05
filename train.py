@@ -10,7 +10,7 @@ if __name__ == "__main__":
     parser.add_argument("--lr", type=float, default=0.001)
     parser.add_argument("--weight_decay", type=float, default=0.001)
     parser.add_argument("--max_batches", type=int, default=960)
-    parser.add_argument("--folds", type=int, default=10)
+    parser.add_argument("--folds", type=int, default=3)
 
     args = parser.parse_args()
 
