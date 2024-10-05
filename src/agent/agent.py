@@ -22,3 +22,6 @@ class CustomAgent(Agent):
                 return card
 
         return self.play_strategy.choose_card(obs)
+
+    def train(self, training_data):
+        self.play_strategy.train(training_data)

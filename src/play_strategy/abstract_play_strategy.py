@@ -33,3 +33,11 @@ class PlayStrategy(ABC):
         :return: The selected trump suit as an integer
         """
         raise NotImplementedError("Method not implemented")
+
+    def train(self, training_data):
+        """
+        Implement the training method for the play strategy. This method should be implemented by the child class.
+        :param training_data:
+        :return:
+        """
+        pass
