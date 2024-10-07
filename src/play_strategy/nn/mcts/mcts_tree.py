@@ -57,10 +57,7 @@ class MCTS:
             card = random_play_strategy.choose_card(obs)
             game_sim.action_play_card(card)
 
-        if simulating_player % 2 == 0:
-            return game_sim.state.points[0] / 157
-        else:
-            return game_sim.state.points[1] / 157
+        return (game_sim.state.points[simulating_player % 2] - game_sim.state.points[(simulating_player + 1) % 2]) / 157
 
     @staticmethod
     def _back_propagation(node: MCTSNode, score: float):
