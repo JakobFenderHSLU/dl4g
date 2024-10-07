@@ -13,6 +13,7 @@ from src.play_strategy.abstract_play_strategy import PlayStrategy
 from src.play_strategy.highest_value_play_strategy import HighestValuePlayStrategy
 from src.play_strategy.mcts_play_stategy import MCTSPlayStrategy
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
+from src.play_strategy.sampled_mcts_play_strategy import SampledMCTSPlayStrategy
 from src.trump_strategy.abstract_trump_strategy import TrumpStrategy
 from src.trump_strategy.deep_nn_trump_strategy import DeepNNTrumpStrategy
 from src.trump_strategy.highest_score_trump_strategy import HighestScoreTrumpStrategy
@@ -23,7 +24,7 @@ from src.utils.log_utils import LogUtils
 from src.utils.results_utils import ResultsUtils
 
 POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score", "statistical", "deep_nn"]
-POSSIBLE_PLAY_STRATEGIES = ["random", "highest_value", "mcts"]
+POSSIBLE_PLAY_STRATEGIES = ["random", "highest_value", "mcts", "sampled_mcts"]
 POSSIBLE_PLAY_RULE_STRATEGIES = ["all", "none", "only_valid", "smear"]
 
 if __name__ == "__main__":
@@ -97,6 +98,8 @@ if __name__ == "__main__":
             return HighestValuePlayStrategy()
         elif strategy_name == "mcts":
             return MCTSPlayStrategy()
+        elif strategy_name == "sampled_mcts":
+            return SampledMCTSPlayStrategy()
         else:
             raise ValueError(f"Unknown play strategy: {strategy_name}")
 
