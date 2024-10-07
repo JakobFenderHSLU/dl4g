@@ -10,7 +10,6 @@ rule = RuleSchieber()
 
 class MCTSNode:
     def __init__(self, parent: "MCTSNode" = None, state: GameState = None, card: int = None):
-        self.children = []
         self.parent = parent
         self.state = state
         self.card = card
@@ -23,7 +22,10 @@ class MCTSNode:
             trump=self.state.trump
         )
         self.possible_cards = np.where(valid_cards == 1)[0]
+        self.not_simulated_cards = self.possible_cards.copy()
         self.n_possible_cards = len(self.possible_cards)
+        self.children = []
+        self.children_scores = np.ones(self.n_possible_cards) * -1
 
         self.is_terminal = self.state.nr_played_cards == 36
 
@@ -43,12 +45,14 @@ class MCTSNode:
         node_sim = GameSim(rule=RuleSchieber())
         node_sim.init_from_state(self.state)
 
-        card = np.random.choice(self.possible_cards)
-        self.possible_cards = np.delete(self.possible_cards, np.where(self.possible_cards == card))
+        card = np.random.choice(self.not_simulated_cards)
+        index_of_card = np.where(self.possible_cards == card)[0][0]
+        self.not_simulated_cards = np.delete(self.not_simulated_cards, np.where(self.not_simulated_cards == card))
 
         sim_copy = copy.deepcopy(node_sim)
         sim_copy.action_play_card(card)
         new_node = MCTSNode(self, sim_copy.state, card)
         new_node.parent = self
         self.children.append(new_node)
+        self.children_scores[index_of_card] = 0
         return new_node
