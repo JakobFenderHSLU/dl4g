@@ -14,7 +14,7 @@ class MCTSPlayStrategy(PlayStrategy):
 
     def choose_card(self, obs: GameObservation) -> int:
         game_sim = self.__create_game_sim_from_obs(obs)
-        return MCTS().search(game_sim.state, iterations=50)
+        return MCTS().search(game_sim.state, iterations=1000)
 
     def __create_game_sim_from_obs(self, game_obs: GameObservation) -> GameSim:
         game_sim = GameSim(rule=self._rule)
