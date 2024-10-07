@@ -10,18 +10,21 @@ from src.play_strategy.nn.mcts.hand_sampler import HandSampler
 
 class SampledMCTSPlayStrategy(PlayStrategy):
 
-    def __init__(self, samples=10, max_time_s=10):
+    def __init__(self, samples=10, limit_s=1):
         super().__init__(__name__)
         self.samples = samples
-        self.max_time_s = max_time_s
+        self.limit_s_per_sample = limit_s / samples
 
     def choose_card(self, obs: GameObservation) -> int:
         action_scores = []
-
+        valid_cards = None
         for i in range(self.samples):
             game_sim = self.__create_game_sim_from_obs(obs)
             mcts = MCTS()
-            mcts.search(game_sim.state, limit_s=self.max_time_s)
+            mcts.search(game_sim.state, limit_s=self.limit_s_per_sample)
+
+            if i == 0:
+                valid_cards = mcts.root.possible_cards
 
             # sort by card index
             mcts.root.children.sort(key=lambda x: x.card)
@@ -29,8 +32,8 @@ class SampledMCTSPlayStrategy(PlayStrategy):
 
         action_scores = np.array(action_scores)
         mean_scores = np.mean(action_scores, axis=0)
-        best_card = np.argmax(mean_scores)
-        return best_card
+        best_card_index = np.argmax(mean_scores)
+        return valid_cards[best_card_index]
 
     def __create_game_sim_from_obs(self, game_obs: GameObservation) -> GameSim:
         game_sim = GameSim(rule=self._rule)
