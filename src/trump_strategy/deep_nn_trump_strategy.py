@@ -10,7 +10,7 @@ class DeepNNTrumpStrategy(TrumpStrategy):
     def __init__(self, model_path: str = "data/deep_nn_trump_selector.pt"):
         super().__init__(__name__)
 
-        weights = torch.load(model_path)
+        weights = torch.load(model_path, weights_only=True)
 
         self.model = TrumpSelector()
         self.model.load_state_dict(weights)
