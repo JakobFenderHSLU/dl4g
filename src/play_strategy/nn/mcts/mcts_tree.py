@@ -64,7 +64,7 @@ class MCTS:
             return game_sim.state.points[1] / 157
 
     @staticmethod
-    def _back_propagation(node: MCTSNode, score: int):
+    def _back_propagation(node: MCTSNode, score: float):
         prev_node = None
         while node is not None:
             node.n_simulated += 1
@@ -72,9 +72,10 @@ class MCTS:
                 node.score = score
             else:
                 prev_node_card = prev_node.card
-                prev_node_index = prev_node.possible_cards.tolist().index(prev_node_card)
+                prev_node_index = node.possible_cards.tolist().index(prev_node_card)
                 node.children_scores[prev_node_index] = score
-                node.score = sum(node.children_scores) / len(node.children_scores)
+                children_scores = node.children_scores[node.children_scores != -1]
+                node.score = sum(children_scores) / len(node.children_scores)
 
             prev_node = node
             node = node.parent
