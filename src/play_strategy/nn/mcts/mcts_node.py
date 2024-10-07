@@ -56,3 +56,6 @@ class MCTSNode:
         self.children.append(new_node)
         self.children_scores[index_of_card] = 0
         return new_node
+
+    def __repr__(self):
+        return f"MCTSNode(card={self.card}, score={self.score}, n_simulated={self.n_simulated})"
