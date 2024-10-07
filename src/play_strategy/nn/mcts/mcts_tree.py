@@ -52,7 +52,6 @@ class MCTS:
         random_play_strategy = RandomPlayStrategy()
 
         while not game_sim.is_done():
-            # get obs from state
             obs = game_sim.get_observation()
             card = random_play_strategy.choose_card(obs)
             game_sim.action_play_card(card)
