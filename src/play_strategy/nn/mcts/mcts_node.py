@@ -42,7 +42,7 @@ class MCTSNode:
         return self.children[np.argmax(choices_weights)]
 
     def expand(self):
-        node_sim = GameSim(rule=RuleSchieber())
+        node_sim = GameSim(rule=rule)
         node_sim.init_from_state(self.state)
 
         card = np.random.choice(self.not_simulated_cards)
