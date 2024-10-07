@@ -5,6 +5,7 @@ from typing import List
 import numpy as np
 from jass.arena.arena import Arena
 
+from play_rule_strategy.mini_max_play_rule_strategy import MiniMaxPlayRuleStrategy
 from src.agent.agent import CustomAgent
 from src.play_rule_strategy.abstract_play_rule import PlayRuleStrategy
 from src.play_rule_strategy.only_valid_play_strategy import OnlyValidPlayRuleStrategy
@@ -25,7 +26,7 @@ from src.utils.results_utils import ResultsUtils
 
 POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score", "statistical", "deep_nn"]
 POSSIBLE_PLAY_STRATEGIES = ["random", "highest_value", "mcts", "sampled_mcts"]
-POSSIBLE_PLAY_RULE_STRATEGIES = ["all", "none", "only_valid", "smear"]
+POSSIBLE_PLAY_RULE_STRATEGIES = ["all", "none", "only_valid", "smear", "mini_max"]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -114,9 +115,11 @@ if __name__ == "__main__":
         strategies = []
         for strategy_name in strategies_names:
             if strategy_name == "only_valid":
-                strategies.append(OnlyValidPlayRuleStrategy(seed=args.seed))
+                strategies.append(OnlyValidPlayRuleStrategy(seed=args.seed, log_level=args.log_level))
             if strategy_name == "smear":
-                strategies.append(SmearPlayRuleStrategy(seed=args.seed))
+                strategies.append(SmearPlayRuleStrategy(seed=args.seed, log_level=args.log_level))
+            if strategy_name == "mini_max":
+                strategies.append(MiniMaxPlayRuleStrategy(seed=args.seed, log_level=args.log_level, depth=4, limit_s=1))
 
         return strategies
 
