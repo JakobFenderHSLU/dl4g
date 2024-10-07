@@ -8,7 +8,7 @@ from src.play_strategy.abstract_play_strategy import PlayStrategy
 from src.play_strategy.nn.mcts.hand_sampler import HandSampler
 
 
-class SampledMCTSPlayStrategy(PlayStrategy):
+class DeterminizedMCTSPlayStrategy(PlayStrategy):
 
     def __init__(self, samples=10, limit_s=1):
         super().__init__(__name__)
