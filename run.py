@@ -11,7 +11,7 @@ from src.play_rule_strategy.only_valid_play_strategy import OnlyValidPlayRuleStr
 from src.play_rule_strategy.smear_play_strategy import SmearPlayRuleStrategy
 from src.play_strategy.abstract_play_strategy import PlayStrategy
 from src.play_strategy.highest_value_play_strategy import HighestValuePlayStrategy
-from src.play_strategy.mcts_play_stategy import MCTSPlayStrategy
+from src.play_strategy.mcts_play_strategy import MCTSPlayStrategy
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.play_strategy.sampled_mcts_play_strategy import SampledMCTSPlayStrategy
 from src.trump_strategy.abstract_trump_strategy import TrumpStrategy
