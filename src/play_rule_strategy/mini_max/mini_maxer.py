@@ -1,3 +1,4 @@
+from jass.game.const import card_strings
 from jass.game.game_sim import GameSim
 from jass.game.rule_schieber import RuleSchieber
 
@@ -8,9 +9,13 @@ rule = RuleSchieber()
 
 class MiniMaxer:
     def __init__(self):
-        pass
+        self.cutoff_time = None
 
-    def search(self, game_state, limit_s=None) -> MiniMaxNode:
+    def search(self, game_state, cutoff_time_s=None) -> MiniMaxNode:
+        self.cutoff_time = cutoff_time_s
+        if not cutoff_time_s:
+            self.cutoff_time = float('inf')
+
         root = MiniMaxNode(parent=None, state=game_state)
         self.minimax(root, float('-inf'), float('inf'), True)
         return root
@@ -33,8 +38,6 @@ class MiniMaxer:
                 max_eval = max(max_eval, eval)
                 node.score = max_eval
                 alpha = max(alpha, eval)
-                if beta <= alpha:
-                    break  # Alpha-beta pruning
             return max_eval
         else:
             min_eval = float('inf')
@@ -50,6 +53,14 @@ class MiniMaxer:
                 min_eval = min(min_eval, eval)
                 node.score = min_eval
                 beta = min(beta, eval)
-                if beta <= alpha:
-                    break
             return min_eval
+
+    def print_tree(self, root, depth=100):
+        def print_tree_node(node, node_depth):
+            display_name = card_strings[node.card] if node.card is not None else "ROOT"
+            print("    " * node_depth, f"{display_name}: {node.score}")
+            if node_depth < depth:
+                for child in node.children:
+                    print_tree_node(child, node_depth + 1)
+
+        print_tree_node(root, 0)

@@ -12,12 +12,7 @@ class MiniMaxNode:
         self.card = card
         self.children = []
         self.score = 0
-        valid_cards = rule.get_valid_cards(
-            hand=self.state.hands[self.state.player],
-            current_trick=self.state.current_trick,
-            move_nr=self.state.nr_cards_in_trick,
-            trump=self.state.trump
-        )
+        valid_cards = rule.get_valid_cards_from_state(self.state)
         self.possible_cards = np.where(valid_cards == 1)[0]
 
     def is_terminal(self):

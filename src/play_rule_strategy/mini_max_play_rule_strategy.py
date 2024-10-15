@@ -1,3 +1,5 @@
+import time
+
 from jass.game.game_observation import GameObservation
 from jass.game.game_sim import GameSim
 from jass.game.game_state_util import state_from_observation
@@ -19,11 +21,11 @@ class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
         if sum(obs.hand) > self.depth:
             return None
 
-        # cutoff_time = time.time() + self.limit_s # ignore for now
+        cutoff_time = time.time() + self.limit_s  # ignore for now
         children = []
         for i in range(10):
             game_sim = self.__create_game_sim_from_obs(obs)
-            root_node = self.mini_maxer.search(game_sim.state)
+            root_node = self.mini_maxer.search(game_sim.state, limit_s=cutoff_time)
             children.append(root_node.children)
 
         cards = [node.card for node in children[0]]
