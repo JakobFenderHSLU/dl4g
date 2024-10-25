@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "dl4g"
+package-mode = false
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+jass-kit = "2.0.5"
+numpy = "1.26.4"
+prettytable = "3.11.0"
+tqdm = "4.66.5"
+wandb = "0.17.7"
+matplotlib = "3.9.2"
+torch = "2.4.0"
+scikit-learn = "1.5.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
