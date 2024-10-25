@@ -4,9 +4,9 @@ from jass.game.game_observation import GameObservation
 from jass.game.game_sim import GameSim
 from jass.game.game_state_util import state_from_observation
 
-from play_rule_strategy.abstract_play_rule import PlayRuleStrategy
-from play_rule_strategy.mini_max.mini_maxer import MiniMaxer
-from play_strategy.nn.mcts.hand_sampler import HandSampler
+from src.play_rule_strategy.abstract_play_rule import PlayRuleStrategy
+from src.play_rule_strategy.mini_max.mini_maxer import MiniMaxer
+from src.play_strategy.nn.mcts.hand_sampler import HandSampler
 
 
 class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
@@ -40,5 +40,7 @@ class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
 
     def __create_game_sim_from_obs(self, game_obs: GameObservation) -> GameSim:
         game_sim = GameSim(rule=self._rule)
-        game_sim.init_from_state(state_from_observation(game_obs, HandSampler().sample(game_obs)))
+        game_sim.init_from_state(
+            state_from_observation(game_obs, HandSampler().sample(game_obs))
+        )
         return game_sim

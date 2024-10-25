@@ -34,6 +34,7 @@ class PlayStrategy(ABC):
         """
         raise NotImplementedError("Method not implemented")
 
+    @abstractmethod
     def train(self, training_data):
         """
         Implement the training method for the play strategy. This method should be implemented by the child class.

@@ -9,9 +9,12 @@ class LogUtils:
         logging.basicConfig(level=log_level)
 
         log_formatter = logging.Formatter(
-            "%(asctime)s %(levelname)-8s %(name)-10s - [%(filename)s:%(lineno)d]: %(message)s")
+            "%(asctime)s %(levelname)-8s %(name)-10s - [%(filename)s:%(lineno)d]: %(message)s"
+        )
 
-        file_handler = logging.FileHandler(f"logs/{self.formatted_start_time}_game_logs.log")
+        file_handler = logging.FileHandler(
+            f"logs/{self.formatted_start_time}_game_logs.log"
+        )
         file_handler.setFormatter(log_formatter)
 
         console_handler = logging.StreamHandler()

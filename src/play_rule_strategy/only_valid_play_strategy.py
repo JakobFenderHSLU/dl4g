@@ -1,4 +1,4 @@
-from play_rule_strategy.abstract_play_rule import PlayRuleStrategy
+from src.play_rule_strategy.abstract_play_rule import PlayRuleStrategy
 
 
 class OnlyValidPlayRuleStrategy(PlayRuleStrategy):

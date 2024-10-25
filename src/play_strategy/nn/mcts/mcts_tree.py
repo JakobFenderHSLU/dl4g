@@ -4,8 +4,8 @@ from jass.game.game_sim import GameSim
 from jass.game.game_state import GameState
 from jass.game.rule_schieber import RuleSchieber
 
-from play_strategy.nn.mcts.mcts_node import MCTSNode
-from play_strategy.random_play_strategy import RandomPlayStrategy
+from src.play_strategy.nn.mcts.mcts_node import MCTSNode
+from src.play_strategy.random_play_strategy import RandomPlayStrategy
 
 
 class MCTS:
@@ -56,7 +56,10 @@ class MCTS:
             card = random_play_strategy.choose_card(obs)
             game_sim.action_play_card(card)
 
-        return (game_sim.state.points[simulating_player % 2] - game_sim.state.points[(simulating_player + 1) % 2]) / 157
+        return (
+            game_sim.state.points[simulating_player % 2]
+            - game_sim.state.points[(simulating_player + 1) % 2]
+        ) / 157
 
     @staticmethod
     def _back_propagation(node: MCTSNode, score: float):

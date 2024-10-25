@@ -1,5 +1,17 @@
 import numpy as np
-from jass.game.const import PUSH, OBE_ABE, UNE_UFE, DIAMONDS, HEARTS, SPADES, CLUBS, DA, HA, SA, CA
+from jass.game.const import (
+    CA,
+    CLUBS,
+    DA,
+    DIAMONDS,
+    HA,
+    HEARTS,
+    OBE_ABE,
+    PUSH,
+    SA,
+    SPADES,
+    UNE_UFE,
+)
 
 from src.trump_strategy.abstract_trump_strategy import TrumpStrategy
 

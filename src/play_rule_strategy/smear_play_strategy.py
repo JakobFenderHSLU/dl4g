@@ -2,7 +2,7 @@ import numpy as np
 from jass.game.const import OBE_ABE
 
 import src.utils.game_utils as gu
-from play_rule_strategy.abstract_play_rule import PlayRuleStrategy
+from src.play_rule_strategy.abstract_play_rule import PlayRuleStrategy
 
 
 class SmearPlayRuleStrategy(PlayRuleStrategy):

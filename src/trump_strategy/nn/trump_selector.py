@@ -13,7 +13,7 @@ class TrumpSelector(nn.Module):
             nn.ReLU(),
             nn.Linear(32, 16),
             nn.ReLU(),
-            nn.Linear(16, 6)
+            nn.Linear(16, 6),
         )
 
         # kaiming initialization

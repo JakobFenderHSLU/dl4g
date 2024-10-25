@@ -6,7 +6,7 @@ import torch.nn as nn
 import wandb
 from jass.game.const import MAX_TRUMP
 from sklearn.model_selection import KFold
-from torch.utils.data import TensorDataset, DataLoader
+from torch.utils.data import DataLoader, TensorDataset
 from tqdm import tqdm
 
 from trump_strategy.nn.trump_data_generator import TrumpDataGenerator
@@ -14,8 +14,16 @@ from trump_strategy.nn.trump_selector import TrumpSelector
 
 
 class Trainer:
-    def __init__(self, data_generator: TrumpDataGenerator, batch_size: int, max_batches: int, max_epochs: int,
-                 lr: float, weight_decay: float, folds: int):
+    def __init__(
+        self,
+        data_generator: TrumpDataGenerator,
+        batch_size: int,
+        max_batches: int,
+        max_epochs: int,
+        lr: float,
+        weight_decay: float,
+        folds: int,
+    ):
 
         self.data_generator = data_generator
         self.batch_size = batch_size
@@ -37,7 +45,7 @@ class Trainer:
         print("Starting training...")
         dataset = (
             np.zeros((self.max_batches, self.batch_size, 36)),
-            np.zeros((self.max_batches, self.batch_size, MAX_TRUMP + 1))
+            np.zeros((self.max_batches, self.batch_size, MAX_TRUMP + 1)),
         )
 
         print(f"Generating {self.batch_size} hands...")
@@ -49,7 +57,9 @@ class Trainer:
 
         print(f"Generated {self.batch_size} hands.")
 
-        for fold, (train_index, val_index) in enumerate(KFold(n_splits=self.folds).split(dataset[0])):
+        for fold, (train_index, val_index) in enumerate(
+            KFold(n_splits=self.folds).split(dataset[0])
+        ):
             end_fold = False
 
             self.model = TrumpSelector().to(self.device)
@@ -58,36 +68,30 @@ class Trainer:
             self.run = wandb.init(
                 project="dl4g-trump-selection",
                 name=f"bs={self.config['batch_size']}_lr={self.config['lr']}"
-                     f"_wd={self.config['weight_decay']}_fold={fold}",
-                config=self.config
+                f"_wd={self.config['weight_decay']}_fold={fold}",
+                config=self.config,
             )
 
             optimizer = torch.optim.Adam(
                 self.model.parameters(),
                 lr=self.run.config.lr,
-                weight_decay=self.run.config.weight_decay
+                weight_decay=self.run.config.weight_decay,
             )
 
             loss_fn = nn.SmoothL1Loss()
 
-            train_ds = (
-                dataset[0][train_index],
-                dataset[1][train_index]
-            )
+            train_ds = (dataset[0][train_index], dataset[1][train_index])
 
-            val_ds = (
-                dataset[0][val_index],
-                dataset[1][val_index]
-            )
+            val_ds = (dataset[0][val_index], dataset[1][val_index])
 
             train_ds = TensorDataset(
                 torch.tensor(train_ds[0], dtype=torch.float).to(self.device),
-                torch.tensor(train_ds[1], dtype=torch.float).to(self.device)
+                torch.tensor(train_ds[1], dtype=torch.float).to(self.device),
             )
 
             val_ds = TensorDataset(
                 torch.tensor(val_ds[0], dtype=torch.float).to(self.device),
-                torch.tensor(val_ds[1], dtype=torch.float).to(self.device)
+                torch.tensor(val_ds[1], dtype=torch.float).to(self.device),
             )
 
             train_dl = DataLoader(train_ds, batch_size=self.batch_size)
@@ -106,9 +110,11 @@ class Trainer:
                     optimizer.step()
 
                     if i == 0:
-                        self.run.log({
-                            "train/loss": loss.item(),
-                        })
+                        self.run.log(
+                            {
+                                "train/loss": loss.item(),
+                            }
+                        )
 
                 with torch.no_grad():
                     for i, (hand, score) in enumerate(val_dl):
@@ -116,7 +122,9 @@ class Trainer:
                         loss = loss_fn(y_pred, score)
 
                         if loss.item() < self.lowest_val_loss[0]:
-                            print(f"New lowest val loss: {loss.item()} at epoch {epoch}")
+                            print(
+                                f"New lowest val loss: {loss.item()} at epoch {epoch}"
+                            )
                             self.lowest_val_loss = (loss.item(), epoch)
 
                             if epoch > 1000:
@@ -129,6 +137,8 @@ class Trainer:
                             end_fold = True
 
                         if i == 0:
-                            self.run.log({
-                                "val/loss": loss.item(),
-                            })
+                            self.run.log(
+                                {
+                                    "val/loss": loss.item(),
+                                }
+                            )

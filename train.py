@@ -19,14 +19,14 @@ if __name__ == "__main__":
             load_data=True,
             n_play_per_hand=20,
             backup_interval=10_000,
-            max_cache_size=1_000_000
+            max_cache_size=1_000_000,
         ),
         batch_size=args.batch_size,
         lr=args.lr,
         weight_decay=args.weight_decay,
         max_batches=args.max_batches,
         max_epochs=10_000_000,
-        folds=args.folds
+        folds=args.folds,
     )
 
     trainer.train()

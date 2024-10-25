@@ -13,7 +13,13 @@ import src.utils.game_utils as gu
 
 
 class TrumpDataGenerator:
-    def __init__(self, load_data=False, n_play_per_hand=100, backup_interval=10_000, max_cache_size=1_000_000):
+    def __init__(
+        self,
+        load_data=False,
+        n_play_per_hand=100,
+        backup_interval=10_000,
+        max_cache_size=1_000_000,
+    ):
         self.DATA_PATH = "data/trump_data_generator"
 
         self.max_cache_size = max_cache_size
@@ -38,7 +44,9 @@ class TrumpDataGenerator:
             self._load_data()
         else:
             self.cached_decks = np.zeros((self.max_cache_size, 36)).astype(int)
-            self.cached_results = np.zeros((self.max_cache_size, MAX_TRUMP + 1, n_play_per_hand)).astype(int)
+            self.cached_results = np.zeros(
+                (self.max_cache_size, MAX_TRUMP + 1, n_play_per_hand)
+            ).astype(int)
 
     def __iter__(self):
         return self
@@ -60,7 +68,10 @@ class TrumpDataGenerator:
             return onehot_hands, results
 
         # Backup data at interval if it was generated.
-        elif self.total_n_yielded_hands % self.backup_interval == 0 and self.total_n_yielded_hands > 0:
+        elif (
+            self.total_n_yielded_hands % self.backup_interval == 0
+            and self.total_n_yielded_hands > 0
+        ):
             self.logger.info(f"Backing up hands at {self.total_n_yielded_hands}...")
             self._backup_hands()
 
@@ -69,7 +80,9 @@ class TrumpDataGenerator:
         onehot_hands = self._generate_random_deck()
         results = self._get_scores(onehot_hands)
 
-        self.cached_decks[self.relative_n_yielded_hands] = np.where(onehot_hands == 1)[1]
+        self.cached_decks[self.relative_n_yielded_hands] = np.where(onehot_hands == 1)[
+            1
+        ]
         self.cached_results[self.relative_n_yielded_hands] = results
 
         self.total_n_yielded_hands += 1
@@ -79,24 +92,33 @@ class TrumpDataGenerator:
 
     def _load_data(self):
         cache_to_load = self.total_n_yielded_hands // self.max_cache_size
-        if (not os.path.exists(f"{self.DATA_PATH}/cached_decks_{cache_to_load}.npy")
-                or not os.path.exists(f"{self.DATA_PATH}/cached_results_{cache_to_load}.npy")):
+        if not os.path.exists(
+            f"{self.DATA_PATH}/cached_decks_{cache_to_load}.npy"
+        ) or not os.path.exists(f"{self.DATA_PATH}/cached_results_{cache_to_load}.npy"):
             self.logger.warning("no cached data found")
             return
 
         # load as int
-        loaded_decks = np.load(f"{self.DATA_PATH}/cached_decks_{cache_to_load}.npy").astype(int)
-        loaded_results = np.load(f"{self.DATA_PATH}/cached_results_{cache_to_load}.npy").astype(int)
+        loaded_decks = np.load(
+            f"{self.DATA_PATH}/cached_decks_{cache_to_load}.npy"
+        ).astype(int)
+        loaded_results = np.load(
+            f"{self.DATA_PATH}/cached_results_{cache_to_load}.npy"
+        ).astype(int)
 
         if loaded_decks is None or loaded_results is None:
             self.logger.warning("cached data is None")
             self.cache_decks = np.zeros((self.max_cache_size, 36)).astype(int)
-            self.cached_results = np.zeros((self.max_cache_size, MAX_TRUMP + 1, self.n_play_per_hand)).astype(int)
+            self.cached_results = np.zeros(
+                (self.max_cache_size, MAX_TRUMP + 1, self.n_play_per_hand)
+            ).astype(int)
 
         if loaded_decks.shape[0] != loaded_results.shape[0]:
             self.logger.warning("cached data is inconsistent")
             self.cache_decks = np.zeros((self.max_cache_size, 36)).astype(int)
-            self.cached_results = np.zeros((self.max_cache_size, MAX_TRUMP + 1, self.n_play_per_hand)).astype(int)
+            self.cached_results = np.zeros(
+                (self.max_cache_size, MAX_TRUMP + 1, self.n_play_per_hand)
+            ).astype(int)
 
         first_empty_hand_index = np.where(loaded_decks.sum(axis=1) == 0)[0][0]
         self.total_n_cached_results += first_empty_hand_index
@@ -106,11 +128,16 @@ class TrumpDataGenerator:
         self.cached_results = loaded_results
 
     def _backup_hands(self):
-        with open(f"{self.DATA_PATH}/cached_decks_{self.total_n_yielded_hands // self.max_cache_size}.npy", "wb") as f:
+        with open(
+            f"{self.DATA_PATH}/cached_decks_{self.total_n_yielded_hands // self.max_cache_size}.npy",
+            "wb",
+        ) as f:
             np.save(f, self.cached_decks.astype(int))
 
-        with open(f"{self.DATA_PATH}/cached_results_{self.total_n_yielded_hands // self.max_cache_size}.npy",
-                  "wb") as f:
+        with open(
+            f"{self.DATA_PATH}/cached_results_{self.total_n_yielded_hands // self.max_cache_size}.npy",
+            "wb",
+        ) as f:
             np.save(f, self.cached_results.astype(int))
 
     def _generate_random_deck(self) -> ndarray:
@@ -118,12 +145,14 @@ class TrumpDataGenerator:
         np.random.shuffle(deck)
         hands = gu.deck_to_onehot_hands(deck)
         swap_hand, color_order = gu.swap_colors(hands[0])
-        swapped_hands = np.array([
-            swap_hand,
-            gu.swap_colors_from_order(hands[1], color_order),
-            gu.swap_colors_from_order(hands[2], color_order),
-            gu.swap_colors_from_order(hands[3], color_order)
-        ])
+        swapped_hands = np.array(
+            [
+                swap_hand,
+                gu.swap_colors_from_order(hands[1], color_order),
+                gu.swap_colors_from_order(hands[2], color_order),
+                gu.swap_colors_from_order(hands[3], color_order),
+            ]
+        )
 
         return swapped_hands
 
@@ -148,7 +177,9 @@ class TrumpDataGenerator:
                     card_action = np.random.choice(np.flatnonzero(valid_cards))
                     self.game.action_play_card(card_action)
 
-                score[i] = np.where(self.game.state.trick_winner == 0, self.game.state.trick_points, 0).sum()
+                score[i] = np.where(
+                    self.game.state.trick_winner == 0, self.game.state.trick_points, 0
+                ).sum()
 
             results[trump] = score
 

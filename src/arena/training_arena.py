@@ -11,7 +11,9 @@ class TrainingArena:
         self.players = players
 
         assert len(players) == 4, "There must be 4 players in the training arena"
-        assert all([isinstance(player, CustomAgent) for player in players]), "All players must be of type CustomAgent"
+        assert all(
+            [isinstance(player, CustomAgent) for player in players]
+        ), "All players must be of type CustomAgent"
 
         self.game_sim = GameSim(rule=RuleSchieber())
         self.dealing_strategy = DealingCardRandomStrategy()
@@ -22,7 +24,9 @@ class TrainingArena:
         for i in range(max_epochs):
             for batch in range(batch_size):
                 # create game
-                self.game_sim.init_from_cards(self.dealing_strategy.deal_cards(), dealer)
+                self.game_sim.init_from_cards(
+                    self.dealing_strategy.deal_cards(), dealer
+                )
 
                 # play one round
                 hands = np.zeros((batch_size, 9, 4, 36), dtype=np.int32)

@@ -6,7 +6,9 @@ rule = RuleSchieber()
 
 
 class MiniMaxNode:
-    def __init__(self, parent: "MiniMaxNode" = None, state: GameState = None, card: int = None):
+    def __init__(
+        self, parent: "MiniMaxNode" = None, state: GameState = None, card: int = None
+    ):
         self.parent = parent
         self.state = state
         self.card = card
