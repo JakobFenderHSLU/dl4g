@@ -13,10 +13,11 @@ from src.agent.agent import CustomAgent
 from src.play_rule_strategy.only_valid_play_strategy import PlayRuleStrategy
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
+from src.utils.worker_nodes import WorkerNodeManager
 
 
 def create_app():
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
     # create and configure the app
     app = PlayerServiceApp("player_service")
@@ -28,7 +29,7 @@ def create_app():
     #     CustomAgent(
     #         trump_strategy=RandomTrumpStrategy(0),
     #         play_strategy=RandomPlayStrategy(),
-    #         play_rules_strategies=PlayRuleStrategy(),
+    #         play_rules_strategies=[],
     #     ),
     # )
 
