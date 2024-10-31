@@ -119,7 +119,8 @@ if __name__ == "__main__":
             if strategy_name == "smear":
                 strategies.append(SmearPlayRuleStrategy(seed=args.seed, log_level=args.log_level))
             if strategy_name == "mini_max":
-                strategies.append(MiniMaxPlayRuleStrategy(seed=args.seed, log_level=args.log_level, depth=4, limit_s=1))
+                strategies.append(
+                    MiniMaxPlayRuleStrategy(seed=args.seed, log_level=args.log_level, depth=3, limit_s=10))
 
         return strategies
 
@@ -144,8 +145,10 @@ if __name__ == "__main__":
     arena1.play_all_games()
 
     np.random.seed(args.seed)
-    arena2 = Arena(nr_games_to_play=args.n_games // 2,
-                   save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs")
+    arena2 = Arena(
+        nr_games_to_play=args.n_games // 2,
+        save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs"
+    )
     arena2.set_players(
         CustomAgent(_get_trump_strategy(args.opponent_trump_strategy),
                     _get_play_strategy(args.opponent_play_strategy),
