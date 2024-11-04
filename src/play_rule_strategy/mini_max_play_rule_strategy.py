@@ -9,6 +9,7 @@ from jass.game.game_state_util import state_from_observation
 from play_rule_strategy.abstract_play_rule import PlayRuleStrategy
 from play_rule_strategy.mini_max.mini_maxer import MiniMaxer
 from play_strategy.nn.mcts.hand_sampler import HandSampler
+from play_strategy.random_play_strategy import RandomPlayStrategy
 
 
 class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
@@ -20,6 +21,7 @@ class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
         self.limit_s = limit_s
         self.n_threads = n_threads
         self.executor = ThreadPoolExecutor(max_workers=self.n_threads)
+        self.fallback = RandomPlayStrategy()
 
     def choose_card(self, obs: GameObservation) -> int | None:
         if sum(obs.hand) > self.depth:
@@ -40,6 +42,12 @@ class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
             future.result()
 
         children = list(children.queue)
+
+        if len(children) == 0:
+            # Note (Jakob): if no children were generated in time. Choose random card, since we have no time
+            # budget left to compute something more advanced.
+            return self.fallback.choose_card(obs)
+
 
         cards = [node.card for node in children[0]]
         avg_return = {
