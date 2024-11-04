@@ -1,4 +1,6 @@
-### Random
+### Trump Selection
+
+#### Random
 
 <pre>                         
  5000                                          5000 
@@ -152,4 +154,39 @@ Total Games Played: 10000
  |     Points Median      |  105.0   |    79.0   | 
  | Points 75th Percentile |  124.0   |   102.0   | 
  +------------------------+----------+-----------+ 
+</pre>
+
+### Play Strategy
+
+#### Determinized Monte Carlo Tree Search
+
+Note: 2.5s compute time with 16 trees with ca ~150 iterations per tree
+
+<pre>
+ 66                                              34 
+[+++++++++++++++++++++++++++++++++-----------------]
+                                                    
+ +------------------------+---------+-----------+   
+ |        Overall         |  Agents | Opponents |   
+ +------------------------+---------+-----------+   
+ |        Winrate         | 66.00 % |  34.00 %  |   
+ |     Average Points     |  96.21  |   60.79   |   
+ |       Max Points       |  157.0  |   145.0   |   
+ |       Min Points       |   12.0  |    0.0    |   
+ | Points 25th Percentile |   66.0  |   31.75   |   
+ |     Points Median      |   98.0  |    59.0   |   
+ | Points 75th Percentile |  125.25 |    91.0   |   
+ +------------------------+---------+-----------+   
+                                                    
+ +------------------------+---------+-----------+   
+ |      Trump Rounds      |  Agents | Opponents |   
+ +------------------------+---------+-----------+   
+ |        Winrate         | 98.00 % |  66.00 %  |   
+ |     Average Points     |  121.98 |   86.56   |   
+ |       Max Points       |  157.0  |   145.0   |   
+ |       Min Points       |   67.0  |    12.0   |   
+ | Points 25th Percentile |  106.0  |   67.25   |   
+ |     Points Median      |  125.0  |    91.0   |   
+ | Points 75th Percentile |  137.75 |   107.0   |   
+ +------------------------+---------+-----------+   
 </pre>

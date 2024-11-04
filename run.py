@@ -100,7 +100,7 @@ if __name__ == "__main__":
         elif strategy_name == "mcts":
             return MCTSPlayStrategy()
         elif strategy_name == "dmcts":
-            return DeterminizedMCTSPlayStrategy(limit_s=9.5)
+            return DeterminizedMCTSPlayStrategy(limit_s=2.5)
         else:
             raise ValueError(f"Unknown play strategy: {strategy_name}")
 
