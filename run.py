@@ -25,7 +25,7 @@ from src.utils.log_utils import LogUtils
 from src.utils.results_utils import ResultsUtils
 
 POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score", "statistical", "deep_nn"]
-POSSIBLE_PLAY_STRATEGIES = ["random", "highest_value", "mcts", "sampled_mcts"]
+POSSIBLE_PLAY_STRATEGIES = ["random", "highest_value", "mcts", "dmcts"]
 POSSIBLE_PLAY_RULE_STRATEGIES = ["all", "none", "only_valid", "smear", "mini_max"]
 
 if __name__ == "__main__":
@@ -99,8 +99,8 @@ if __name__ == "__main__":
             return HighestValuePlayStrategy()
         elif strategy_name == "mcts":
             return MCTSPlayStrategy()
-        elif strategy_name == "sampled_mcts":
-            return DeterminizedMCTSPlayStrategy()
+        elif strategy_name == "dmcts":
+            return DeterminizedMCTSPlayStrategy(limit_s=9.5)
         else:
             raise ValueError(f"Unknown play strategy: {strategy_name}")
 

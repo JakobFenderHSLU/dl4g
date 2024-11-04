@@ -27,8 +27,6 @@ class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
         if sum(obs.hand) > self.depth:
             return None
 
-        tmp_time = time.time()
-
         cutoff_time = time.time() + self.limit_s
         children = queue.Queue()
 
@@ -37,7 +35,6 @@ class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
             for _ in range(self.n_threads)
         ]
 
-        # wait until all threads are done
         for future in futures:
             future.result()
 
