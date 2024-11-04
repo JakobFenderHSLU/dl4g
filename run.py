@@ -120,7 +120,7 @@ if __name__ == "__main__":
                 strategies.append(SmearPlayRuleStrategy(seed=args.seed, log_level=args.log_level))
             if strategy_name == "mini_max":
                 strategies.append(
-                    MiniMaxPlayRuleStrategy(seed=args.seed, log_level=args.log_level, depth=3, limit_s=10))
+                    MiniMaxPlayRuleStrategy(seed=args.seed, log_level=args.log_level, depth=3, limit_s=2.5))
 
         return strategies
 

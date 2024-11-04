@@ -12,7 +12,7 @@ from play_strategy.nn.mcts.hand_sampler import HandSampler
 
 
 class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
-    def __init__(self, log_level: str, seed: int, depth: int, limit_s: int, n_threads: int = 32):
+    def __init__(self, log_level: str, seed: int, depth: int, limit_s: float, n_threads: int = 32):
         super().__init__(log_level, __name__, seed)
         self.depth = depth
         self.mini_maxer = MiniMaxer()
@@ -39,8 +39,6 @@ class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
         for future in futures:
             future.result()
 
-        print(f"Time: {time.time() - tmp_time}")
-
         children = list(children.queue)
 
         cards = [node.card for node in children[0]]
@@ -48,9 +46,6 @@ class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
             card: sum(node.score for node in children) / len(children)
             for card, children in zip(cards, zip(*children))
         }
-
-        print(avg_return)
-        print(len(children))
 
         max_card = max(avg_return, key=avg_return.get)
 
