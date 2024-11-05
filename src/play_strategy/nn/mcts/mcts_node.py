@@ -33,7 +33,7 @@ class MCTSNode:
     def is_fully_expanded(self):
         return len(self.children) == self.n_possible_cards
 
-    def best_child_ubc(self, c=np.sqrt(2)):  # TODO: WRITE OWN IMPLEMENTATION
+    def best_child_ubc(self, c=np.sqrt(2)):
         choices_weights = [
             (child.score / child.n_simulated) + c * np.sqrt(
                 (2 * np.log(self.n_simulated) / child.n_simulated))
