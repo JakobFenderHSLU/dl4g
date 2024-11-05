@@ -1,6 +1,7 @@
 import math
 import time
 
+import numpy as np
 from jass.game.game_sim import GameSim
 from jass.game.game_state import GameState
 from jass.game.rule_schieber import RuleSchieber
@@ -10,15 +11,16 @@ from play_strategy.random_play_strategy import RandomPlayStrategy
 
 
 class MCTS:
-    def __init__(self):
+    def __init__(self, ucb_c=np.sqrt(2)):
         self.root = None
+        self.ucb_c = ucb_c
 
     def search(self, game_state: GameState, iterations=100, limit_s=None, root=None):
 
         if root is not None:
             self.root = root
         else:
-            self.root = MCTSNode(state=game_state)
+            self.root = MCTSNode(state=game_state, ucb_c=self.ucb_c)
 
         if limit_s is None:
             for i in range(iterations):

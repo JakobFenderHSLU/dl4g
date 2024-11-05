@@ -10,10 +10,11 @@ rule = RuleSchieber()
 
 
 class MCTSNode:
-    def __init__(self, parent: "MCTSNode" = None, state: GameState = None, card: int = None):
+    def __init__(self, parent: "MCTSNode" = None, state: GameState = None, card: int = None, ucb_c=np.sqrt(2)):
         self.parent = parent
         self.state = state
         self.card = card
+        self.ucb_c = ucb_c
         self.score = -math.inf
         self.n_simulated = 0
         valid_cards = rule.get_valid_cards(
@@ -34,9 +35,9 @@ class MCTSNode:
     def is_fully_expanded(self):
         return len(self.children) == self.n_possible_cards
 
-    def best_child_ubc(self, c=np.sqrt(2)):
+    def best_child_ubc(self):
         choices_weights = [
-            (child.score / child.n_simulated) + c * np.sqrt(
+            child.score + self.ucb_c * np.sqrt(
                 (2 * np.log(self.n_simulated) / child.n_simulated))
             for child in self.children
         ]
