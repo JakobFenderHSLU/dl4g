@@ -10,7 +10,7 @@ rule = RuleSchieber()
 
 def is_safe_trick(obs: GameObservation) -> bool:
     """
-    Check if the current trick is save.
+    Check if the current trick is safe.
 
     :param obs: GameObservation
     """
