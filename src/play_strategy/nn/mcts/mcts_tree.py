@@ -1,3 +1,4 @@
+import math
 import time
 
 from jass.game.game_sim import GameSim
@@ -21,25 +22,32 @@ class MCTS:
 
         if limit_s is None:
             for i in range(iterations):
-                self._run(game_state)
+                is_fully_expanded = self._run(game_state)
+                if is_fully_expanded:
+                    break
         else:
             cutoff_time = time.time() + limit_s
             while time.time() < cutoff_time:
                 self._run(game_state)
+                if self.is_fully_expanded:
+                    break
 
         return self._get_most_simulated_node().card
 
-    def _run(self, game_state: GameState):
+    def _run(self, game_state: GameState) -> bool:
         # get the best node to simulate
         node = self._tree_policy(self.root)
+        if node is None:
+            return True
 
         # simulate the game
         score = self._simulate(node, game_state.player)
 
         # back propagate the score
         self._back_propagation(node, score)
+        return False
 
-    def _tree_policy(self, node: MCTSNode) -> MCTSNode:
+    def _tree_policy(self, node: MCTSNode) -> MCTSNode or None:
         """
         Traverse the tree to find the best node to simulate
         :param node: The node to start the tree policy from
@@ -51,6 +59,8 @@ class MCTS:
                 return current_node.expand()
             else:
                 current_node = current_node.best_child_ubc()
+        if current_node.score != -math.inf:
+            return None
         return current_node
 
     def _simulate(self, node: MCTSNode, simulating_player: int) -> float:

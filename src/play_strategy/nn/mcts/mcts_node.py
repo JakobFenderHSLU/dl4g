@@ -1,4 +1,5 @@
 import copy
+import math
 
 import numpy as np
 from jass.game.game_sim import GameSim
@@ -13,7 +14,7 @@ class MCTSNode:
         self.parent = parent
         self.state = state
         self.card = card
-        self.score = 0.0
+        self.score = -math.inf
         self.n_simulated = 0
         valid_cards = rule.get_valid_cards(
             hand=self.state.hands[self.state.player],
