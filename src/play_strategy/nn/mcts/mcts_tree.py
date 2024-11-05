@@ -12,9 +12,12 @@ class MCTS:
     def __init__(self):
         self.root = None
 
-    def search(self, game_state: GameState, iterations=100, limit_s=None):
+    def search(self, game_state: GameState, iterations=100, limit_s=None, root=None):
 
-        self.root = MCTSNode(state=game_state)
+        if root is not None:
+            self.root = root
+        else:
+            self.root = MCTSNode(state=game_state)
 
         if limit_s is None:
             for i in range(iterations):
@@ -36,7 +39,12 @@ class MCTS:
         # back propagate the score
         self._back_propagation(node, score)
 
-    def _tree_policy(self, node: MCTSNode):
+    def _tree_policy(self, node: MCTSNode) -> MCTSNode:
+        """
+        Traverse the tree to find the best node to simulate
+        :param node: The node to start the tree policy from
+        :return: The best node to simulate
+        """
         current_node = node
         while not current_node.is_terminal:
             if not current_node.is_fully_expanded:
@@ -45,7 +53,13 @@ class MCTS:
                 current_node = current_node.best_child_ubc()
         return current_node
 
-    def _simulate(self, node: MCTSNode, simulating_player: int):
+    def _simulate(self, node: MCTSNode, simulating_player: int) -> float:
+        """
+        Simulate a game from the current node
+        :param node: The node to simulate from containing a valid game state
+        :param simulating_player: The player to simulate for
+        :return: The score of the simulated game
+        """
         game_sim = GameSim(rule=RuleSchieber())
         game_sim.init_from_state(node.state)
 
@@ -59,7 +73,12 @@ class MCTS:
         return (game_sim.state.points[simulating_player % 2] - game_sim.state.points[(simulating_player + 1) % 2]) / 157
 
     @staticmethod
-    def _back_propagation(node: MCTSNode, score: float):
+    def _back_propagation(node: MCTSNode, score: float) -> None:
+        """
+        Back propagate the score of the simulated game
+        :param node: The node to back propagate from
+        :param score: The score of the simulated game
+        """
         prev_node = None
         while node is not None:
             node.n_simulated += 1
