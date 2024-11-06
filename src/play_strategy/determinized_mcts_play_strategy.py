@@ -1,10 +1,11 @@
-import queue
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures.process import ProcessPoolExecutor
+from multiprocessing import Manager
 
 import numpy as np
 from jass.game.game_observation import GameObservation
 from jass.game.game_sim import GameSim
 from jass.game.game_state_util import state_from_observation
+from jass.game.rule_schieber import RuleSchieber
 
 from play_strategy.nn.mcts.mcts_tree import MCTS
 from src.play_strategy.abstract_play_strategy import PlayStrategy
@@ -12,43 +13,55 @@ from src.play_strategy.nn.mcts.hand_sampler import HandSampler
 
 
 class DeterminizedMCTSPlayStrategy(PlayStrategy):
-
-    def __init__(self, samples=10, limit_s=1, n_threads=16):
+    def __init__(self, limit_s=1, n_threads=16):
         super().__init__(__name__)
-        self.samples = samples
         self.n_threads = n_threads
         self.limit_s = limit_s
         self.hand_sampler = HandSampler()
-        self.executor = ThreadPoolExecutor(max_workers=self.n_threads)
+        self.executor = ProcessPoolExecutor()
 
     def choose_card(self, obs: GameObservation) -> int:
-        action_scores = queue.Queue()
-        valid_cards = np.flatnonzero(self._rule.get_valid_cards_from_obs(obs))
+        with Manager() as manager:
+            action_scores = manager.Queue()
+            n_simulations = manager.Queue()
+            valid_cards = np.flatnonzero(self._rule.get_valid_cards_from_obs(obs))
 
-        futures = [
-            self.executor.submit(self.__thread_search, action_scores, obs)
-            for _ in range(self.n_threads)
-        ]
+            futures = []
+            for _ in range(self.n_threads):
+                future = self.executor.submit(_thread_search, action_scores, obs, self.limit_s, n_simulations)
+                futures.append(future)
 
-        for future in futures:
-            future.result()
+            for future in futures:
+                future.result()
 
-        action_scores = list(action_scores.queue)
-        action_scores = np.array(action_scores)
-        mean_scores = np.mean(action_scores, axis=0)
-        best_card_index = np.argmax(mean_scores)
-        return int(valid_cards[best_card_index])
+            all_action_scores = []
+            while not action_scores.empty():
+                all_action_scores.append(action_scores.get())
 
-    def __thread_search(self, action_scores, game_obs):
-        game_sim = self.__create_game_sim_from_obs(game_obs)
-        mcts = MCTS()
-        mcts.search(game_sim.state, limit_s=self.limit_s)
+            sum_n_simulations = []
+            while not n_simulations.empty():
+                sum_n_simulations.append(n_simulations.get())
 
-        # sort by card index
-        mcts.root.children.sort(key=lambda x: x.card)
-        action_scores.put([child.score for child in mcts.root.children])
+            print(f"Sum of simulations: {sum_n_simulations}")
 
-    def __create_game_sim_from_obs(self, game_obs: GameObservation) -> GameSim:
-        game_sim = GameSim(rule=self._rule)
-        game_sim.init_from_state(state_from_observation(game_obs, self.hand_sampler.sample(game_obs)))
-        return game_sim
+            action_scores = np.array(all_action_scores)
+            mean_scores = np.mean(action_scores, axis=0)
+            best_card_index = np.argmax(mean_scores)
+            return int(valid_cards[best_card_index])
+
+
+def _thread_search(action_scores, game_obs, limit_s, n_simulations):
+    game_sim = __create_game_sim_from_obs(game_obs, RuleSchieber())
+    mcts = MCTS()
+    mcts.search(game_sim.state, limit_s=limit_s)
+
+    # sort by card index
+    mcts.root.children.sort(key=lambda x: x.card)
+    n_simulations.put(np.sum([child.n_simulated for child in mcts.root.children]))
+    action_scores.put([child.score for child in mcts.root.children])
+
+
+def __create_game_sim_from_obs(game_obs: GameObservation, rule) -> GameSim:
+    game_sim = GameSim(rule=rule)
+    game_sim.init_from_state(state_from_observation(game_obs, HandSampler().sample(game_obs)))
+    return game_sim
