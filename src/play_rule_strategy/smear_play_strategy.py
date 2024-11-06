@@ -18,7 +18,7 @@ class SmearPlayRuleStrategy(PlayRuleStrategy):
             return None
 
         # Skip if the trick is not safe
-        if not gu.is_safe_trick(observation, self._rule):
+        if not gu.is_safe_trick(observation):
             return None
 
         # Get valid cards

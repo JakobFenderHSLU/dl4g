@@ -1,3 +1,5 @@
+import time
+
 from jass.game.const import card_strings
 from jass.game.game_sim import GameSim
 from jass.game.rule_schieber import RuleSchieber
@@ -11,16 +13,21 @@ class MiniMaxer:
     def __init__(self):
         self.cutoff_time = None
 
-    def search(self, game_state, cutoff_time_s=None) -> MiniMaxNode:
-        self.cutoff_time = cutoff_time_s
-        if not cutoff_time_s:
-            self.cutoff_time = float("inf")
+    def search(self, game_state, cutoff_time=None) -> MiniMaxNode:
+        self.cutoff_time = cutoff_time
+        if not cutoff_time:
+            self.cutoff_time = float('inf')
 
         root = MiniMaxNode(parent=None, state=game_state)
-        self.minimax(root, float("-inf"), float("inf"), True)
+        self.minimax(root, float('-inf'), float('inf'), True)
+        if self.cutoff_time <= time.time():
+            return None
         return root
 
     def minimax(self, node, alpha, beta, maximizing_team):
+        if self.cutoff_time <= time.time():
+            return None
+
         if node.is_terminal():
             return node.evaluate()
 
@@ -35,6 +42,8 @@ class MiniMaxer:
                 child = MiniMaxNode(parent=node, state=child_state, card=possible_card)
                 node.children.append(child)
                 eval = self.minimax(child, alpha, beta, False)
+                if eval is None:
+                    return None
                 max_eval = max(max_eval, eval)
                 node.score = max_eval
                 alpha = max(alpha, eval)
@@ -50,6 +59,8 @@ class MiniMaxer:
                 child = MiniMaxNode(parent=node, state=child_state, card=possible_card)
                 node.children.append(child)
                 eval = self.minimax(child, alpha, beta, True)
+                if eval is None:
+                    return None
                 min_eval = min(min_eval, eval)
                 node.score = min_eval
                 beta = min(beta, eval)
