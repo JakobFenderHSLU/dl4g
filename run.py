@@ -5,10 +5,8 @@ from typing import List
 import numpy as np
 from jass.arena.arena import Arena
 
-from play_rule_strategy.mini_max_play_rule_strategy import MiniMaxPlayRuleStrategy
 from play_rule_strategy.pull_trumps_strategy import PullTrumpsPlayRuleStrategy
 from play_rule_strategy.trump_jack_strategy import TrumpJackPlayRuleStrategy
-
 from src.agent.agent import CustomAgent
 from src.play_rule_strategy.abstract_play_rule import PlayRuleStrategy
 from src.play_rule_strategy.mini_max_play_rule_strategy import MiniMaxPlayRuleStrategy
@@ -137,7 +135,7 @@ if __name__ == "__main__":
         elif strategy_name == "mcts":
             return MCTSPlayStrategy()
         elif strategy_name == "dmcts":
-            return DeterminizedMCTSPlayStrategy(limit_s=2.5)
+            return DeterminizedMCTSPlayStrategy(limit_s=10)
         else:
             raise ValueError(f"Unknown play strategy: {strategy_name}")
 
