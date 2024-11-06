@@ -23,12 +23,11 @@ class DeterminizedMCTSPlayStrategy(PlayStrategy):
     def choose_card(self, obs: GameObservation) -> int:
         with Manager() as manager:
             action_scores = manager.Queue()
-            n_simulations = manager.Queue()
             valid_cards = np.flatnonzero(self._rule.get_valid_cards_from_obs(obs))
 
             futures = []
             for _ in range(self.n_threads):
-                future = self.executor.submit(_thread_search, action_scores, obs, self.limit_s, n_simulations)
+                future = self.executor.submit(_thread_search, action_scores, obs, self.limit_s)
                 futures.append(future)
 
             for future in futures:
@@ -38,26 +37,19 @@ class DeterminizedMCTSPlayStrategy(PlayStrategy):
             while not action_scores.empty():
                 all_action_scores.append(action_scores.get())
 
-            sum_n_simulations = []
-            while not n_simulations.empty():
-                sum_n_simulations.append(n_simulations.get())
-
-            print(f"Sum of simulations: {sum_n_simulations}")
-
             action_scores = np.array(all_action_scores)
             mean_scores = np.mean(action_scores, axis=0)
             best_card_index = np.argmax(mean_scores)
             return int(valid_cards[best_card_index])
 
 
-def _thread_search(action_scores, game_obs, limit_s, n_simulations):
+def _thread_search(action_scores, game_obs, limit_s):
     game_sim = __create_game_sim_from_obs(game_obs, RuleSchieber())
     mcts = MCTS()
     mcts.search(game_sim.state, limit_s=limit_s)
 
     # sort by card index
     mcts.root.children.sort(key=lambda x: x.card)
-    n_simulations.put(np.sum([child.n_simulated for child in mcts.root.children]))
     action_scores.put([child.score for child in mcts.root.children])
 
 
