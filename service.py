@@ -4,17 +4,15 @@
 # Modified by Dan Livingston & Jakob Fender
 #
 import logging
+import os
 
 from flask import jsonify
 from jass.agents.agent_random_schieber import AgentRandomSchieber
 from jass.service.player_service_app import PlayerServiceApp
 
 from src.agent.agent import CustomAgent
-from src.play_rule_strategy.only_valid_play_strategy import PlayRuleStrategy
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
-from src.utils.worker_nodes import WorkerNodeManager
-import os
 
 
 def create_app():
@@ -25,14 +23,14 @@ def create_app():
 
     # add some players
     app.add_player("random", AgentRandomSchieber())
-    # app.add_player(
-    #     "random",
-    #     CustomAgent(
-    #         trump_strategy=RandomTrumpStrategy(0),
-    #         play_strategy=RandomPlayStrategy(),
-    #         play_rules_strategies=[],
-    #     ),
-    # )
+    app.add_player(
+        "random",
+        CustomAgent(
+            trump_strategy=RandomTrumpStrategy(0),
+            play_strategy=RandomPlayStrategy(),
+            play_rules_strategies=[],
+        ),
+    )
 
     return app
 
