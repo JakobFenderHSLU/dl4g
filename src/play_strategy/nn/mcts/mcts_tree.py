@@ -30,8 +30,8 @@ class MCTS:
         else:
             cutoff_time = time.time() + limit_s
             while time.time() < cutoff_time:
-                self._run(game_state)
-                if self.is_fully_expanded:
+                is_fully_expanded = self._run(game_state)
+                if is_fully_expanded:
                     break
 
         return self._get_most_simulated_node().card
@@ -108,10 +108,3 @@ class MCTS:
 
     def _get_most_simulated_node(self):
         return max(self.root.children, key=lambda child: child.n_simulated)
-
-    @property
-    def is_fully_expanded(self):
-        for child in self.root.children:
-            if not child.is_fully_expanded:
-                return False
-        return True
