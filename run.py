@@ -6,6 +6,7 @@ import numpy as np
 from jass.arena.arena import Arena
 
 from play_rule_strategy.mini_max_play_rule_strategy import MiniMaxPlayRuleStrategy
+from play_rule_strategy.pull_trumps_strategy import PullTrumpsPlayRuleStrategy
 from play_rule_strategy.trump_jack_strategy import TrumpJackPlayRuleStrategy
 from src.agent.agent import CustomAgent
 from src.play_rule_strategy.abstract_play_rule import PlayRuleStrategy
@@ -27,7 +28,7 @@ from src.utils.results_utils import ResultsUtils
 
 POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score", "statistical", "deep_nn"]
 POSSIBLE_PLAY_STRATEGIES = ["random", "highest_value", "mcts", "dmcts"]
-POSSIBLE_PLAY_RULE_STRATEGIES = ["all", "none", "only_valid", "smear", "mini_max", "trump_jack"]
+POSSIBLE_PLAY_RULE_STRATEGIES = ["all", "none", "only_valid", "smear", "mini_max", "trump_jack", "pull_trumps"]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -125,6 +126,8 @@ if __name__ == "__main__":
                 )
             if strategy_name == "trump_jack":
                 strategies.append(TrumpJackPlayRuleStrategy(seed=args.seed, log_level=args.log_level))
+            if strategy_name == "pull_trumps":
+                strategies.append(PullTrumpsPlayRuleStrategy(seed=args.seed, log_level=args.log_level))
 
         return strategies
 
