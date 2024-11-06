@@ -1,8 +1,0 @@
- _instance = None
-
-    def __new__(wnm):
-        """creates a singleton object, if it is not created,
-        or else returns the previous singleton object"""
-        if not hasattr(wnm, "instance"):
-            wnm.instance = super(WorkerNodeManager, wnm).__new__(wnm)
-        return wnm.instance

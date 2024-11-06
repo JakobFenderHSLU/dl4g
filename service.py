@@ -14,6 +14,7 @@ from src.play_rule_strategy.only_valid_play_strategy import PlayRuleStrategy
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
 from src.utils.worker_nodes import WorkerNodeManager
+import os
 
 
 def create_app():
@@ -42,10 +43,19 @@ def modify_app(app):
     def ping():
         return jsonify("pong")
 
+    @app.route("/process", methods=["GET"])
+    def process_obs():
+        # TODO: process game observation
+        # TODO: return result
+        return jsonify([])
+
     return app
 
 
 if __name__ == "__main__":
     app = create_app()
     app = modify_app(app)
-    app.run(host="0.0.0.0", port=5000)
+    host = os.getenv("HOST", "0.0.0.0")
+    port = int(os.getenv("PORT", 5000))
+
+    app.run(host=host, port=port)
