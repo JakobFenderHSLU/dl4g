@@ -2,8 +2,8 @@ import torch
 from jass.game.const import PUSH
 from jass.game.game_observation import GameObservation
 
-from trump_strategy.abstract_trump_strategy import TrumpStrategy
-from trump_strategy.nn.trump_selector import TrumpSelector
+from src.trump_strategy.abstract_trump_strategy import TrumpStrategy
+from src.trump_strategy.nn.trump_selector import TrumpSelector
 
 
 class DeepNNTrumpStrategy(TrumpStrategy):

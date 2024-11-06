@@ -132,7 +132,7 @@ def get_bock_chain(obs: GameObservation) -> np.ndarray:
 
     bock_chain = []
     trump = obs.trump
-    trump_suits = obs.hand[trump * 9:trump * 9 + 9]
+    trump_suits = obs.hand[trump * 9 : trump * 9 + 9]
     possible_opponent_cards = np.ones(36)
     # set possible opponent cards to 0 for own cards
     possible_opponent_cards[obs.hand == 1] = 0
@@ -141,7 +141,7 @@ def get_bock_chain(obs: GameObservation) -> np.ndarray:
 
     for trump_card in indexes_of_trump_suits:
         trump_mask = np.zeros(36)
-        trump_mask[trump * 9:trump * 9 + 9] = higher_trump_card[trump_card]
+        trump_mask[trump * 9 : trump * 9 + 9] = higher_trump_card[trump_card]
 
         if not np.any(possible_opponent_cards * trump_mask):
             bock_chain.append(trump_card)

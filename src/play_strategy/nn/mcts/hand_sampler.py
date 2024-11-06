@@ -7,7 +7,9 @@ class HandSampler:
         # required as multiprocessing messes with random numbers
         np.random.seed()
         available_cards = np.ones(shape=36, dtype=int)
-        available_cards = np.ma.masked_where(game_obs.hand == 1, available_cards).filled(0)
+        available_cards = np.ma.masked_where(
+            game_obs.hand == 1, available_cards
+        ).filled(0)
         cards_to_distribute = len(np.flatnonzero(game_obs.hand))
         hands = np.zeros(shape=[4, 36], dtype=np.integer)
         for i in range(0, 4):

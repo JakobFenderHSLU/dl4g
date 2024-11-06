@@ -1,0 +1,25 @@
+{
+    "nodes": [
+        {
+            "name": "localhost",
+            "cpu_cores": 12,
+            "ip": "127.0.0.1",
+            "port": "5000",
+            "enabled": true
+        },
+        {
+            "name": "disabled",
+            "cpu_cores": 6,
+            "ip": "127.0.0.1",
+            "port": "6000",
+            "enabled": false
+        },
+        {
+            "name": "failing",
+            "cpu_cores": 2,
+            "ip": "127.0.0.1",
+            "port": "7000",
+            "enabled": true
+        }
+    ]
+}

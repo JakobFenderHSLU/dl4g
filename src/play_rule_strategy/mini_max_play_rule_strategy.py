@@ -65,5 +65,7 @@ class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
 
     def __create_game_sim_from_obs(self, game_obs: GameObservation) -> GameSim:
         game_sim = GameSim(rule=self._rule)
-        game_sim.init_from_state(state_from_observation(game_obs, HandSampler().sample(game_obs)))
+        game_sim.init_from_state(
+            state_from_observation(game_obs, HandSampler().sample(game_obs))
+        )
         return game_sim

@@ -7,9 +7,9 @@ from jass.game.game_sim import GameSim
 from jass.game.game_state_util import state_from_observation
 from jass.game.rule_schieber import RuleSchieber
 
-from play_strategy.nn.mcts.mcts_tree import MCTS
 from src.play_strategy.abstract_play_strategy import PlayStrategy
 from src.play_strategy.nn.mcts.hand_sampler import HandSampler
+from src.play_strategy.nn.mcts.mcts_tree import MCTS
 
 
 class DeterminizedMCTSPlayStrategy(PlayStrategy):

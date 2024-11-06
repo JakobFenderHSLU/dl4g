@@ -8,6 +8,8 @@ from jass.game.rule_schieber import RuleSchieber
 
 rule = RuleSchieber()
 
+np_sqrt_2 = np.sqrt(2)
+
 
 class MCTSNode:
     def __init__(self, parent: "MCTSNode" = None, state: GameState = None, card: int = None, ucb_c=np.sqrt(2)):
@@ -21,7 +23,7 @@ class MCTSNode:
             hand=self.state.hands[self.state.player],
             current_trick=self.state.current_trick,
             move_nr=self.state.nr_cards_in_trick,
-            trump=self.state.trump
+            trump=self.state.trump,
         )
         self.possible_cards = np.where(valid_cards == 1)[0]
         self.not_simulated_cards = self.possible_cards.copy()
@@ -49,7 +51,9 @@ class MCTSNode:
 
         card = np.random.choice(self.not_simulated_cards)
         index_of_card = np.where(self.possible_cards == card)[0][0]
-        self.not_simulated_cards = np.delete(self.not_simulated_cards, np.where(self.not_simulated_cards == card))
+        self.not_simulated_cards = np.delete(
+            self.not_simulated_cards, np.where(self.not_simulated_cards == card)
+        )
 
         sim_copy = copy.deepcopy(node_sim)
         sim_copy.action_play_card(card)

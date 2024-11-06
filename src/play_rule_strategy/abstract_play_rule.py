@@ -1,5 +1,5 @@
 import logging
-from abc import abstractmethod, ABC
+from abc import ABC, abstractmethod
 
 import numpy as np
 from jass.game.game_observation import GameObservation

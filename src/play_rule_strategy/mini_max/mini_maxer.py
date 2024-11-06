@@ -4,7 +4,7 @@ from jass.game.const import card_strings
 from jass.game.game_sim import GameSim
 from jass.game.rule_schieber import RuleSchieber
 
-from play_rule_strategy.mini_max.mini_max_node import MiniMaxNode
+from src.play_rule_strategy.mini_max.mini_max_node import MiniMaxNode
 
 rule = RuleSchieber()
 
@@ -32,7 +32,7 @@ class MiniMaxer:
             return node.evaluate()
 
         if maximizing_team:
-            max_eval = float('-inf')
+            max_eval = float("-inf")
             for possible_card in node.possible_cards:
                 game_sim = GameSim(rule=rule)
                 game_sim.init_from_state(node.state)
@@ -49,7 +49,7 @@ class MiniMaxer:
                 alpha = max(alpha, eval)
             return max_eval
         else:
-            min_eval = float('inf')
+            min_eval = float("inf")
             for possible_card in node.possible_cards:
                 game_sim = GameSim(rule=rule)
                 game_sim.init_from_state(node.state)

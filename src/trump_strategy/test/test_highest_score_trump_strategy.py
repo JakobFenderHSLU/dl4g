@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 import numpy as np
-from jass.game.const import PUSH, OBE_ABE, DIAMONDS, UNE_UFE
+from jass.game.const import DIAMONDS, OBE_ABE, PUSH, UNE_UFE
 from jass.game.game_observation import GameObservation
 
 from src.trump_strategy.highest_score_trump_strategy import HighestScoreTrumpStrategy
