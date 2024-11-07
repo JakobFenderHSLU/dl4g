@@ -160,33 +160,33 @@ Total Games Played: 10000
 
 #### Determinized Monte Carlo Tree Search
 
-Note: 2.5s compute time with 16 trees with ca ~150 iterations per tree
+Note: 10s compute time per tree. 16 trees with ca ~10'000 iterations each.
 
-<pre>
- 66                                              34 
-[+++++++++++++++++++++++++++++++++-----------------]
-                                                    
+<pre> 
+ 63                                              37
+ [+++++++++++++++++++++++++++++++------------------]
+                                                   
  +------------------------+---------+-----------+   
  |        Overall         |  Agents | Opponents |   
  +------------------------+---------+-----------+   
- |        Winrate         | 66.00 % |  34.00 %  |   
- |     Average Points     |  96.21  |   60.79   |   
- |       Max Points       |  157.0  |   145.0   |   
- |       Min Points       |   12.0  |    0.0    |   
- | Points 25th Percentile |   66.0  |   31.75   |   
- |     Points Median      |   98.0  |    59.0   |   
- | Points 75th Percentile |  125.25 |    91.0   |   
+ |        Winrate         | 63.00 % |  37.00 %  |   
+ |     Average Points     |  91.94  |   65.06   |   
+ |       Max Points       |  157.0  |   157.0   |   
+ |       Min Points       |   0.0   |    0.0    |   
+ | Points 25th Percentile |   62.5  |    37.0   |   
+ |     Points Median      |   96.5  |    60.5   |   
+ | Points 75th Percentile |  120.0  |    94.5   |   
  +------------------------+---------+-----------+   
                                                     
- +------------------------+---------+-----------+   
- |      Trump Rounds      |  Agents | Opponents |   
- +------------------------+---------+-----------+   
- |        Winrate         | 98.00 % |  66.00 %  |   
- |     Average Points     |  121.98 |   86.56   |   
- |       Max Points       |  157.0  |   145.0   |   
- |       Min Points       |   67.0  |    12.0   |   
- | Points 25th Percentile |  106.0  |   67.25   |   
- |     Points Median      |  125.0  |    91.0   |   
- | Points 75th Percentile |  137.75 |   107.0   |   
- +------------------------+---------+-----------+   
+ +------------------------+---------+-----------+  
+ |      Trump Rounds      |  Agents | Opponents |  
+ +------------------------+---------+-----------+  
+ |        Winrate         | 96.00 % |  70.00 %  |  
+ |     Average Points     |  118.3  |   91.42   |  
+ |       Max Points       |  157.0  |   157.0   |  
+ |       Min Points       |   58.0  |    39.0   |  
+ | Points 25th Percentile |  108.5  |   74.25   |  
+ |     Points Median      |  120.0  |    91.5   |  
+ | Points 75th Percentile |  133.75 |   106.75  |  
+ +------------------------+---------+-----------+    
 </pre>
