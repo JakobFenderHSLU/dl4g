@@ -54,6 +54,7 @@ def modify_app(app):
         obs_json = json.loads(obs_str)
         obs = GameObservation.from_json(obs_json)
         action_values = dmcts_worker.execute(obs)
+
         return jsonify(action_values.tolist())
 
     return app

@@ -28,7 +28,7 @@ class WorkerNodeManager:
             self.worker_nodes: list[WorkerNode] = []
             self.load_worker_nodes(file_path)
             logging.info(f"loaded {len(self.worker_nodes)} node(s)")
-            self.ping_nodes_remove_failed()
+            asyncio.run(self.ping_nodes_remove_failed())
             logging.info(f"kept {len(self.worker_nodes)} node(s)")
         else:
             logging.info("Returning existing instance of WorkerNodeManager singleton")
@@ -43,25 +43,31 @@ class WorkerNodeManager:
                 worker_node = WorkerNode(node["name"], node["ip"], node["port"])
                 self.worker_nodes.append(worker_node)
 
-    def flush_worker_nodes(self) -> None:
-        """Clears the list of worker nodes."""
-
-        self.worker_nodes = []
-
-    def ping_nodes_remove_failed(self) -> None:
+    async def ping_nodes_remove_failed(self) -> None:
         """Pings all worker nodes and removes those that fail to respond."""
 
         temp_nodes = []
-        for worker_node in self.worker_nodes:
-            if worker_node.ping():
+        tasks = [
+            (worker_node, asyncio.create_task(worker_node.ping()))
+            for worker_node in self.worker_nodes
+        ]
+        for worker_node, task in tasks:
+            if await task:
                 temp_nodes.append(worker_node)
         self.worker_nodes = temp_nodes
 
+    async def process_game_observation(self, worker_node, obs_json):
+        return await worker_node.process_game_observation(obs_json)
+
     def execute_all_dmcts(self, obs_json):
-        loop = asyncio.get_event_loop()
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
         tasks = [
-            loop.create_task(worker_node.process_game_observation(obs_json))
+            self.process_game_observation(worker_node, obs_json)
             for worker_node in self.worker_nodes
         ]
         results = loop.run_until_complete(asyncio.gather(*tasks))
-        return results
+        return [result for result in results if result is not None]
