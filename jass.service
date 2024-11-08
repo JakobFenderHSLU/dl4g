@@ -5,6 +5,7 @@ After=network.target
 [Service]
 User=root
 WorkingDirectory=/srv/dl4g
+Environment=PORT=6789
 ExecStart=/root/.local/bin/poetry run python service.py
 
 [Install]
