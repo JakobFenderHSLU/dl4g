@@ -11,8 +11,8 @@ from flask import jsonify, request
 from jass.game.game_observation import GameObservation
 from jass.service.player_service_app import PlayerServiceApp
 
-from src.play_strategy.nn.mcts.dmcts_worker import DMCTSWorker
 from src.agent.agent import CustomAgent
+from src.play_strategy.nn.mcts.dmcts_worker import DMCTSWorker
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
 

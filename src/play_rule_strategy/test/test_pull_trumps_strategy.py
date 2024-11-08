@@ -10,7 +10,9 @@ class TestPullTrumpsPlayRuleStrategy(TestCase):
     def setUp(self):
         self._log_level = "DEBUG"
         self._seed = 42
-        self._strategy = PullTrumpsPlayRuleStrategy(log_level=self._log_level, seed=self._seed)
+        self._strategy = PullTrumpsPlayRuleStrategy(
+            log_level=self._log_level, seed=self._seed
+        )
 
     def test_choose_card_wrong_trump(self):
         obs = GameObservation()

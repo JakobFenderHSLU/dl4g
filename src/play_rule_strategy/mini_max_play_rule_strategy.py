@@ -13,7 +13,9 @@ from play_strategy.random_play_strategy import RandomPlayStrategy
 
 
 class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
-    def __init__(self, log_level: str, seed: int, depth: int, limit_s: float, n_threads: int = 32):
+    def __init__(
+        self, log_level: str, seed: int, depth: int, limit_s: float, n_threads: int = 32
+    ):
         super().__init__(log_level, __name__, seed)
         self.depth = depth
         self.mini_maxer = MiniMaxer()
@@ -44,7 +46,6 @@ class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
             # Note (Jakob): if no children were generated in time. Choose random card, since we have no time
             # budget left to compute something more advanced.
             return self.fallback.choose_card(obs)
-
 
         cards = [node.card for node in children[0]]
         avg_return = {

@@ -1,5 +1,5 @@
 import numpy as np
-from jass.game.const import DIAMONDS, HEARTS, SPADES, CLUBS, OBE_ABE, UNE_UFE
+from jass.game.const import CLUBS, DIAMONDS, HEARTS, OBE_ABE, SPADES, UNE_UFE
 from jass.game.game_observation import GameObservation
 
 from play_rule_strategy.abstract_play_rule import PlayRuleStrategy
@@ -25,12 +25,23 @@ class SwisslosOpeningPlayRuleStrategy(PlayRuleStrategy):
             return None
 
         # If the partner declared the trump and the trump is OBE_ABE or UNE_UFE play the next highest card
-        if obs.declared_trump is (obs.player + 2) % 4 and obs.trump in [OBE_ABE, UNE_UFE]:
+        if obs.declared_trump is (obs.player + 2) % 4 and obs.trump in [
+            OBE_ABE,
+            UNE_UFE,
+        ]:
             # OBE_ABE: if partner played ace -> play matching king
-            if obs.trump == OBE_ABE and obs.current_trick[0] % 9 == 0 and obs.hand[obs.current_trick[0] + 1] == 1:
+            if (
+                obs.trump == OBE_ABE
+                and obs.current_trick[0] % 9 == 0
+                and obs.hand[obs.current_trick[0] + 1] == 1
+            ):
                 return obs.current_trick[0] + 1
             # UNE_UFE: if partner played six -> play matching seven
-            if obs.trump == UNE_UFE and obs.current_trick[0] % 9 == 8 and obs.hand[obs.current_trick[0] - 1] == 1:
+            if (
+                obs.trump == UNE_UFE
+                and obs.current_trick[0] % 9 == 8
+                and obs.hand[obs.current_trick[0] - 1] == 1
+            ):
                 return obs.current_trick[0] - 1
 
         # If the player declared the trump play the best card
@@ -43,16 +54,22 @@ class SwisslosOpeningPlayRuleStrategy(PlayRuleStrategy):
             if current_trump in [DIAMONDS, HEARTS, SPADES, CLUBS]:
                 mask = np.tile(self._no_trump_weight, 4)
                 if current_suit != -1:
-                    mask[current_suit * 9:current_suit * 9 + 9] = self._no_trump_weight_current_suit
-                mask[current_trump * 9:current_trump * 9 + 9] = self._trump_weight
+                    mask[current_suit * 9 : current_suit * 9 + 9] = (
+                        self._no_trump_weight_current_suit
+                    )
+                mask[current_trump * 9 : current_trump * 9 + 9] = self._trump_weight
             if current_trump == OBE_ABE:
                 mask = np.tile(self._obenabe_weight, 4)
                 if current_suit != -1:
-                    mask[current_suit * 9:current_suit * 9 + 9] = self._obenabe_weight_current_suit
+                    mask[current_suit * 9 : current_suit * 9 + 9] = (
+                        self._obenabe_weight_current_suit
+                    )
             elif current_trump == UNE_UFE:
                 mask = np.tile(self._uneufe_weight, 4)
                 if current_suit != -1:
-                    mask[current_suit * 9:current_suit * 9 + 9] = self._uneufe_weight_current_suit
+                    mask[current_suit * 9 : current_suit * 9 + 9] = (
+                        self._uneufe_weight_current_suit
+                    )
 
             possible_cards = self._rule.get_valid_cards_from_obs(obs)
 

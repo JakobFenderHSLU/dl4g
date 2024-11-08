@@ -28,9 +28,23 @@ from src.trump_strategy.statistical_trump_strategy import StatisticalTrumpStrate
 from src.utils.log_utils import LogUtils
 from src.utils.results_utils import ResultsUtils
 
-POSSIBLE_TRUMP_STRATEGIES = ["random", "highest_sum", "highest_score", "statistical", "deep_nn"]
+POSSIBLE_TRUMP_STRATEGIES = [
+    "random",
+    "highest_sum",
+    "highest_score",
+    "statistical",
+    "deep_nn",
+]
 POSSIBLE_PLAY_STRATEGIES = ["random", "highest_value", "mcts", "dmcts"]
-POSSIBLE_PLAY_RULE_STRATEGIES = ["all", "none", "only_valid", "smear", "mini_max", "trump_jack", "pull_trumps"]
+POSSIBLE_PLAY_RULE_STRATEGIES = [
+    "all",
+    "none",
+    "only_valid",
+    "smear",
+    "mini_max",
+    "trump_jack",
+    "pull_trumps",
+]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -158,12 +172,18 @@ if __name__ == "__main__":
                 )
             if strategy_name == "mini_max":
                 strategies.append(
-                    MiniMaxPlayRuleStrategy(seed=args.seed, log_level=args.log_level, depth=3, limit_s=2.5)
+                    MiniMaxPlayRuleStrategy(
+                        seed=args.seed, log_level=args.log_level, depth=3, limit_s=2.5
+                    )
                 )
             if strategy_name == "trump_jack":
-                strategies.append(TrumpJackPlayRuleStrategy(seed=args.seed, log_level=args.log_level))
+                strategies.append(
+                    TrumpJackPlayRuleStrategy(seed=args.seed, log_level=args.log_level)
+                )
             if strategy_name == "pull_trumps":
-                strategies.append(PullTrumpsPlayRuleStrategy(seed=args.seed, log_level=args.log_level))
+                strategies.append(
+                    PullTrumpsPlayRuleStrategy(seed=args.seed, log_level=args.log_level)
+                )
 
         return strategies
 
@@ -199,7 +219,7 @@ if __name__ == "__main__":
     np.random.seed(args.seed)
     arena2 = Arena(
         nr_games_to_play=args.n_games // 2,
-        save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs"
+        save_filename=f"logs/{log_utils.formatted_start_time}_arena_logs",
     )
     arena2.set_players(
         CustomAgent(

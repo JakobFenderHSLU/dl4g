@@ -9,9 +9,11 @@ from jass.game.rule_schieber import RuleSchieber
 from src.play_strategy.nn.mcts.mcts_node import MCTSNode
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 
+np_sqrt_2 = np.sqrt(2)
+
 
 class MCTS:
-    def __init__(self, ucb_c=np.sqrt(2)):
+    def __init__(self, ucb_c=np_sqrt_2):
         self.root = None
         self.ucb_c = ucb_c
 

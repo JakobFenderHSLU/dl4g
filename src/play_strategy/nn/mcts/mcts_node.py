@@ -12,7 +12,13 @@ np_sqrt_2 = np.sqrt(2)
 
 
 class MCTSNode:
-    def __init__(self, parent: "MCTSNode" = None, state: GameState = None, card: int = None, ucb_c=np.sqrt(2)):
+    def __init__(
+        self,
+        parent: "MCTSNode" = None,
+        state: GameState = None,
+        card: int = None,
+        ucb_c=np_sqrt_2,
+    ):
         self.parent = parent
         self.state = state
         self.card = card
@@ -39,8 +45,8 @@ class MCTSNode:
 
     def best_child_ubc(self):
         choices_weights = [
-            child.score + self.ucb_c * np.sqrt(
-                (2 * np.log(self.n_simulated) / child.n_simulated))
+            child.score
+            + self.ucb_c * np.sqrt((2 * np.log(self.n_simulated) / child.n_simulated))
             for child in self.children
         ]
         return self.children[np.argmax(choices_weights)]

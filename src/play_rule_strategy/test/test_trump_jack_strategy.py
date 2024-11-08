@@ -10,7 +10,9 @@ class TestTrumpJackStrategy(TestCase):
     def setUp(self):
         self._log_level = "DEBUG"
         self._seed = 42
-        self._strategy = TrumpJackPlayRuleStrategy(log_level=self._log_level, seed=self._seed)
+        self._strategy = TrumpJackPlayRuleStrategy(
+            log_level=self._log_level, seed=self._seed
+        )
 
     def test_choose_card_no_jack(self):
         obs = GameObservation()
@@ -81,7 +83,9 @@ class TestTrumpJackStrategy(TestCase):
 
         for suit in range(4):
             obs.trump = suit
-            obs.current_trick = np.array([suit * 9 + 0, suit * 9 + 1, suit * 9 + 2, -1])  # 18 points
+            obs.current_trick = np.array(
+                [suit * 9 + 0, suit * 9 + 1, suit * 9 + 2, -1]
+            )  # 18 points
 
             trump_jack = suit * 9 + 3
             trump_nine = suit * 9 + 5

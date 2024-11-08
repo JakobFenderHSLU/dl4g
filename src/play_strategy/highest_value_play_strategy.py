@@ -25,4 +25,6 @@ class HighestValuePlayStrategy(PlayStrategy):
         current_suit = observation.current_trick[0] // 9
         possible_cards = self._rule.get_valid_cards_from_obs(observation)
 
-        return int(np.argmax(possible_cards * TRUMP_WEIGHTS[current_trump][current_suit]))
+        return int(
+            np.argmax(possible_cards * TRUMP_WEIGHTS[current_trump][current_suit])
+        )

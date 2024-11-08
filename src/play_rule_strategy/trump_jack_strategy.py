@@ -24,11 +24,17 @@ class TrumpJackPlayRuleStrategy(PlayRuleStrategy):
         if obs.hand[trump_nine] != 1:
             # if trump 9 in current trick by enemy player, play trump jack
             current_index = np.where(obs.current_trick == -1)[0][0]
-            if obs.current_trick[current_index - 1] == trump_nine or obs.current_trick[current_index - 3] == trump_nine:
+            if (
+                obs.current_trick[current_index - 1] == trump_nine
+                or obs.current_trick[current_index - 3] == trump_nine
+            ):
                 return trump_jack
 
         # if trump has been played, or we have it, and we won't win the trick by default
         # and the current trick is worth more than 20 points, play the trump jack
-        if ((np.any(trump_nine in obs.tricks) or obs.hand[trump_nine] == 1) and not is_safe_trick(obs)
-                and np.sum(TRUMP_VALUE_MASK[obs.trump][obs.current_trick]) > 20):
+        if (
+            (np.any(trump_nine in obs.tricks) or obs.hand[trump_nine] == 1)
+            and not is_safe_trick(obs)
+            and np.sum(TRUMP_VALUE_MASK[obs.trump][obs.current_trick]) > 20
+        ):
             return trump_jack

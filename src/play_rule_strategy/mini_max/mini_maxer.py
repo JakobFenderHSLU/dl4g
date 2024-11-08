@@ -16,10 +16,10 @@ class MiniMaxer:
     def search(self, game_state, cutoff_time=None) -> MiniMaxNode:
         self.cutoff_time = cutoff_time
         if not cutoff_time:
-            self.cutoff_time = float('inf')
+            self.cutoff_time = float("inf")
 
         root = MiniMaxNode(parent=None, state=game_state)
-        self.minimax(root, float('-inf'), float('inf'), True)
+        self.minimax(root, float("-inf"), float("inf"), True)
         if self.cutoff_time <= time.time():
             return None
         return root

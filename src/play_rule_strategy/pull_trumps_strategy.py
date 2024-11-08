@@ -34,7 +34,7 @@ class PullTrumpsPlayRuleStrategy(PlayRuleStrategy):
 
             # play max card of trump
             valid_cards = self._rule.get_valid_cards_from_obs(obs)
-            trump_cards = valid_cards[obs.trump * 9:obs.trump * 9 + 9] * _TRUMP_WEIGHT
+            trump_cards = valid_cards[obs.trump * 9 : obs.trump * 9 + 9] * _TRUMP_WEIGHT
 
             if sum(trump_cards) == 0:
                 return None
