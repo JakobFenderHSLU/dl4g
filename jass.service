@@ -1,0 +1,11 @@
+[Unit]
+Description=Jass Service
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/srv/dl4g
+ExecStart=poetry run python service.py
+
+[Install]
+WantedBy=multi-user.target
