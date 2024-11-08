@@ -1,4 +1,4 @@
-import heapq
+import asyncio
 import json
 import logging
 import os
@@ -25,7 +25,7 @@ class WorkerNodeManager:
             file_path = (
                 f"{os.path.dirname(os.path.realpath(__file__))}/worker_nodes.json"
             )
-            self.worker_nodes = []
+            self.worker_nodes: list[WorkerNode] = []
             self.load_worker_nodes(file_path)
             logging.info(f"loaded {len(self.worker_nodes)} node(s)")
             self.ping_nodes_remove_failed()
@@ -41,9 +41,7 @@ class WorkerNodeManager:
         for node in data["nodes"]:
             if node["enabled"]:
                 worker_node = WorkerNode(node["name"], node["ip"], node["port"])
-                heapq.heappush(
-                    self.worker_nodes, (-node["cpu_cores"], worker_node)
-                )  # Use negative to create a max-heap
+                self.worker_nodes.append(worker_node)
 
     def flush_worker_nodes(self) -> None:
         """Clears the list of worker nodes."""
@@ -54,19 +52,16 @@ class WorkerNodeManager:
         """Pings all worker nodes and removes those that fail to respond."""
 
         temp_nodes = []
-        while self.worker_nodes:
-            cpu_cores, worker_node = heapq.heappop(self.worker_nodes)
+        for worker_node in self.worker_nodes:
             if worker_node.ping():
-                heapq.heappush(temp_nodes, (cpu_cores, worker_node))
+                temp_nodes.append(worker_node)
         self.worker_nodes = temp_nodes
 
-    def get_available_node(self) -> WorkerNode:
-        """Retrieves and returns the WorkerNode instance with the highest CPU cores available."""
-        if self.worker_nodes:
-            return heapq.heappop(self.worker_nodes)[1]  # Return the WorkerNode instance
-        return None
-
-    def return_available_node(self, node: WorkerNode) -> None:
-        """Adds a worker node (back) to the heap of available nodes, prioritizing by CPU cores."""
-
-        heapq.heappush(self.worker_nodes, (-node.cpu_cores, node))
+    def execute_all_dmcts(self, obs_json):
+        loop = asyncio.get_event_loop()
+        tasks = [
+            loop.create_task(worker_node.process_game_observation(obs_json))
+            for worker_node in self.worker_nodes
+        ]
+        results = loop.run_until_complete(asyncio.gather(*tasks))
+        return results
