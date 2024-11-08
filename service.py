@@ -11,12 +11,13 @@ from flask import jsonify, request
 from jass.game.game_observation import GameObservation
 from jass.service.player_service_app import PlayerServiceApp
 
-from play_strategy.nn.mcts.dmcts_worker import DMCTSWorker
+from src.play_strategy.nn.mcts.dmcts_worker import DMCTSWorker
 from src.agent.agent import CustomAgent
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
 
 dmcts_worker = DMCTSWorker(os.getenv("LIMIT_S", 1.0))  # TODO: set realistic limit_s
+
 
 def create_app():
     logging.basicConfig(level=logging.INFO)

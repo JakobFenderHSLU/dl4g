@@ -8,8 +8,8 @@ from jass.game.game_sim import GameSim
 from jass.game.game_state_util import state_from_observation
 from jass.game.rule_schieber import RuleSchieber
 
-from play_strategy.nn.mcts.hand_sampler import HandSampler
-from play_strategy.nn.mcts.mcts_tree import MCTS
+from src.play_strategy.nn.mcts.hand_sampler import HandSampler
+from src.play_strategy.nn.mcts.mcts_tree import MCTS
 
 
 class DMCTSWorker:
@@ -33,7 +33,9 @@ class DMCTSWorker:
 
             futures = []
             for _ in range(n_determinations):
-                future = self.executor.submit(_thread_search, action_scores, obs, self.limit_s)
+                future = self.executor.submit(
+                    _thread_search, action_scores, obs, self.limit_s
+                )
                 futures.append(future)
 
             for future in futures:
@@ -57,7 +59,9 @@ def _thread_search(action_scores, game_obs, limit_s):
     """
 
     game_sim = GameSim(rule=RuleSchieber())
-    game_sim.init_from_state(state_from_observation(game_obs, HandSampler().sample(game_obs)))
+    game_sim.init_from_state(
+        state_from_observation(game_obs, HandSampler().sample(game_obs))
+    )
     mcts = MCTS()
     mcts.search(game_sim.state, limit_s=limit_s)
 
