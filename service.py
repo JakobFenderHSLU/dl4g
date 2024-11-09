@@ -11,9 +11,14 @@ from flask import jsonify, request
 from jass.game.game_observation import GameObservation
 from jass.service.player_service_app import PlayerServiceApp
 
+from play_rule_strategy.only_valid_play_strategy import OnlyValidPlayRuleStrategy
+from play_rule_strategy.pull_trumps_strategy import PullTrumpsPlayRuleStrategy
+from play_rule_strategy.smear_play_strategy import SmearPlayRuleStrategy
+from play_strategy.determinized_mcts_play_strategy import DeterminizedMCTSPlayStrategy
 from src.agent.agent import CustomAgent
 from src.play_strategy.nn.mcts.dmcts_worker import DMCTSWorker
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
+from src.trump_strategy.deep_nn_trump_strategy import DeepNNTrumpStrategy
 from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
 
 dmcts_worker = DMCTSWorker(os.getenv("LIMIT_S", 1.0))  # TODO: set realistic limit_s
@@ -24,6 +29,8 @@ def create_app():
 
     # create and configure the app
     app = PlayerServiceApp("player_service")
+    seed = os.getenv("SEED", 42)
+    log_level = os.getenv("LOG_LEVEL", "INFO")
 
     # add some players
     app.add_player(
@@ -34,6 +41,16 @@ def create_app():
             play_rules_strategies=[],
         ),
     )
+    app.add_player("dmcts",
+                   CustomAgent(
+                       trump_strategy=DeepNNTrumpStrategy(),
+                       play_strategy=DeterminizedMCTSPlayStrategy(limit_s=os.getenv("LIMIT_S", 9.0)),
+                       play_rules_strategies=[
+                           OnlyValidPlayRuleStrategy(seed=seed, log_level=log_level),
+                           SmearPlayRuleStrategy(seed=seed, log_level=log_level),
+                           PullTrumpsPlayRuleStrategy(seed=seed, log_level=log_level)
+                       ],
+                   ))
 
     return app
 
