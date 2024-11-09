@@ -12,9 +12,6 @@ from jass.game.game_observation import GameObservation
 from jass.service.player_service_app import PlayerServiceApp
 
 from src.agent.agent import CustomAgent
-from src.play_rule_strategy.only_valid_play_strategy import OnlyValidPlayRuleStrategy
-from src.play_rule_strategy.pull_trumps_strategy import PullTrumpsPlayRuleStrategy
-from src.play_rule_strategy.smear_play_strategy import SmearPlayRuleStrategy
 from src.play_strategy.determinized_mcts_play_strategy import DeterminizedMCTSPlayStrategy
 from src.play_strategy.nn.mcts.dmcts_worker import DMCTSWorker
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
@@ -45,11 +42,12 @@ def create_app():
                    CustomAgent(
                        trump_strategy=DeepNNTrumpStrategy(),
                        play_strategy=DeterminizedMCTSPlayStrategy(limit_s=os.getenv("LIMIT_S", 9.0)),
-                       play_rules_strategies=[
-                           OnlyValidPlayRuleStrategy(seed=seed, log_level=log_level),
-                           SmearPlayRuleStrategy(seed=seed, log_level=log_level),
-                           PullTrumpsPlayRuleStrategy(seed=seed, log_level=log_level)
-                       ],
+                       # play_rules_strategies=[
+                       #     OnlyValidPlayRuleStrategy(seed=seed, log_level=log_level),
+                       #     SmearPlayRuleStrategy(seed=seed, log_level=log_level),
+                       #     PullTrumpsPlayRuleStrategy(seed=seed, log_level=log_level)
+                       # ],
+                       play_rules_strategies=[],
                    ))
 
     return app
