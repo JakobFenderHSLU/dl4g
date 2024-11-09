@@ -41,7 +41,7 @@ def create_app():
             play_rules_strategies=[],
         ),
     )
-    app.add_player("dmcts",
+    app.add_player("dmcts-player",
                    CustomAgent(
                        trump_strategy=DeepNNTrumpStrategy(),
                        play_strategy=DeterminizedMCTSPlayStrategy(limit_s=os.getenv("LIMIT_S", 9.0)),
