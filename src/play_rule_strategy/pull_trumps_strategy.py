@@ -2,7 +2,7 @@ import numpy as np
 from jass.game.game_observation import GameObservation
 
 from src.play_rule_strategy.abstract_play_rule import PlayRuleStrategy
-from utils.consts import _TRUMP_WEIGHT
+from src.utils.consts import _TRUMP_WEIGHT
 
 
 class PullTrumpsPlayRuleStrategy(PlayRuleStrategy):
