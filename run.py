@@ -85,7 +85,7 @@ if __name__ == "__main__":
         help="Choose the play strategy for the opponent",
     )
     parser.add_argument(
-        "-oa",
+        "-opr",
         "--opponent-play-rule-strategies",
         default=POSSIBLE_PLAY_RULE_STRATEGIES[1],
         choices=POSSIBLE_PLAY_RULE_STRATEGIES,
