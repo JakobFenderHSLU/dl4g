@@ -17,16 +17,16 @@ class CustomAgent(Agent):
         self.play_rules_strategy = play_rules_strategies
 
     def action_trump(self, obs):
-        return self.trump_strategy.choose_trump(obs)
+        return int(self.trump_strategy.choose_trump(obs))
 
     def action_play_card(self, obs):
         # Check if any of the play rules strategies can play a card
         for strategy in self.play_rules_strategy:
             card = strategy.choose_card(obs)
             if card is not None:
-                return card
+                return int(card)
 
-        return self.play_strategy.choose_card(obs)
+        return int(self.play_strategy.choose_card(obs))
 
     def train(self, training_data):
         self.play_strategy.train(training_data)
