@@ -11,11 +11,11 @@ from flask import jsonify, request
 from jass.game.game_observation import GameObservation
 from jass.service.player_service_app import PlayerServiceApp
 
-from play_rule_strategy.only_valid_play_strategy import OnlyValidPlayRuleStrategy
-from play_rule_strategy.pull_trumps_strategy import PullTrumpsPlayRuleStrategy
-from play_rule_strategy.smear_play_strategy import SmearPlayRuleStrategy
-from play_strategy.determinized_mcts_play_strategy import DeterminizedMCTSPlayStrategy
 from src.agent.agent import CustomAgent
+from src.play_rule_strategy.only_valid_play_strategy import OnlyValidPlayRuleStrategy
+from src.play_rule_strategy.pull_trumps_strategy import PullTrumpsPlayRuleStrategy
+from src.play_rule_strategy.smear_play_strategy import SmearPlayRuleStrategy
+from src.play_strategy.determinized_mcts_play_strategy import DeterminizedMCTSPlayStrategy
 from src.play_strategy.nn.mcts.dmcts_worker import DMCTSWorker
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.trump_strategy.deep_nn_trump_strategy import DeepNNTrumpStrategy
