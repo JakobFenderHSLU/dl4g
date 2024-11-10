@@ -13,6 +13,15 @@ from flask import jsonify, request
 from jass.game.game_observation import GameObservation
 from jass.service.player_service_app import PlayerServiceApp
 
+# attempt to load .env
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    print("Loaded .env")
+except ImportError:
+    print("Skipped .env due to ImportError")
+
 from src.agent.agent import CustomAgent
 from src.play_strategy.determinized_mcts_play_strategy import (
     DeterminizedMCTSPlayStrategy,
@@ -93,7 +102,9 @@ def delayed_worker_node_init():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(
+        level=logging.getLevelNamesMapping()[os.getenv("LOG_LEVEL", "INFO")]
+    )
 
     app = create_app()
     app = modify_app(app)
