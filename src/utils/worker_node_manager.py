@@ -28,8 +28,10 @@ class WorkerNodeManager:
             self.worker_nodes: list[WorkerNode] = []
             self.load_worker_nodes(file_path)
             logging.info(f"loaded {len(self.worker_nodes)} node(s)")
+            logging.info(f"Worker nodes: {[node.name for node in self.worker_nodes]}")
             asyncio.run(self.ping_nodes_remove_failed())
             logging.info(f"kept {len(self.worker_nodes)} node(s)")
+            logging.info(f"Worker nodes: {[node.name for node in self.worker_nodes]}")
         else:
             logging.info("Returning existing instance of WorkerNodeManager singleton")
 

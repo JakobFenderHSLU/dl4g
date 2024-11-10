@@ -6,6 +6,8 @@
 import json
 import logging
 import os
+import threading
+import time
 
 from flask import jsonify, request
 from jass.game.game_observation import GameObservation
@@ -19,11 +21,13 @@ from src.play_strategy.nn.mcts.dmcts_worker import DMCTSWorker
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.trump_strategy.deep_nn_trump_strategy import DeepNNTrumpStrategy
 from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
+from src.utils.worker_node_manager import WorkerNodeManager
 
 dmcts_worker = DMCTSWorker(os.getenv("LIMIT_S", 1.0))  # TODO: set realistic limit_s
 
 
 def create_app():
+    logging.info("Creating App")
     # create and configure the app
     app = PlayerServiceApp("player_service")
     # seed = os.getenv("SEED", 42)
@@ -58,6 +62,8 @@ def create_app():
 
 
 def modify_app(app):
+    logging.info("Modifying App")
+
     @app.route("/ping", methods=["GET"])
     @app.route("/ping", methods=["POST"])
     def ping():
@@ -79,6 +85,13 @@ def modify_app(app):
     return app
 
 
+def delayed_worker_node_init():
+    logging.debug("Delaying WorkerNodeManager initialization")
+    time.sleep(3)
+    WorkerNodeManager()
+    logging.debug("WorkerNodeManager initialized")
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
 
@@ -86,5 +99,7 @@ if __name__ == "__main__":
     app = modify_app(app)
     host = os.getenv("HOST", "0.0.0.0")
     port = int(os.getenv("PORT", 5000))
+
+    threading.Thread(target=delayed_worker_node_init).start()
 
     app.run(host=host, port=port)

@@ -18,14 +18,14 @@ class DeterminizedMCTSPlayStrategy(PlayStrategy):
         self.hand_sampler = HandSampler()
         self.executor = ProcessPoolExecutor()
         self.dmcts_worker = DMCTSWorker(limit_s)
-        self.worker_node_manager = WorkerNodeManager()
 
     def choose_card(self, obs: GameObservation) -> int:
         valid_cards = np.flatnonzero(self._rule.get_valid_cards_from_obs(obs))
 
         obs_json_str = json.dumps(obs.to_json())
+        worker_node_manager = WorkerNodeManager()
         # shape: (n_nodes, n_determinisations_per_node, valid_cards_score)
-        action_scores = self.worker_node_manager.execute_all_dmcts(obs_json_str)
+        action_scores = worker_node_manager.execute_all_dmcts(obs_json_str)
         # shape: (n_determinisations, valid_cards_score)
         action_scores = np.concatenate(action_scores)
         logging.debug("action_scores")
