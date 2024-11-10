@@ -24,7 +24,9 @@ class DeterminizedMCTSPlayStrategy(PlayStrategy):
         valid_cards = np.flatnonzero(self._rule.get_valid_cards_from_obs(obs))
 
         obs_json_str = json.dumps(obs.to_json())
+        # shape: (1, n_nodes, valid_cards_score)
         action_scores = self.worker_node_manager.execute_all_dmcts(obs_json_str)
+        action_scores = np.array(action_scores[0])  # shape: (n_nodes, valid_cards_score)
         logging.debug("action_scores")
         logging.debug(action_scores)
 
@@ -42,4 +44,4 @@ class DeterminizedMCTSPlayStrategy(PlayStrategy):
             logging.error("Error in choose_card: %s", str(e))
             best_card = int(valid_cards[0])
 
-        return int(valid_cards[best_card_index])
+        return best_card
