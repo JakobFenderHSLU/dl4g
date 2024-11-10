@@ -60,9 +60,11 @@ class WorkerNodeManager:
         return await worker_node.process_game_observation(obs_json)
 
     def execute_all_dmcts(self, obs_json):
+        logging.info("Executing DMCTS on nodes")
         try:
             loop = asyncio.get_event_loop()
         except RuntimeError:
+            logging.debug("No current event loop, creating a new one.")
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
         tasks = [
@@ -70,4 +72,6 @@ class WorkerNodeManager:
             for worker_node in self.worker_nodes
         ]
         results = loop.run_until_complete(asyncio.gather(*tasks))
+        logging.debug("results")
+        logging.debug(results)
         return [result for result in results if result is not None]

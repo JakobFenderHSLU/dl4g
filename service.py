@@ -12,7 +12,9 @@ from jass.game.game_observation import GameObservation
 from jass.service.player_service_app import PlayerServiceApp
 
 from src.agent.agent import CustomAgent
-from src.play_strategy.determinized_mcts_play_strategy import DeterminizedMCTSPlayStrategy
+from src.play_strategy.determinized_mcts_play_strategy import (
+    DeterminizedMCTSPlayStrategy,
+)
 from src.play_strategy.nn.mcts.dmcts_worker import DMCTSWorker
 from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.trump_strategy.deep_nn_trump_strategy import DeepNNTrumpStrategy
@@ -22,12 +24,10 @@ dmcts_worker = DMCTSWorker(os.getenv("LIMIT_S", 1.0))  # TODO: set realistic lim
 
 
 def create_app():
-    logging.basicConfig(level=logging.INFO)
-
     # create and configure the app
     app = PlayerServiceApp("player_service")
-    seed = os.getenv("SEED", 42)
-    log_level = os.getenv("LOG_LEVEL", "INFO")
+    # seed = os.getenv("SEED", 42)
+    # log_level = os.getenv("LOG_LEVEL", "INFO")
 
     # add some players
     app.add_player(
@@ -38,17 +38,21 @@ def create_app():
             play_rules_strategies=[],
         ),
     )
-    app.add_player("dmcts-player",
-                   CustomAgent(
-                       trump_strategy=DeepNNTrumpStrategy(),
-                       play_strategy=DeterminizedMCTSPlayStrategy(limit_s=os.getenv("LIMIT_S", 9.0)),
-                       # play_rules_strategies=[
-                       #     OnlyValidPlayRuleStrategy(seed=seed, log_level=log_level),
-                       #     SmearPlayRuleStrategy(seed=seed, log_level=log_level),
-                       #     PullTrumpsPlayRuleStrategy(seed=seed, log_level=log_level)
-                       # ],
-                       play_rules_strategies=[],
-                   ))
+    app.add_player(
+        "dmcts-player",
+        CustomAgent(
+            trump_strategy=DeepNNTrumpStrategy(),
+            play_strategy=DeterminizedMCTSPlayStrategy(
+                limit_s=os.getenv("LIMIT_S", 9.0)
+            ),
+            # play_rules_strategies=[
+            #     OnlyValidPlayRuleStrategy(seed=seed, log_level=log_level),
+            #     SmearPlayRuleStrategy(seed=seed, log_level=log_level),
+            #     PullTrumpsPlayRuleStrategy(seed=seed, log_level=log_level)
+            # ],
+            play_rules_strategies=[],
+        ),
+    )
 
     return app
 
@@ -76,6 +80,8 @@ def modify_app(app):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
+
     app = create_app()
     app = modify_app(app)
     host = os.getenv("HOST", "0.0.0.0")

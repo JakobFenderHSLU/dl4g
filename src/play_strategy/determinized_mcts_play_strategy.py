@@ -1,4 +1,5 @@
 import json
+import logging
 from concurrent.futures.process import ProcessPoolExecutor
 
 import numpy as np
@@ -24,7 +25,21 @@ class DeterminizedMCTSPlayStrategy(PlayStrategy):
 
         obs_json_str = json.dumps(obs.to_json())
         action_scores = self.worker_node_manager.execute_all_dmcts(obs_json_str)
+        logging.debug("action_scores")
+        logging.debug(action_scores)
 
-        mean_scores = np.mean(action_scores, axis=0)
-        best_card_index = np.argmax(mean_scores)
+        try:
+            mean_scores = np.mean(action_scores, axis=0)
+            logging.debug("mean_scores")
+            logging.debug(mean_scores)
+            best_card_index = np.argmax(mean_scores)
+            logging.debug("best_card_index")
+            logging.debug(best_card_index)
+            best_card = int(valid_cards[best_card_index])
+            logging.debug("best_card")
+            logging.debug(best_card)
+        except Exception as e:
+            logging.error("Error in choose_card: %s", str(e))
+            best_card = int(valid_cards[0])
+
         return int(valid_cards[best_card_index])

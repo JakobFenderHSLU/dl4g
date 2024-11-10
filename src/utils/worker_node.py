@@ -16,10 +16,10 @@ class WorkerNode:
         url = f"{self.base_url}/ping"
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(url) as response:
+                async with session.get(url, timeout=5) as response:
                     return response.status == 200
         except aiohttp.ClientError as e:
-            logging.debug(f"Error pinging {self.name}: {e}")
+            logging.error(f"Error pinging {self.name}: {e}")
             return False
 
     async def process_game_observation(self, obs_json: str):
@@ -35,7 +35,7 @@ class WorkerNode:
                     else:
                         return None
         except aiohttp.ClientError as e:
-            logging.debug(f"Error processing game observation {self.name}: {e}")
+            logging.error(f"Error processing game observation {self.name}: {e}")
             return None
         except asyncio.TimeoutError:
             logging.warning(
