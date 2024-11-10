@@ -54,8 +54,13 @@ class WorkerNodeManager:
             for worker_node in self.worker_nodes
         ]
         for worker_node, task in tasks:
-            if await task:
-                temp_nodes.append(worker_node)
+            try:
+                if await task:
+                    temp_nodes.append(worker_node)
+            except asyncio.TimeoutError:
+                logging.warning(f"Timeout while pinging {worker_node.name}")
+            except Exception as e:
+                logging.error(f"Error while pinging {worker_node.name}: {e}")
         self.worker_nodes = temp_nodes
 
     async def process_game_observation(self, worker_node, obs_json):
