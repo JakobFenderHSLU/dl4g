@@ -97,10 +97,10 @@ def modify_app(app):
         action_values = dmcts_worker.execute(obs)
 
         execution_time = time.time() - start_time
-        logging.info(f"Execution time: {execution_time} seconds")
+        logging.info(f"Execution time /dmcts: {execution_time} seconds")
         if execution_time > 9.5:
             logging.error(
-                f"Execution time exceeded 9.5 seconds: {execution_time} seconds"
+                f"Execution time /dmcts exceeded 9.5 seconds: {execution_time} seconds"
             )
 
         return jsonify(action_values.tolist())

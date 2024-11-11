@@ -1,6 +1,7 @@
 import json
 import logging
 from concurrent.futures.process import ProcessPoolExecutor
+import time
 
 import numpy as np
 from jass.game.game_observation import GameObservation
@@ -20,6 +21,7 @@ class DeterminizedMCTSPlayStrategy(PlayStrategy):
         self.dmcts_worker = DMCTSWorker(limit_s)
 
     def choose_card(self, obs: GameObservation) -> int:
+        start_time = time.time()
         valid_cards = np.flatnonzero(self._rule.get_valid_cards_from_obs(obs))
 
         obs_json_str = json.dumps(obs.to_json())
@@ -45,4 +47,10 @@ class DeterminizedMCTSPlayStrategy(PlayStrategy):
             logging.error("Error in choose_card: %s", str(e))
             best_card = int(valid_cards[0])
 
+        execution_time = time.time() - start_time
+        logging.info(f"Execution time choose_card(): {execution_time} seconds")
+        if execution_time > 9.5:
+            logging.error(
+                f"Execution time choose_card() exceeded 9.5 seconds: {execution_time} seconds"
+            )
         return best_card
