@@ -24,6 +24,9 @@ class DeterminizedMCTSPlayStrategy(PlayStrategy):
         worker_node_manager = WorkerNodeManager()
         # shape: (n_nodes, n_determinisations_per_node, valid_cards_score)
         action_scores = worker_node_manager.execute_all_dmcts(obs_json_str)
+        if len(action_scores) == 0:
+            logging.error("No action scores returned")
+            return int(valid_cards[0])
         # shape: (n_determinisations, valid_cards_score)
         action_scores = np.concatenate(action_scores)
         logging.debug("action_scores")
