@@ -13,8 +13,10 @@ from flask import jsonify, request
 from jass.game.game_observation import GameObservation
 from jass.service.player_service_app import PlayerServiceApp
 
-
 from src.agent.agent import CustomAgent
+from src.play_rule_strategy.only_valid_play_strategy import OnlyValidPlayRuleStrategy
+from src.play_rule_strategy.smear_play_strategy import SmearPlayRuleStrategy
+from src.play_rule_strategy.trump_jack_strategy import TrumpJackPlayRuleStrategy
 from src.play_strategy.determinized_mcts_play_strategy import (
     DeterminizedMCTSPlayStrategy,
 )
@@ -29,8 +31,8 @@ def create_app():
     logging.info("Creating App")
     # create and configure the app
     app = PlayerServiceApp("player_service")
-    # seed = os.getenv("SEED", 42)
-    # log_level = os.getenv("LOG_LEVEL", "INFO")
+    seed = os.getenv("SEED", 42)
+    log_level = os.getenv("LOG_LEVEL", "INFO")
 
     # add some players
     app.add_player(
@@ -48,12 +50,11 @@ def create_app():
             play_strategy=DeterminizedMCTSPlayStrategy(
                 limit_s=os.getenv("LIMIT_S", 9.0)
             ),
-            # play_rules_strategies=[
-            #     OnlyValidPlayRuleStrategy(seed=seed, log_level=log_level),
-            #     SmearPlayRuleStrategy(seed=seed, log_level=log_level),
-            #     PullTrumpsPlayRuleStrategy(seed=seed, log_level=log_level)
-            # ],
-            play_rules_strategies=[],
+            play_rules_strategies=[
+                OnlyValidPlayRuleStrategy(seed=seed, log_level=log_level),
+                SmearPlayRuleStrategy(seed=seed, log_level=log_level),
+                TrumpJackPlayRuleStrategy(seed=seed, log_level=log_level),
+            ],
         ),
     )
 
@@ -62,7 +63,7 @@ def create_app():
 
 def modify_app(app):
     logging.info("Modifying App")
-    dmcts_worker = DMCTSWorker(os.getenv("LIMIT_S", 1.0))  # TODO: set realistic limit_s
+    dmcts_worker = DMCTSWorker(float(os.getenv("LIMIT_S", 1.0)))  # TODO: set realistic limit_s
 
     @app.route("/ping", methods=["GET"])
     @app.route("/ping", methods=["POST"])
