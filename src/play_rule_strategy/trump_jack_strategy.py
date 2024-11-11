@@ -1,9 +1,9 @@
 import numpy as np
 from jass.game.game_observation import GameObservation
 
-from play_rule_strategy.abstract_play_rule import PlayRuleStrategy
-from utils.consts import TRUMP_VALUE_MASK
-from utils.game_utils import is_safe_trick
+from src.play_rule_strategy.abstract_play_rule import PlayRuleStrategy
+from src.utils.consts import TRUMP_VALUE_MASK
+from src.utils.game_utils import is_safe_trick
 
 
 class TrumpJackPlayRuleStrategy(PlayRuleStrategy):
