@@ -40,6 +40,9 @@ class WorkerNode:
                         )
                         return res
                     else:
+                        logging.warning(
+                            f"Total time for failed processing game observation on {self.name}: {total_time:.2f} seconds"
+                        )
                         return None
         except aiohttp.ClientError as e:
             logging.error(f"Error processing game observation {self.name}: {e}")
