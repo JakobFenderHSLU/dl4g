@@ -115,9 +115,7 @@ if __name__ == "__main__":
         print("Loaded .env")
     except ImportError:
         print("Skipped .env due to ImportError")
-    logging.basicConfig(
-        level=logging.getLevelNamesMapping()[os.getenv("LOG_LEVEL", "INFO")]
-    )
+    logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
 
     app = create_app()
     app = modify_app(app)
