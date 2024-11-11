@@ -16,7 +16,7 @@ class WorkerNode:
         url = f"{self.base_url}/ping"
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=5) as response:
+                async with session.get(url, timeout=10) as response:
                     return response.status == 200
         except aiohttp.ClientError as e:
             logging.error(f"Error pinging {self.name}: {e}")

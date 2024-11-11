@@ -60,7 +60,7 @@ class WorkerNodeManager:
             except asyncio.TimeoutError:
                 logging.warning(f"Timeout while pinging {worker_node.name}")
             except Exception as e:
-                logging.error(f"Error while pinging {worker_node.name}: {e}")
+                logging.error(f"Error while pinging node {worker_node.name}: {e}")
         self.worker_nodes = temp_nodes
 
     async def process_game_observation(self, worker_node, obs_json):
