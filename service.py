@@ -77,7 +77,7 @@ def modify_app(app):
     @app.route("/ping", methods=["POST"])
     def ping():
         return jsonify("pong")
-    
+
     @app.route("/reload-worker-nodes")
     def reload_worker_nodes():
         w = WorkerNodeManager()
@@ -87,6 +87,7 @@ def modify_app(app):
     # http://127.0.0.1:5000/dmcts?obs={%22version%22:%20%22V0.2%22,%20%22trump%22:%201,%20%22dealer%22:%200,%20%22currentPlayer%22:%203,%20%22playerView%22:%203,%20%22forehand%22:%201,%20%22tricks%22:%20[{%22first%22:%203}],%20%22player%22:%20[{%22hand%22:%20[]},%20{%22hand%22:%20[]},%20{%22hand%22:%20[]},%20{%22hand%22:%20[%22D8%22,%20%22D7%22,%20%22HK%22,%20%22H9%22,%20%22SA%22,%20%22SQ%22,%20%22S10%22,%20%22S7%22,%20%22CK%22]}],%20%22jassTyp%22:%20%22SCHIEBER%22}
     @app.route("/dmcts", methods=["GET"])
     def dmcts():
+        start_time = time.time()
         obs_str: str = request.args.get("obs", None)
         if obs_str is None:
             return jsonify("No observation provided"), 422
@@ -94,6 +95,13 @@ def modify_app(app):
         obs_json = json.loads(obs_str)
         obs = GameObservation.from_json(obs_json)
         action_values = dmcts_worker.execute(obs)
+
+        execution_time = time.time() - start_time
+        logging.info(f"Execution time: {execution_time} seconds")
+        if execution_time > 9.5:
+            logging.error(
+                f"Execution time exceeded 9.5 seconds: {execution_time} seconds"
+            )
 
         return jsonify(action_values.tolist())
 
