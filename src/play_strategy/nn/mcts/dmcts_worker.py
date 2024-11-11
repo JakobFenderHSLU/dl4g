@@ -1,3 +1,4 @@
+import logging
 from concurrent.futures import ProcessPoolExecutor
 from multiprocessing import Manager
 
@@ -17,6 +18,9 @@ class DMCTSWorker:
         self._rule = RuleSchieber()
         self.limit_s = limit_s
         self.executor = ProcessPoolExecutor()
+        self.logger = logging.getLogger(__name__)
+        self.logger.info(f"DMCTSWorker initialized with limit_s={limit_s}")
+
 
     def execute(self, obs: GameObservation, n_determinations: int = None) -> np.ndarray:
         """
