@@ -1,4 +1,5 @@
 import logging
+import time
 from concurrent.futures import ProcessPoolExecutor
 from multiprocessing import Manager
 
@@ -18,9 +19,9 @@ class DMCTSWorker:
         self._rule = RuleSchieber()
         self.limit_s = limit_s
         self.executor = ProcessPoolExecutor()
+        self.manager = Manager()
         self.logger = logging.getLogger(__name__)
         self.logger.info(f"DMCTSWorker initialized with limit_s={limit_s}")
-
 
     def execute(self, obs: GameObservation, n_determinations: int = None) -> np.ndarray:
         """
@@ -29,28 +30,33 @@ class DMCTSWorker:
         :param n_determinations: The number of determinations to run in parallel. If None, the number of logical CPUs
         :return: The action scores for each card in the hand
         """
+        start_time = time.time()
         if n_determinations is None:
             n_determinations = psutil.cpu_count(logical=False)
 
-        with Manager() as manager:
-            action_scores = manager.Queue()
+        self.logger.info(f"It took {time.time() - start_time} seconds to initialize the manager")
+        self.logger.info(f"Running {n_determinations} determinations in parallel")
+        action_scores = self.manager.Queue()
 
-            futures = []
-            for _ in range(n_determinations):
-                future = self.executor.submit(
-                    _thread_search, action_scores, obs, self.limit_s
-                )
-                futures.append(future)
+        start_time = time.time()
+        futures = []
+        for _ in range(n_determinations):
+            future = self.executor.submit(
+                _thread_search, action_scores, obs, self.limit_s
+            )
+            futures.append(future)
 
-            for future in futures:
-                future.result()
+        for future in futures:
+            future.result()
 
-            all_action_scores = []
-            while not action_scores.empty():
-                all_action_scores.append(action_scores.get())
+        self.logger.info(f"It took {time.time() - start_time} seconds to run the determinations")
 
-            action_scores = np.array(all_action_scores)
-            return action_scores
+        all_action_scores = []
+        while not action_scores.empty():
+            all_action_scores.append(action_scores.get())
+
+        action_scores = np.array(all_action_scores)
+        return action_scores
 
 
 def _thread_search(action_scores, game_obs, limit_s):
