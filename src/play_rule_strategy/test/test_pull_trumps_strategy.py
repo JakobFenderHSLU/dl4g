@@ -49,7 +49,7 @@ class TestPullTrumpsPlayRuleStrategy(TestCase):
             [8, 9, 10, 17],
         ]
         obs.trick_first_player = [0, 1, 2, 3]
-        obs.player = 0
+        obs.player = 1
 
         valid_cards = np.zeros(36)
         valid_cards[11] = 1
