@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import time
 
 import aiohttp
 
@@ -23,14 +24,20 @@ class WorkerNode:
             return False
 
     async def process_game_observation(self, obs_json: str):
-        logging.debug("processing game observation")
+        logging.debug(f"Processing game observation on {self.name}")
+        start_time = time.time()
         url = f"{self.base_url}/dmcts?obs={obs_json}"
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=9) as response:
+                async with session.get(url, timeout=9.25) as response:
                     if response.status == 200:
                         res = await response.json()
                         logging.debug(res)
+                        end_time = time.time()
+                        total_time = end_time - start_time
+                        logging.debug(
+                            f"Total time for processing game observation on {self.name}: {total_time:.2f} seconds"
+                        )
                         return res
                     else:
                         return None
@@ -39,6 +46,6 @@ class WorkerNode:
             return None
         except asyncio.TimeoutError:
             logging.warning(
-                f"Task execution for {self.name} exceeded the time limit of 9 seconds"
+                f"Task execution for {self.name} exceeded the time limit of 9.25 seconds"
             )
             return None
