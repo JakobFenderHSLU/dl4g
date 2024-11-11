@@ -13,14 +13,6 @@ from flask import jsonify, request
 from jass.game.game_observation import GameObservation
 from jass.service.player_service_app import PlayerServiceApp
 
-# attempt to load .env
-try:
-    from dotenv import load_dotenv
-
-    load_dotenv()
-    print("Loaded .env")
-except ImportError:
-    print("Skipped .env due to ImportError")
 
 from src.agent.agent import CustomAgent
 from src.play_strategy.determinized_mcts_play_strategy import (
@@ -31,8 +23,6 @@ from src.play_strategy.random_play_strategy import RandomPlayStrategy
 from src.trump_strategy.deep_nn_trump_strategy import DeepNNTrumpStrategy
 from src.trump_strategy.random_trump_strategy import RandomTrumpStrategy
 from src.utils.worker_node_manager import WorkerNodeManager
-
-dmcts_worker = DMCTSWorker(os.getenv("LIMIT_S", 1.0))  # TODO: set realistic limit_s
 
 
 def create_app():
@@ -72,6 +62,7 @@ def create_app():
 
 def modify_app(app):
     logging.info("Modifying App")
+    dmcts_worker = DMCTSWorker(os.getenv("LIMIT_S", 1.0))  # TODO: set realistic limit_s
 
     @app.route("/ping", methods=["GET"])
     @app.route("/ping", methods=["POST"])
@@ -116,6 +107,14 @@ def delayed_worker_node_init():
 
 
 if __name__ == "__main__":
+    # attempt to load .env
+    try:
+        from dotenv import load_dotenv
+
+        load_dotenv()
+        print("Loaded .env")
+    except ImportError:
+        print("Skipped .env due to ImportError")
     logging.basicConfig(
         level=logging.getLevelNamesMapping()[os.getenv("LOG_LEVEL", "INFO")]
     )
