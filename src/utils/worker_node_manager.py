@@ -29,7 +29,7 @@ class WorkerNodeManager:
     def reload_all_worker_nodes(self) -> None:
         try:
             file_path = (
-            f"{os.path.dirname(os.path.realpath(__file__))}/worker_nodes.json"
+                f"{os.path.dirname(os.path.realpath(__file__))}/worker_nodes.json"
             )
         except Exception as e:
             logging.error(f"Error determining file path: {e}")
@@ -51,7 +51,7 @@ class WorkerNodeManager:
             if node["enabled"]:
                 worker_node = WorkerNode(node["name"], node["ip"], node["port"])
                 self.worker_nodes.append(worker_node)
-    
+
     def get_worker_nodes_dict(self):
         """Return the worker nodes as a dict."""
         nodes = [
