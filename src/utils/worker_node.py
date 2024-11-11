@@ -27,7 +27,7 @@ class WorkerNode:
         url = f"{self.base_url}/dmcts?obs={obs_json}"
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=9.2) as response:
+                async with session.get(url, timeout=9) as response:
                     if response.status == 200:
                         res = await response.json()
                         logging.debug(res)
@@ -39,6 +39,6 @@ class WorkerNode:
             return None
         except asyncio.TimeoutError:
             logging.warning(
-                f"Task execution for {self.name} exceeded the time limit of 9.5 seconds"
+                f"Task execution for {self.name} exceeded the time limit of 9 seconds"
             )
             return None
