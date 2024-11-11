@@ -22,18 +22,25 @@ class WorkerNodeManager:
         if not hasattr(self, "initialized"):  # Ensure __init__ is called only once
             self.initialized = True
             logging.info("Instantiating WorkerNodeManager singleton")
-            file_path = (
-                f"{os.path.dirname(os.path.realpath(__file__))}/worker_nodes.json"
-            )
-            self.worker_nodes: list[WorkerNode] = []
-            self.load_worker_nodes(file_path)
-            logging.info(f"loaded {len(self.worker_nodes)} node(s)")
-            logging.info(f"Worker nodes: {[node.name for node in self.worker_nodes]}")
-            asyncio.run(self.ping_nodes_remove_failed())
-            logging.info(f"kept {len(self.worker_nodes)} node(s)")
-            logging.info(f"Worker nodes: {[node.name for node in self.worker_nodes]}")
+            self.reload_all_worker_nodes()
         else:
             logging.info("Returning existing instance of WorkerNodeManager singleton")
+
+    def reload_all_worker_nodes(self) -> None:
+        try:
+            file_path = (
+            f"{os.path.dirname(os.path.realpath(__file__))}/worker_nodes.json"
+            )
+        except Exception as e:
+            logging.error(f"Error determining file path: {e}")
+            return
+        self.worker_nodes: list[WorkerNode] = []
+        self.load_worker_nodes(file_path)
+        logging.info(f"loaded {len(self.worker_nodes)} node(s)")
+        logging.info(f"Worker nodes: {[node.name for node in self.worker_nodes]}")
+        asyncio.run(self.ping_nodes_remove_failed())
+        logging.info(f"kept {len(self.worker_nodes)} node(s)")
+        logging.info(f"Worker nodes: {[node.name for node in self.worker_nodes]}")
 
     def load_worker_nodes(self, file_path: str) -> None:
         """Load worker nodes from a JSON file and add them to a max-heap."""
@@ -44,6 +51,14 @@ class WorkerNodeManager:
             if node["enabled"]:
                 worker_node = WorkerNode(node["name"], node["ip"], node["port"])
                 self.worker_nodes.append(worker_node)
+    
+    def get_worker_nodes_dict(self):
+        """Return the worker nodes as a dict."""
+        nodes = [
+            {"name": node.name, "ip": node.ip, "port": node.port}
+            for node in self.worker_nodes
+        ]
+        return {"nodes": nodes}
 
     async def ping_nodes_remove_failed(self) -> None:
         """Pings all worker nodes and removes those that fail to respond."""

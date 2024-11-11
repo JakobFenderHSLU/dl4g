@@ -77,6 +77,12 @@ def modify_app(app):
     @app.route("/ping", methods=["POST"])
     def ping():
         return jsonify("pong")
+    
+    @app.route("/reload-worker-nodes")
+    def reload_worker_nodes():
+        w = WorkerNodeManager()
+        w.reload_all_worker_nodes()
+        return jsonify(w.get_worker_nodes_dict())
 
     # http://127.0.0.1:5000/dmcts?obs={%22version%22:%20%22V0.2%22,%20%22trump%22:%201,%20%22dealer%22:%200,%20%22currentPlayer%22:%203,%20%22playerView%22:%203,%20%22forehand%22:%201,%20%22tricks%22:%20[{%22first%22:%203}],%20%22player%22:%20[{%22hand%22:%20[]},%20{%22hand%22:%20[]},%20{%22hand%22:%20[]},%20{%22hand%22:%20[%22D8%22,%20%22D7%22,%20%22HK%22,%20%22H9%22,%20%22SA%22,%20%22SQ%22,%20%22S10%22,%20%22S7%22,%20%22CK%22]}],%20%22jassTyp%22:%20%22SCHIEBER%22}
     @app.route("/dmcts", methods=["GET"])
