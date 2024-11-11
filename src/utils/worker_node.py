@@ -24,7 +24,7 @@ class WorkerNode:
             return False
 
     async def process_game_observation(self, obs_json: str):
-        logging.debug(f"Processing game observation on {self.name}")
+        logging.info(f"Processing game observation on {self.name}")
         start_time = time.time()
         url = f"{self.base_url}/dmcts?obs={obs_json}"
         try:
@@ -35,7 +35,7 @@ class WorkerNode:
                         logging.debug(res)
                         end_time = time.time()
                         total_time = end_time - start_time
-                        logging.debug(
+                        logging.info(
                             f"Total time for processing game observation on {self.name}: {total_time:.2f} seconds"
                         )
                         return res
