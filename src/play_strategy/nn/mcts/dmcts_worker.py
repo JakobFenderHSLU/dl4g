@@ -46,7 +46,10 @@ class DMCTSWorker:
         for future in futures:
             future.result()
 
-        self.logger.info(f"It took {time.time() - start_time} seconds to run the determinations")
+        execution_time = time.time() - start_time
+        self.logger.info(
+            f"It took {execution_time:.3f} seconds to run the determinations"
+        )
 
         all_action_scores = []
         while not action_scores.empty():

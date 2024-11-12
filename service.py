@@ -63,7 +63,9 @@ def create_app():
 
 def modify_app(app):
     logging.info("Modifying App")
-    dmcts_worker = DMCTSWorker(float(os.getenv("LIMIT_S", 1.0)))  # TODO: set realistic limit_s
+    dmcts_worker = DMCTSWorker(
+        float(os.getenv("LIMIT_S", 1.0))
+    )  # TODO: set realistic limit_s
 
     @app.route("/ping", methods=["GET"])
     @app.route("/ping", methods=["POST"])
@@ -89,11 +91,12 @@ def modify_app(app):
         action_values = dmcts_worker.execute(obs)
 
         execution_time = time.time() - start_time
-        logging.info(f"Execution time /dmcts: {execution_time} seconds")
         if execution_time > 9.5:
             logging.error(
-                f"Execution time /dmcts exceeded 9.5 seconds: {execution_time} seconds"
+                f"Execution time /dmcts exceeded 9.5 seconds: {execution_time:.2f} seconds"
             )
+        else:
+            logging.info(f"Execution time /dmcts: {execution_time:.2f} seconds")
 
         return jsonify(action_values.tolist())
 

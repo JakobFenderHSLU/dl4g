@@ -17,7 +17,7 @@ class WorkerNode:
         url = f"{self.base_url}/ping"
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=10) as response:
+                async with session.get(url, timeout=9) as response:
                     return response.status == 200
         except aiohttp.ClientError as e:
             logging.error(f"Error pinging {self.name}: {e}")
@@ -29,7 +29,7 @@ class WorkerNode:
         url = f"{self.base_url}/dmcts?obs={obs_json}"
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=9.25) as response:
+                async with session.get(url, timeout=9) as response:
                     if response.status == 200:
                         res = await response.json()
                         logging.debug(res)
@@ -48,7 +48,9 @@ class WorkerNode:
             logging.error(f"Error processing game observation {self.name}: {e}")
             return None
         except asyncio.TimeoutError:
+            end_time = time.time()
+            total_time = end_time - start_time
             logging.warning(
-                f"Task execution for {self.name} exceeded the time limit of 9.25 seconds"
+                f"Task execution for {self.name} exceeded the time limit of 9 seconds ({total_time:.2f})"
             )
             return None
