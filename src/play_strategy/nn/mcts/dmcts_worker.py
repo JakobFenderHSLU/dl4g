@@ -33,7 +33,7 @@ class DMCTSWorker:
         """
         if n_determinations is None:
             n_determinations = psutil.cpu_count(logical=False)
-            n_determinations = os.getenv("N_DETERMINATIONS", n_determinations)
+            n_determinations = int(os.getenv("N_DETERMINATIONS", n_determinations))
         self.logger.info(f"Running {n_determinations} determinations in parallel")
         action_scores = self.manager.Queue()
 
