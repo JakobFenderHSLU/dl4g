@@ -64,7 +64,7 @@ def create_app():
 def modify_app(app):
     logging.info("Modifying App")
     dmcts_worker = DMCTSWorker(
-        float(os.getenv("LIMIT_S", 1.0))
+        float(os.getenv("LIMIT_S", 9.0))
     )  # TODO: set realistic limit_s
 
     @app.route("/ping", methods=["GET"])
