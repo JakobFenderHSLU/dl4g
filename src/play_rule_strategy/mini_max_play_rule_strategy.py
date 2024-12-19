@@ -6,10 +6,10 @@ from jass.game.game_observation import GameObservation
 from jass.game.game_sim import GameSim
 from jass.game.game_state_util import state_from_observation
 
-from play_rule_strategy.abstract_play_rule import PlayRuleStrategy
-from play_rule_strategy.mini_max.mini_maxer import MiniMaxer
-from play_strategy.nn.mcts.hand_sampler import HandSampler
-from play_strategy.random_play_strategy import RandomPlayStrategy
+from src.play_rule_strategy.abstract_play_rule import PlayRuleStrategy
+from src.play_rule_strategy.mini_max.mini_maxer import MiniMaxer
+from src.play_strategy.nn.mcts.hand_sampler import HandSampler
+from src.play_strategy.random_play_strategy import RandomPlayStrategy
 
 
 class MiniMaxPlayRuleStrategy(PlayRuleStrategy):
