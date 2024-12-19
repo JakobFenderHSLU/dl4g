@@ -5,13 +5,13 @@ from typing import List
 import numpy as np
 from jass.arena.arena import Arena
 
-from play_rule_strategy.pull_trumps_strategy import PullTrumpsPlayRuleStrategy
-from play_rule_strategy.trump_jack_strategy import TrumpJackPlayRuleStrategy
 from src.agent.agent import CustomAgent
 from src.play_rule_strategy.abstract_play_rule import PlayRuleStrategy
 from src.play_rule_strategy.mini_max_play_rule_strategy import MiniMaxPlayRuleStrategy
 from src.play_rule_strategy.only_valid_play_strategy import OnlyValidPlayRuleStrategy
+from src.play_rule_strategy.pull_trumps_strategy import PullTrumpsPlayRuleStrategy
 from src.play_rule_strategy.smear_play_strategy import SmearPlayRuleStrategy
+from src.play_rule_strategy.trump_jack_strategy import TrumpJackPlayRuleStrategy
 from src.play_strategy.abstract_play_strategy import PlayStrategy
 from src.play_strategy.determinized_mcts_play_strategy import (
     DeterminizedMCTSPlayStrategy,
