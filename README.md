@@ -32,7 +32,7 @@ combinations.
 
 ### Trump Strategies
 
-A trump strategy receives a hand of cards, and it has to return a trump:
+A trump strategy receives an Observation of a game, and it has to return a trump:
 
 - `DIAMONDS`
 - `HEARTS`
@@ -132,8 +132,3 @@ O = overall, T = in Trump Rounds
 | DeepNN       | 65.23 %   | 81.08 %   | 90.6736          | 103.2246         |
 
 For a more detailed evaluation see [evaluation_results.md](README/evaluation_results.md).
-*Work in progress*
-
-
-
-
