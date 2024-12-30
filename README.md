@@ -156,9 +156,10 @@ run.py --seed 42 --n_games 10000 --agent-play-strategy <strategy> --agent-trump-
 
 O = overall, T = in Trump Rounds
 
-|              | Winrate O | Winrate T | Average Points O | Average Points T | Games Played |
-|--------------|-----------|-----------|------------------|------------------|--------------|
-| Random       | 50.00 %   | 80.74 %   | 78.5             | 102.9398         | 10'000       |
-| HighestValue | 46.14 %   | 79.40 %   | 75.6356          | 104.0712         | 10'000       |
-| MCTS         | 62.00 %   | 98.00 %   | 88.9             | 117.96           | 100          |
+|                   | Winrate O | Winrate T | Average Points O | Average Points T | Games Played |
+|-------------------|-----------|-----------|------------------|------------------|--------------|
+| Random            | 50.00 %   | 80.74 %   | 78.5             | 102.9398         | 10'000       |
+| HighestValue      | 46.14 %   | 79.40 %   | 75.6356          | 104.0712         | 10'000       |
+| MCTS              | 62.00 %   | 98.00 %   | 88.9             | 117.96           | 100          |
+| Determinized MCTS | 64.00 %   | 96.00 %   | 90.61            | 117.1            | 100          |
 
