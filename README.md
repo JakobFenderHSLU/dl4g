@@ -80,6 +80,15 @@ following information:
 From this information, the bot has to decide which card on his hand to play. This is a complex problem and can be
 solved in many different ways.
 
+### Implemented Play Strategies
+
+- `RandomPlayStrategy` chooses a random valid card from the hand.
+- `HighestValuePlayStrategy` chooses the highest value card from the hand.
+- `MCTSPlayStrategy` Randomly distributes other cards among the players. Then uses Monte Carlo Tree Search to find the
+  best card to play for this hand.
+- `DeterminizedMCTSPlayStrategy` Takes **n** random samples of the remaining cards and uses Monte Carlo Tree Search to
+  find the best card to play for this hand. Takes the card that works best on average.
+
 ### Play Rules
 
 This is a list of rules that will trigger before a PlayStrategy is called. This is in order to play no-brainer moves.
@@ -88,11 +97,13 @@ triggered, the PlayStrategy will be called.
 
 - `OnlyValidPlayRule` if only one card is valid, play it. This is to save time and resources.
 - `SmearPlayRule` Smearing is a strategy in Jass where you play a high value card when the trick is already won.
+- `TrumpJackPlayRule` If player has Trump Jack, play it if an opponent played the Trump 9 or the total points of the
+  trick are above 20.
+- `PullTrumpPlayRule` As long as the opponents have trump cards, play the highest trump card.
+- `MiniMaxPlayRule` At a certain threshold, switch to mini-max strategy.
+- `SwisslosOpeningPlayRule` This was an attempt to code all opening rules from swisslos. We discontinued this because
+  it was too complex and not worth the effort.
 
-### Implemented Play Strategies
-
-- `RandomPlayStrategy` chooses a random valid card from the hand.
-- `HighestCardPlayStrategy` chooses the highest card from the hand.
 
 ## Generate Data
 
