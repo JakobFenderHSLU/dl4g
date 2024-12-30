@@ -104,7 +104,6 @@ triggered, the PlayStrategy will be called.
 - `SwisslosOpeningPlayRule` This was an attempt to code all opening rules from swisslos. We discontinued this because
   it was too complex and not worth the effort.
 
-
 ## Generate Data
 
 We have also implemented a script that generates the average score per trump that a player for a random hand. This can
@@ -118,8 +117,6 @@ python generate_trump_data.py --help
 ## Evaluation
 
 ### Trump Strategies
-
-#### Overview
 
 To evaluate the trump strategies independent of the play strategy, we ran every Trump strategy together with the
 `random` play strategy and no play rules. The opponent played with a random trump strategy. We played 10'000 games in
@@ -136,10 +133,32 @@ O = overall, T = in Trump Rounds
 
 |              | Winrate O | Winrate T | Average Points O | Average Points T |
 |--------------|-----------|-----------|------------------|------------------|
-| Random       | 50.00 %   | 50.06 %   | 78.5             | 78.5858          |
+| Random       | 50.00 %   | 50.00 %   | 78.5             | 78.5             |
 | HighestSum   | 59.15 %   | 69.88 %   | 85.8071          | 93.7382          |
 | HighestScore | 64.11 %   | 78.44 %   | 89.8663          | 101.387          |
 | Statistical  | 62.43 %   | 75.24 %   | 88.2777          | 98.3564          |
 | DeepNN       | 65.23 %   | 81.08 %   | 90.6736          | 103.2246         |
 
 For a more detailed evaluation see [evaluation_results.md](README/evaluation_results.md).
+
+### Play Strategies
+
+Similar to the Trump strategies, we evaluated the play strategies independent of the trump strategy. We ran every Play
+strategy together with the best Trump strategy `DeepNNTrumpStrategy` for both teams. The amount of games we played
+varied due to computational limitations. The timelimit for choosing a card is 5 seconds, half of the time in the
+official tournament.
+
+Command used:
+
+```bash
+run.py --seed 42 --n_games 10000 --agent-play-strategy <strategy> --agent-trump-strategy deep_nn --opponent-trump-strategy deep_nn
+```
+
+O = overall, T = in Trump Rounds
+
+|              | Winrate O | Winrate T | Average Points O | Average Points T | Games Played |
+|--------------|-----------|-----------|------------------|------------------|--------------|
+| Random       | 50.00 %   | 80.74 %   | 78.5             | 102.9398         | 10'000       |
+| HighestValue | 46.14 %   | 79.40 %   | 75.6356          | 104.0712         | 10'000       |
+| MCTS         | 62.00 %   | 98.00 %   | 88.9             | 117.96           | 100          |
+
