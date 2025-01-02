@@ -173,7 +173,7 @@ if __name__ == "__main__":
             if strategy_name == "mini_max":
                 strategies.append(
                     MiniMaxPlayRuleStrategy(
-                        seed=args.seed, log_level=args.log_level, depth=3, limit_s=2.5
+                        seed=args.seed, log_level=args.log_level, depth=4, limit_s=5
                     )
                 )
             if strategy_name == "trump_jack":
