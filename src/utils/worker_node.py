@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 import time
 
 import aiohttp
@@ -17,7 +18,7 @@ class WorkerNode:
         url = f"{self.base_url}/ping"
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=9) as response:
+                async with session.get(url, timeout=int(os.getenv("WORKER_TIMEOUT", 9))) as response:
                     return response.status == 200
         except aiohttp.ClientError as e:
             logging.error(f"Error pinging {self.name}: {e}")
@@ -29,7 +30,7 @@ class WorkerNode:
         url = f"{self.base_url}/dmcts?obs={obs_json}"
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=9) as response:
+                async with session.get(url, timeout=int(os.getenv("WORKER_TIMEOUT", 9))) as response:
                     if response.status == 200:
                         res = await response.json()
                         logging.debug(res)
