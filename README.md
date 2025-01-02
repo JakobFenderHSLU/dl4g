@@ -173,7 +173,7 @@ Command used:
 
 ```bash
 run.py --seed 42 --n_games 10000 --agent-play-strategy random --agent-trump-strategy deep_nn --opponent-trump-strategy deep_nn --agent-play-rule-strategies <strategy>
-run.py --seed 42 --n_games 100 --agent-play-strategy determinized_mcts --agent-trump-strategy deep_nn --opponent-trump-strategy deep_nn --agent-play-rule-strategies <strategy>
+run.py --seed 42 --n_games 100 --agent-play-strategy dmcts --opponent-play-strategy dmcts --agent-trump-strategy deep_nn --opponent-trump-strategy deep_nn --agent-play-rule-strategies <strategy>
 ```
 
 #### RandomPlayStrategy
@@ -182,8 +182,19 @@ O = overall, T = in Trump Rounds
 
 |           | Winrate O | Winrate T | Average Points O | Average Points T | Games Played |
 |-----------|-----------|-----------|------------------|------------------|--------------|
+| None      | 50.00 %   | 80.74 %   | 78.5             | 102.9398         | 10'000       |
 | OnlyValid | 50.00 %   | 80.74 %   | 78.5             | 102.9398         | 10'000       |
 | Smear     | 51.08 %   | 81.50 %   | 79.3933          | 103.7926         | 10'000       |
 | TrumpJack | 50.57 %   | 81.54 %   | 79.2585          | 104.3382         | 10'000       |
 | PullTrump | 49.29 %   | 80.18 %   | 79.0959          | 104.5728         | 10'000       |
 | MiniMax   | 51.00 %   | 84.00 %   | 78.46            | 105.7            | 100          |
+
+#### DeterminizedMCTSPlayStrategy
+
+O = overall, T = in Trump Rounds
+
+|           | Winrate O | Winrate T | Average Points O | Average Points T | Games Played |
+|-----------|-----------|-----------|------------------|------------------|--------------|
+| None      | 46.00 %   | 60.00 %   | 79.22            | 95.64            | 50           |
+| OnlyValid | 56.00 %   | 88.00 %   | 81.24            | 99.6             | 50           |
+| Smear     | 54.00 %   | 80.00 %   | 80.9             | 102.8            | 50           |
