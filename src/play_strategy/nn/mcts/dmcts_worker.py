@@ -1,11 +1,9 @@
 import logging
-import os
 import time
 from concurrent.futures import ProcessPoolExecutor
 from multiprocessing import Manager
 
 import numpy as np
-import psutil
 from jass.game.game_observation import GameObservation
 from jass.game.game_sim import GameSim
 from jass.game.game_state_util import state_from_observation
@@ -16,9 +14,11 @@ from src.play_strategy.nn.mcts.mcts_tree import MCTS
 
 
 class DMCTSWorker:
-    def __init__(self, limit_s: float):
+    def __init__(self, limit_s: float, n_determinations: int = None, n_iterations: int = None):
         self._rule = RuleSchieber()
         self.limit_s = limit_s
+        self.n_determinations = n_determinations
+        self.n_iterations = n_iterations
         self.executor = ProcessPoolExecutor()
         self.manager = Manager()
         self.logger = logging.getLogger(__name__)
@@ -31,17 +31,14 @@ class DMCTSWorker:
         :param n_determinations: The number of determinations to run in parallel. If None, the number of logical CPUs
         :return: The action scores for each card in the hand
         """
-        if n_determinations is None:
-            n_determinations = psutil.cpu_count(logical=False)
-            n_determinations = int(os.getenv("N_DETERMINATIONS", n_determinations))
         self.logger.info(f"Running {n_determinations} determinations in parallel")
         action_scores = self.manager.Queue()
 
         start_time = time.time()
         futures = []
-        for _ in range(n_determinations):
+        for _ in range(self.n_determinations):
             future = self.executor.submit(
-                _thread_search, action_scores, obs, self.limit_s
+                _thread_search, action_scores, obs, self.limit_s, self.n_iterations
             )
             futures.append(future)
 
@@ -61,7 +58,7 @@ class DMCTSWorker:
         return action_scores
 
 
-def _thread_search(action_scores, game_obs, limit_s):
+def _thread_search(action_scores, game_obs, limit_s, n_iterations):
     """
     Thread function to run the MCTS search
     :param action_scores: A queue to put the action scores in
@@ -75,7 +72,7 @@ def _thread_search(action_scores, game_obs, limit_s):
         state_from_observation(game_obs, HandSampler().sample(game_obs))
     )
     mcts = MCTS()
-    mcts.search(game_sim.state, limit_s=limit_s)
+    mcts.search(game_sim.state, limit_s=limit_s, iterations=n_iterations)
 
     # sort by card index
     mcts.root.children.sort(key=lambda x: x.card)

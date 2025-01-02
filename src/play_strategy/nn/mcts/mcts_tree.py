@@ -17,19 +17,22 @@ class MCTS:
         self.root = None
         self.ucb_c = ucb_c
 
-    def search(self, game_state: GameState, iterations=100, limit_s=None, root=None):
+    def search(self, game_state: GameState, iterations=None, limit_s=None, root=None):
 
         if root is not None:
             self.root = root
         else:
             self.root = MCTSNode(state=game_state, ucb_c=self.ucb_c)
 
-        if limit_s is None:
+        if iterations is None and limit_s is None:
+            raise ValueError("Either iterations or limit_s must be set")
+
+        if iterations is not None:
             for i in range(iterations):
                 is_fully_expanded = self._run(game_state)
                 if is_fully_expanded:
                     break
-        else:
+        if limit_s is not None:
             cutoff_time = time.time() + limit_s
             while time.time() < cutoff_time:
                 is_fully_expanded = self._run(game_state)

@@ -9,6 +9,7 @@ import os
 import threading
 import time
 
+import psutil
 from flask import jsonify, request
 from jass.game.game_observation import GameObservation
 from jass.service.player_service_app import PlayerServiceApp
@@ -63,9 +64,12 @@ def create_app():
 
 def modify_app(app):
     logging.info("Modifying App")
+
     dmcts_worker = DMCTSWorker(
-        float(os.getenv("LIMIT_S", 8.0))
-    )  # TODO: set realistic limit_s
+        limit_s=float(os.getenv("LIMIT_S", 8.0)),
+        n_determinations=int(os.getenv("N_DETERMINATIONS", psutil.cpu_count(logical=False))),
+        n_iterations=int(os.getenv("N_ITERATIONS")) if os.getenv("N_ITERATIONS") else None,
+    )
 
     @app.route("/ping", methods=["GET"])
     @app.route("/ping", methods=["POST"])
