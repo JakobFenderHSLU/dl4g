@@ -163,3 +163,27 @@ O = overall, T = in Trump Rounds
 | MCTS              | 62.00 %   | 98.00 %   | 88.9             | 117.96           | 100          |
 | Determinized MCTS | 64.00 %   | 96.00 %   | 90.61            | 117.1            | 100          |
 
+### Play Rule Strategies
+
+For the Play Rule Strategies, we evaluated them together with DeepNNTrumpStrategy. For the Play strategie, we selected
+RandomPlayStrategy and DeterminizedMCTSPlayStrategy. The amount of games we played varied due to computational
+limitations. Note that MiniMaxPlayRule was limited to 5 seconds per move.
+
+Command used:
+
+```bash
+run.py --seed 42 --n_games 10000 --agent-play-strategy random --agent-trump-strategy deep_nn --opponent-trump-strategy deep_nn --agent-play-rule-strategies <strategy>
+run.py --seed 42 --n_games 100 --agent-play-strategy determinized_mcts --agent-trump-strategy deep_nn --opponent-trump-strategy deep_nn --agent-play-rule-strategies <strategy>
+```
+
+#### RandomPlayStrategy
+
+O = overall, T = in Trump Rounds
+
+|           | Winrate O | Winrate T | Average Points O | Average Points T | Games Played |
+|-----------|-----------|-----------|------------------|------------------|--------------|
+| OnlyValid | 50.00 %   | 80.74 %   | 78.5             | 102.9398         | 10'000       |
+| Smear     | 51.08 %   | 81.50 %   | 79.3933          | 103.7926         | 10'000       |
+| TrumpJack | 50.57 %   | 81.54 %   | 79.2585          | 104.3382         | 10'000       |
+| PullTrump | 49.29 %   | 80.18 %   | 79.0959          | 104.5728         | 10'000       |
+| MiniMax   | 51.00 %   | 84.00 %   | 78.46            | 105.7            | 100          |
