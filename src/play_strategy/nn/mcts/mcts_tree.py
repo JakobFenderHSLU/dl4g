@@ -32,7 +32,7 @@ class MCTS:
                 is_fully_expanded = self._run(game_state)
                 if is_fully_expanded:
                     break
-        if limit_s is not None:
+        else:
             cutoff_time = time.time() + limit_s
             while time.time() < cutoff_time:
                 is_fully_expanded = self._run(game_state)
@@ -88,8 +88,8 @@ class MCTS:
             game_sim.action_play_card(card)
 
         return (
-            game_sim.state.points[simulating_player % 2]
-            - game_sim.state.points[(simulating_player + 1) % 2]
+                game_sim.state.points[simulating_player % 2]
+                - game_sim.state.points[(simulating_player + 1) % 2]
         ) / 157
 
     @staticmethod
