@@ -22,7 +22,8 @@ class DMCTSWorker:
         self.executor = ProcessPoolExecutor()
         self.manager = Manager()
         self.logger = logging.getLogger(__name__)
-        self.logger.info(f"DMCTSWorker initialized with limit_s={limit_s}")
+        self.logger.info(f"DMCTSWorker initialized with limit_s={limit_s}, n_determinations={n_determinations}, "
+                         f"n_iterations={n_iterations}")
 
     def execute(self, obs: GameObservation, n_determinations: int = None) -> np.ndarray:
         """
