@@ -32,7 +32,6 @@ class DMCTSWorker:
         :param n_determinations: The number of determinations to run in parallel. If None, the number of logical CPUs
         :return: The action scores for each card in the hand
         """
-        self.logger.info(f"Running {n_determinations} determinations in parallel")
         action_scores = self.manager.Queue()
 
         start_time = time.time()
