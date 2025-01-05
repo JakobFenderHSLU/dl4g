@@ -86,7 +86,7 @@ solved in many different ways.
 - `HighestValuePlayStrategy` chooses the highest value card from the hand.
 - `MCTSPlayStrategy` Randomly distributes other cards among the players. Then uses Monte Carlo Tree Search to find the
   best card to play for this hand.
-- `DeterminizedMCTSPlayStrategy` Takes **n** random samples of the remaining cards and uses Monte Carlo Tree Search to
+- `DeterminizedMCTSPlayStrategy` Takes **d** random samples of the remaining cards and uses Monte Carlo Tree Search to
   find the best card to play for this hand. Takes the card that works best on average.
 
 ### Play Rules
