@@ -26,7 +26,7 @@ Note:
 - 5 seconds per move for MiniMaxPlayRule
 - 5 seconds per move for DeterminizedMCTSPlayRule
 
-#### Command
+Command used:
 
 ```bash
 run.py --seed 42 --n_games 200 --agent-play-strategy dmcts --opponent-play-strategy dmcts --agent-trump-strategy deep_nn --opponent-trump-strategy deep_nn --agent-play-rule-strategies <strategy>
