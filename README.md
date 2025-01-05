@@ -123,12 +123,6 @@ To evaluate the trump strategies independent of the play strategy, we ran every 
 total. After 5'000 the Arena was reset and the positions were swapped. This ensures, that the `random` play strategies
 returned the same outputs after every half.
 
-Command used:
-
-```bash
-run.py --seed 42 --n_games 10000 --agent-trump-strategy <strategy> 
-```
-
 O = overall, T = in Trump Rounds
 
 |              | Winrate O | Winrate T | Average Points O | Average Points T |
@@ -139,7 +133,7 @@ O = overall, T = in Trump Rounds
 | Statistical  | 62.43 %   | 75.24 %   | 88.2777          | 98.3564          |
 | DeepNN       | 65.23 %   | 81.08 %   | 90.6736          | 103.2246         |
 
-For a more detailed evaluation see [evaluation_results.md](README/evaluation_results.md).
+See [trump_results.md](README/trump_results.md) for more detailed results.
 
 ### Play Strategies
 
@@ -147,12 +141,6 @@ Similar to the Trump strategies, we evaluated the play strategies independent of
 strategy together with the best Trump strategy `DeepNNTrumpStrategy` for both teams. The amount of games we played
 varied due to computational limitations. The timelimit for choosing a card is 5 seconds, half of the time in the
 official tournament.
-
-Command used:
-
-```bash
-run.py --seed 42 --n_games 10000 --agent-play-strategy <strategy> --agent-trump-strategy deep_nn --opponent-trump-strategy deep_nn
-```
 
 O = overall, T = in Trump Rounds
 
@@ -163,18 +151,13 @@ O = overall, T = in Trump Rounds
 | MCTS              | 62.00 %   | 98.00 %   | 88.9             | 117.96           | 100          |
 | Determinized MCTS | 64.00 %   | 96.00 %   | 90.61            | 117.1            | 100          |
 
+See [play_results.md](README/play_results.md) for more detailed results.
+
 ### Play Rule Strategies
 
 For the Play Rule Strategies, we evaluated them together with DeepNNTrumpStrategy. For the Play strategie, we selected
 RandomPlayStrategy and DeterminizedMCTSPlayStrategy. The amount of games we played varied due to computational
 limitations. Note that MiniMaxPlayRule was limited to 5 seconds per move.
-
-Command used:
-
-```bash
-run.py --seed 42 --n_games 10000 --agent-play-strategy random --agent-trump-strategy deep_nn --opponent-trump-strategy deep_nn --agent-play-rule-strategies <strategy>
-run.py --seed 42 --n_games 100 --agent-play-strategy dmcts --opponent-play-strategy dmcts --agent-trump-strategy deep_nn --opponent-trump-strategy deep_nn --agent-play-rule-strategies <strategy>
-```
 
 #### RandomPlayStrategy
 
@@ -189,6 +172,8 @@ O = overall, T = in Trump Rounds
 | PullTrump | 49.29 %   | 80.18 %   | 79.0959          | 104.5728         | 10'000       |
 | MiniMax   | 51.00 %   | 84.00 %   | 78.46            | 105.7            | 100          |
 
+See [play_rule_random_results.md](README/play_rule_random_results.md) for more detailed results.
+
 #### DeterminizedMCTSPlayStrategy
 
 O = overall, T = in Trump Rounds
@@ -202,5 +187,7 @@ O = overall, T = in Trump Rounds
 | PullTrump | 47.50         | 74.00         | 77.485           | 100.78           | 200          |
 | MiniMax   | 47.50         | 79.00         | 74.82            | 96.63            | 200          |
 | All       | 51.00         | 83.00         | 78.79            | 103.18           | 200          |
+
+See [play_rule_dmcts_results.md](README/play_rule_dmcts_results.md) for more detailed results.
 
 
